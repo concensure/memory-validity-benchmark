@@ -1,0 +1,22 @@
+{
+  "scenario_id": "rf001",
+  "family": "refactor",
+  "task": "Extract HTTP request parsing from a monolithic handler without breaking validation behavior.",
+  "repo_state_fingerprint": "rf001-repo-v2",
+  "token_budget": 260,
+  "candidate_memories": [
+    { "id": "rf001-s1", "tier": "session", "content": "Current refactor goal is to extract parsing only; response formatting must remain in handler for this PR.", "validity": "valid", "bucket": "critical" },
+    { "id": "rf001-p1", "tier": "project", "content": "Validation errors must remain byte-for-byte compatible with existing contract tests.", "validity": "valid", "bucket": "critical" },
+    { "id": "rf001-p2", "tier": "project", "content": "Last refactor attempt moved validation after business logic and broke contract tests.", "validity": "valid", "bucket": "supporting" },
+    { "id": "rf001-p3", "tier": "project", "content": "New architecture mandates immediate handler decomposition into five layers in one patch.", "validity": "irrelevant", "bucket": "supporting" },
+    { "id": "rf001-l1", "tier": "long_term", "content": "Safe refactors preserve externally observable behavior first, then separate concerns incrementally.", "validity": "valid", "bucket": "supporting" }
+  ],
+  "gold_valid_ids": ["rf001-s1", "rf001-p1", "rf001-p2", "rf001-l1"],
+  "gold_invalid_ids": ["rf001-p3"],
+  "preferred_order_buckets": [
+    { "name": "session_critical", "memory_ids": ["rf001-s1"] },
+    { "name": "project_critical", "memory_ids": ["rf001-p1"] },
+    { "name": "supporting", "memory_ids": ["rf001-p2", "rf001-l1"] }
+  ],
+  "task_outcome_baselines": { "no_memory": 0.35, "ideal": 1.0 }
+}

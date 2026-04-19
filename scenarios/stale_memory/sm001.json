@@ -1,0 +1,21 @@
+{
+  "scenario_id": "sm001",
+  "family": "stale_memory",
+  "task": "Update a code path after an AST rename where older notes still reference removed types.",
+  "repo_state_fingerprint": "sm001-repo-v3",
+  "token_budget": 200,
+  "candidate_memories": [
+    { "id": "sm001-s1", "tier": "session", "content": "Current compile error says UnaryExpr is undefined.", "validity": "valid", "bucket": "critical" },
+    { "id": "sm001-p1", "tier": "project", "content": "AST rename: UnaryExpr was replaced by PrefixExpr in the parser package.", "validity": "valid", "bucket": "critical" },
+    { "id": "sm001-p2", "tier": "project", "content": "Refactor note from last month: keep constructing UnaryExpr until migration is complete.", "validity": "stale", "bucket": "supporting" },
+    { "id": "sm001-l1", "tier": "long_term", "content": "When type renames land, treat historical construction notes as invalid until checked against current symbols.", "validity": "valid", "bucket": "supporting" }
+  ],
+  "gold_valid_ids": ["sm001-s1", "sm001-p1", "sm001-l1"],
+  "gold_invalid_ids": ["sm001-p2"],
+  "preferred_order_buckets": [
+    { "name": "session_critical", "memory_ids": ["sm001-s1"] },
+    { "name": "project_critical", "memory_ids": ["sm001-p1"] },
+    { "name": "supporting", "memory_ids": ["sm001-l1"] }
+  ],
+  "task_outcome_baselines": { "no_memory": 0.2, "ideal": 1.0 }
+}

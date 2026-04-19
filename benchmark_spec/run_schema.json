@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MVI Run Artifact",
+  "type": "object",
+  "required": [
+    "system_name",
+    "scenario_id",
+    "selected_memories",
+    "final_injection_order",
+    "token_estimate"
+  ],
+  "properties": {
+    "system_name": { "type": "string" },
+    "scenario_id": { "type": "string" },
+    "selected_memories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "tier", "content"],
+        "properties": {
+          "id": { "type": "string" },
+          "tier": { "enum": ["session", "project", "long_term"] },
+          "content": { "type": "string" }
+        }
+      }
+    },
+    "final_injection_order": { "type": "array", "items": { "type": "string" } },
+    "token_estimate": { "type": "integer", "minimum": 0 },
+    "task_outcome": {
+      "type": "object",
+      "properties": {
+        "passed": { "type": "boolean" },
+        "score": { "type": "number" },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

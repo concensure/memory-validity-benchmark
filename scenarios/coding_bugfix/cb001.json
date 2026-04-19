@@ -1,0 +1,23 @@
+{
+  "scenario_id": "cb001",
+  "family": "coding_bugfix",
+  "task": "Fix a parser bug where unary minus is tokenized as a binary operator after a left parenthesis.",
+  "repo_state_fingerprint": "cb001-repo-v1",
+  "token_budget": 220,
+  "candidate_memories": [
+    { "id": "cb001-s1", "tier": "session", "content": "Recent failing test: parse('(-1)') emits unexpected BinaryExpr node.", "validity": "valid", "bucket": "critical" },
+    { "id": "cb001-s2", "tier": "session", "content": "Last attempted fix in lexer.go only changed whitespace handling and did not affect minus token classification.", "validity": "valid", "bucket": "supporting" },
+    { "id": "cb001-p1", "tier": "project", "content": "Parser precedence rules treat unary operators in parsePrefix, not in parseInfix.", "validity": "valid", "bucket": "critical" },
+    { "id": "cb001-p2", "tier": "project", "content": "AST changed last week: PrefixExpr replaced UnaryExpr.", "validity": "valid", "bucket": "critical" },
+    { "id": "cb001-p3", "tier": "project", "content": "Legacy note: minus after left parenthesis is always binary and should be handled in parseInfix.", "validity": "contradicted", "bucket": "supporting" },
+    { "id": "cb001-l1", "tier": "long_term", "content": "When parsers fail around unary operators, preserve failing input examples and inspect prefix vs infix dispatch.", "validity": "valid", "bucket": "supporting" }
+  ],
+  "gold_valid_ids": ["cb001-s1", "cb001-p1", "cb001-p2", "cb001-l1"],
+  "gold_invalid_ids": ["cb001-p3"],
+  "preferred_order_buckets": [
+    { "name": "session_critical", "memory_ids": ["cb001-s1"] },
+    { "name": "project_critical", "memory_ids": ["cb001-p1", "cb001-p2"] },
+    { "name": "supporting", "memory_ids": ["cb001-s2", "cb001-l1"] }
+  ],
+  "task_outcome_baselines": { "no_memory": 0.25, "ideal": 1.0 }
+}

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MVI Scenario",
+  "type": "object",
+  "required": [
+    "scenario_id",
+    "family",
+    "task",
+    "repo_state_fingerprint",
+    "token_budget",
+    "candidate_memories",
+    "gold_valid_ids",
+    "gold_invalid_ids",
+    "preferred_order_buckets",
+    "task_outcome_baselines"
+  ],
+  "properties": {
+    "scenario_id": { "type": "string" },
+    "family": { "type": "string" },
+    "task": { "type": "string" },
+    "repo_state_fingerprint": { "type": "string" },
+    "token_budget": { "type": "integer", "minimum": 1 },
+    "candidate_memories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "tier", "content", "validity", "bucket"],
+        "properties": {
+          "id": { "type": "string" },
+          "tier": { "enum": ["session", "project", "long_term"] },
+          "content": { "type": "string" },
+          "validity": { "enum": ["valid", "stale", "contradicted", "irrelevant"] },
+          "bucket": { "enum": ["critical", "supporting"] },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "gold_valid_ids": { "type": "array", "items": { "type": "string" } },
+    "gold_invalid_ids": { "type": "array", "items": { "type": "string" } },
+    "preferred_order_buckets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "memory_ids"],
+        "properties": {
+          "name": { "type": "string" },
+          "memory_ids": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "task_outcome_baselines": {
+      "type": "object",
+      "required": ["no_memory", "ideal"],
+      "properties": {
+        "no_memory": { "type": "number" },
+        "ideal": { "type": "number" }
+      }
+    }
+  }
+}

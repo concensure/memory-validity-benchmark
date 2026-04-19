@@ -1,0 +1,13 @@
+{
+  "version": "0.1.0",
+  "status": "frozen-public-alpha",
+  "weights": {
+    "validity_precision": 0.25,
+    "validity_recall": 0.20,
+    "ordering_quality": 0.15,
+    "staleness_penalty": -0.20,
+    "noise_load": -0.10,
+    "budget_efficiency": 0.10,
+    "task_outcome_delta": 0.10
+  }
+}

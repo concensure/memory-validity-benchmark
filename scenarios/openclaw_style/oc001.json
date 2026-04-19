@@ -1,0 +1,22 @@
+{
+  "scenario_id": "oc001",
+  "family": "openclaw_style",
+  "task": "Run a multi-step tool workflow where the agent must inspect files, patch one module, and verify output without re-running a known destructive command.",
+  "repo_state_fingerprint": "oc001-repo-v1",
+  "token_budget": 280,
+  "candidate_memories": [
+    { "id": "oc001-s1", "tier": "session", "content": "Do not rerun the destructive cleanup command; it already deleted unrelated temp fixtures in a prior attempt.", "validity": "valid", "bucket": "critical" },
+    { "id": "oc001-s2", "tier": "session", "content": "Immediate task order: inspect config file, patch handler, run non-destructive verification.", "validity": "valid", "bucket": "critical" },
+    { "id": "oc001-p1", "tier": "project", "content": "Handler patch must preserve JSON response shape because downstream scraper expects exact keys.", "validity": "valid", "bucket": "critical" },
+    { "id": "oc001-p2", "tier": "project", "content": "Temporary fixture cleanup can be rerun anytime without consequences.", "validity": "contradicted", "bucket": "supporting" },
+    { "id": "oc001-l1", "tier": "long_term", "content": "Tool-using agents should front-load destructive-action constraints before procedural notes.", "validity": "valid", "bucket": "supporting" }
+  ],
+  "gold_valid_ids": ["oc001-s1", "oc001-s2", "oc001-p1", "oc001-l1"],
+  "gold_invalid_ids": ["oc001-p2"],
+  "preferred_order_buckets": [
+    { "name": "session_critical", "memory_ids": ["oc001-s1", "oc001-s2"] },
+    { "name": "project_critical", "memory_ids": ["oc001-p1"] },
+    { "name": "supporting", "memory_ids": ["oc001-l1"] }
+  ],
+  "task_outcome_baselines": { "no_memory": 0.2, "ideal": 1.0 }
+}
