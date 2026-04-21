@@ -8,10 +8,13 @@ from typing import Callable
 from token_estimator import estimate_tokens
 
 
-def load_scenarios(root: Path) -> list[dict]:
+def load_scenarios(root: Path, include_holdout: bool = False) -> list[dict]:
     scenarios: list[dict] = []
     for path in sorted(root.rglob("*.json")):
-        scenarios.append(json.loads(path.read_text(encoding="utf-8")))
+        data = json.loads(path.read_text(encoding="utf-8"))
+        if not include_holdout and data.get("split") == "holdout":
+            continue
+        scenarios.append(data)
     return scenarios
 
 
@@ -86,13 +89,14 @@ def main() -> None:
     parser.add_argument("--scenario-root", required=True)
     parser.add_argument("--system", required=True)
     parser.add_argument("--out", required=True)
+    parser.add_argument("--include-holdout", action="store_true")
     args = parser.parse_args()
 
     system = args.system
     if system not in BASELINES:
         raise SystemExit(f"unsupported system {system!r}")
 
-    scenarios = load_scenarios(Path(args.scenario_root))
+    scenarios = load_scenarios(Path(args.scenario_root), include_holdout=args.include_holdout)
     runs = [BASELINES[system](scenario) for scenario in scenarios]
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)

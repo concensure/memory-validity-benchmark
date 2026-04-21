@@ -69,14 +69,24 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--scenario-root", required=True)
     parser.add_argument("--run", required=True)
+    parser.add_argument("--include-holdout", action="store_true")
     args = parser.parse_args()
 
     scenarios = load_scenarios(Path(args.scenario_root))
     run_bundle = json.loads(Path(args.run).read_text(encoding="utf-8"))
     runs = run_bundle["runs"] if isinstance(run_bundle, dict) and "runs" in run_bundle else [run_bundle]
+    if not args.include_holdout:
+        runs = [run for run in runs if scenarios[run["scenario_id"]].get("split") != "holdout"]
     scores = [score_run(run, scenarios[run["scenario_id"]]) for run in runs]
     average = round(sum(item["mvi_composite"] for item in scores) / max(1, len(scores)), 4)
-    print(json.dumps({"scores": scores, "average_mvi_composite": average}, indent=2))
+    family_averages: dict[str, list[float]] = {}
+    for item in scores:
+        family = scenarios[item["scenario_id"]]["family"]
+        family_averages.setdefault(family, []).append(item["mvi_composite"])
+    family_summary = {
+        family: round(sum(values) / max(1, len(values)), 4) for family, values in sorted(family_averages.items())
+    }
+    print(json.dumps({"scores": scores, "average_mvi_composite": average, "by_family": family_summary}, indent=2))
 
 
 if __name__ == "__main__":

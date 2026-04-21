@@ -15,8 +15,10 @@
     "task_outcome_baselines"
   ],
   "properties": {
+    "schema_version": { "type": "string" },
     "scenario_id": { "type": "string" },
     "family": { "type": "string" },
+    "split": { "enum": ["public", "holdout"] },
     "task": { "type": "string" },
     "repo_state_fingerprint": { "type": "string" },
     "token_budget": { "type": "integer", "minimum": 1 },
