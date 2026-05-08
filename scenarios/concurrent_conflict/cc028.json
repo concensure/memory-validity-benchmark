@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc028",
+  "family": "concurrent_conflict",
+  "split": "holdout",
+  "task": "Update the DNS record after confirming no conflicting DNS change is pending.",
+  "repo_state_fingerprint": "cc028-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "cc028-s1",
+      "tier": "session",
+      "content": "DNS-Agent-A submitted a DNS A-record change for api.example.com at 10:00.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc028-p1",
+      "tier": "project",
+      "content": "DNS changes must be coordinated; concurrent changes to the same record produce unpredictable TTL state.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc028-p2",
+      "tier": "project",
+      "content": "DNS-Agent-A's change has a 5-minute propagation window; no second change should be submitted during propagation.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc028-l1",
+      "tier": "long_term",
+      "content": "When two agents both submit a DNS change for the same record, check propagation state before applying.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc028-x1",
+      "tier": "session",
+      "content": "DNS-Agent-B also submitted a DNS A-record change for api.example.com at 10:02 with a different IP.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents submitted conflicting DNS A-record changes for the same hostname"
+    },
+    {
+      "id": "cc028-x2",
+      "tier": "project",
+      "content": "Old DNS note says the most recent DNS change takes effect after the TTL expires and is harmless.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc028-s1",
+    "cc028-p1",
+    "cc028-p2",
+    "cc028-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc028-x1",
+    "cc028-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc028-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc028-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc028-p2",
+        "cc028-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps033",
+  "family": "token_pressure_scale",
+  "split": "holdout",
+  "task": "Fix the timeout failure in the batch processor after the external API rate limit was not respected.",
+  "repo_state_fingerprint": "tps033-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps033-s1",
+      "tier": "session",
+      "content": "Batch processor fails with 429 errors because it sends requests at 200 rps exceeding the partner API's 100 rps limit.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps033-p1",
+      "tier": "project",
+      "content": "The batch processor must throttle requests to 80 rps to stay under the partner API's 100 rps limit with headroom.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps033-p2",
+      "tier": "project",
+      "content": "The rate limit was increased from 50 rps to 200 rps without checking the partner API's published limit.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps033-l1",
+      "tier": "long_term",
+      "content": "The 429 errors cause the batch to fail after 3 retries; no data is processed once the rate limit is hit.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps033-s2",
+      "tier": "session",
+      "content": "Session 8 note: the operations team observed 429 errors peaking during the morning batch window at 9:00 AM.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps033-n01",
+      "tier": "project",
+      "content": "The partner API has a documented 100 requests per second rate limit per API key.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps033-n02",
+      "tier": "session",
+      "content": "Session 6 note: the integration team registered a second API key to double the effective rate limit.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps033-n03",
+      "tier": "long_term",
+      "content": "Old practice: the batch processor had a 50 rps limit based on the initial API contract.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps033-n04",
+      "tier": "project",
+      "content": "The partner API rate limit response includes a Retry-After header with the next available window.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps033-n05",
+      "tier": "session",
+      "content": "Session 11 note: a batch performance test showed the processor reaches 200 rps peak on large batches.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps033-n06",
+      "tier": "project",
+      "content": "Old rate limit guide: the 50 rps limit was set before the partner increased their capacity.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps033-n07",
+      "tier": "long_term",
+      "content": "Batch processors must throttle to 80% of the partner API rate limit to maintain a safety margin.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps033-n08",
+      "tier": "session",
+      "content": "Session 4 note: the monitoring team added a 429 rate limit response counter to the dashboard.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps033-n09",
+      "tier": "project",
+      "content": "The batch processor distributes requests using a token bucket with configurable refill rate.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps033-n10",
+      "tier": "session",
+      "content": "A throughput test in session 9 confirmed the processor handles 50 rps without any 429 errors.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps033-n11",
+      "tier": "project",
+      "content": "The partner API also enforces a concurrent connection limit of 10 simultaneous connections.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps033-n12",
+      "tier": "long_term",
+      "content": "Before increasing batch processor throughput, validate the new rate against the partner API contract.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps033-n13",
+      "tier": "session",
+      "content": "Session 7 note: the integration team added exponential backoff for 429 errors.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps033-n14",
+      "tier": "project",
+      "content": "Old batch config: the processor was configured for 50 rps matching the early API contract limit.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps033-n15",
+      "tier": "project",
+      "content": "Batch processing jobs are scheduled during off-peak hours to reduce impact on the partner API.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps033-s1",
+    "tps033-p1",
+    "tps033-p2",
+    "tps033-l1",
+    "tps033-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps033-n01",
+    "tps033-n02",
+    "tps033-n03",
+    "tps033-n04",
+    "tps033-n05",
+    "tps033-n06",
+    "tps033-n07",
+    "tps033-n08",
+    "tps033-n09",
+    "tps033-n10",
+    "tps033-n11",
+    "tps033-n12",
+    "tps033-n13",
+    "tps033-n14",
+    "tps033-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps033-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps033-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps033-p2",
+        "tps033-l1",
+        "tps033-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

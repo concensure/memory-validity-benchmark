@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk022",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Implement the logging format from the data engineering team, not the PM's custom log request.",
+  "repo_state_fingerprint": "stk022-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "stk022-s1",
+      "tier": "session",
+      "content": "Data engineering team issued a binding log format requirement in session 38: all events must use structured JSON logs.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk022-p1",
+      "tier": "project",
+      "content": "Data engineering log format requirements are binding; they ensure downstream pipelines can parse and aggregate logs.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk022-p2",
+      "tier": "project",
+      "content": "The structured log format must include event_type, timestamp, user_id, and correlation_id at minimum.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk022-l1",
+      "tier": "long_term",
+      "content": "When a PM requests a custom log format for readability, apply the structured format and add human-readable metadata.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk022-x1",
+      "tier": "project",
+      "content": "PM instruction (session 39): use human-readable plain text logs so the support team can read them without tooling.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM plain text log request conflicts with data engineering team's binding structured log format"
+    },
+    {
+      "id": "stk022-x2",
+      "tier": "project",
+      "content": "Old logging note says plain text was the default log format before the data engineering team standardized the schema.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk022-s1",
+    "stk022-p1",
+    "stk022-p2",
+    "stk022-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk022-x1",
+    "stk022-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk022-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk022-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk022-p2",
+        "stk022-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

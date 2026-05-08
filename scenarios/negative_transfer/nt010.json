@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt010",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement enforce_quota for the rate limiter without inheriting billing quota behavior.",
+  "repo_state_fingerprint": "nt010-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "nt010-s1",
+      "tier": "session",
+      "content": "Rate limiter enforce_quota tracks request counts per API key within a rolling 60-second window.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt010-p1",
+      "tier": "project",
+      "content": "Rate limit enforcement is stateless at the request level; quota state lives in Redis.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt010-p2",
+      "tier": "project",
+      "content": "Exceeding the quota returns HTTP 429; the client must respect Retry-After headers.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt010-l1",
+      "tier": "long_term",
+      "content": "When enforce_quota appears in rate limiting and billing, confirm the quota model before implementing.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt010-x1",
+      "tier": "project",
+      "content": "Billing: enforce_quota checks cumulative spend against a monthly credit limit and blocks invoices.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: monthly spend quota semantics are irrelevant to per-minute request rate limiting"
+    },
+    {
+      "id": "nt010-x2",
+      "tier": "project",
+      "content": "Old platform note says quota enforcement should eventually be unified across rate limiting and billing.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt010-s1",
+    "nt010-p1",
+    "nt010-p2",
+    "nt010-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt010-x1",
+    "nt010-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt010-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt010-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt010-p2",
+        "nt010-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

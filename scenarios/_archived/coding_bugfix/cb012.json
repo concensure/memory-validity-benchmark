@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cb012",
+  "family": "coding_bugfix",
+  "split": "public",
+  "task": "Fix duplicate review items created by repeated invalidation on the same memory.",
+  "repo_state_fingerprint": "cb012-repo-v1",
+  "token_budget": 205,
+  "candidate_memories": [
+    {
+      "id": "cb012-s1",
+      "tier": "session",
+      "content": "Repeated invalidation currently creates two review rows for the same memory id.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cb012-p1",
+      "tier": "project",
+      "content": "Project memory says invalidation should be idempotent per memory version.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cb012-x1",
+      "tier": "session",
+      "content": "Stale note says duplicate review rows are acceptable because operators can ignore extras.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cb012-s1",
+    "cb012-p1"
+  ],
+  "gold_invalid_ids": [
+    "cb012-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cb012-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cb012-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

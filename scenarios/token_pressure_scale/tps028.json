@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps028",
+  "family": "token_pressure_scale",
+  "split": "holdout",
+  "task": "Fix the API response truncation after the response buffer size was reduced.",
+  "repo_state_fingerprint": "tps028-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps028-s1",
+      "tier": "session",
+      "content": "API responses over 4MB are being truncated to 4MB after the response buffer size was reduced in the last deploy.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps028-p1",
+      "tier": "project",
+      "content": "The API gateway response buffer must be restored to 16MB; it was reduced to 4MB by an accidental config change.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps028-p2",
+      "tier": "project",
+      "content": "The buffer size was changed in the Nginx config file during an unrelated disk space optimization.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps028-l1",
+      "tier": "long_term",
+      "content": "Only bulk export endpoints return responses over 4MB; all other endpoints are within the 4MB limit.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps028-s2",
+      "tier": "session",
+      "content": "Session 3 note: the data team reported bulk export responses being truncated at exactly 4MB, corrupting the output.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps028-n01",
+      "tier": "project",
+      "content": "Nginx is used as the API gateway with custom response buffering configuration.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps028-n02",
+      "tier": "session",
+      "content": "Session 4 note: the platform team upgraded Nginx from 1.24 to 1.25 for HTTP/3 support.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps028-n03",
+      "tier": "long_term",
+      "content": "Old practice: response buffering was disabled in the early API design for streaming responses.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps028-n04",
+      "tier": "project",
+      "content": "The Nginx config is managed by Ansible and deployed with the infrastructure pipeline.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps028-n05",
+      "tier": "session",
+      "content": "Session 9 note: the DevOps team added a config drift detection job for Nginx settings.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps028-n06",
+      "tier": "project",
+      "content": "Old Nginx guide: the 4MB buffer size was the original default before large export responses were added.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps028-n07",
+      "tier": "long_term",
+      "content": "API gateway buffer sizes must be set to accommodate the maximum expected response size plus a safety margin.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps028-n08",
+      "tier": "session",
+      "content": "Session 6 note: the API team added pagination to reduce large response sizes for most endpoints.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps028-n09",
+      "tier": "project",
+      "content": "Bulk export endpoints are rate-limited to 10 requests per minute per user to limit load.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps028-n10",
+      "tier": "session",
+      "content": "A response size test in session 12 confirmed all standard endpoints return responses under 1MB.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps028-n11",
+      "tier": "project",
+      "content": "The load balancer upstream buffer is set to 32MB; truncation occurs at the Nginx layer.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps028-n12",
+      "tier": "long_term",
+      "content": "Config changes that reduce resource limits must be tested against the maximum payload sizes before deploying.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps028-n13",
+      "tier": "session",
+      "content": "Session 7 note: the frontend team optimized the bulk export download to use a streaming response.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps028-n14",
+      "tier": "project",
+      "content": "Old Ansible config: the proxy_buffer_size was set to 16MB in the original template.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps028-n15",
+      "tier": "project",
+      "content": "The content-type for bulk export responses is application/octet-stream.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps028-s1",
+    "tps028-p1",
+    "tps028-p2",
+    "tps028-l1",
+    "tps028-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps028-n01",
+    "tps028-n02",
+    "tps028-n03",
+    "tps028-n04",
+    "tps028-n05",
+    "tps028-n06",
+    "tps028-n07",
+    "tps028-n08",
+    "tps028-n09",
+    "tps028-n10",
+    "tps028-n11",
+    "tps028-n12",
+    "tps028-n13",
+    "tps028-n14",
+    "tps028-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps028-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps028-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps028-p2",
+        "tps028-l1",
+        "tps028-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

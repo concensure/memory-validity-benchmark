@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "bm009",
+  "family": "branch_merge",
+  "split": "holdout",
+  "task": "Resolve contradictory code generation guidance after merge.",
+  "repo_state_fingerprint": "bm009-repo-v1",
+  "token_budget": 220,
+  "candidate_memories": [
+    {
+      "id": "bm009-s1",
+      "tier": "session",
+      "content": "Two branches carried different generated file workflows and merge kept only one target path.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "bm009-p1",
+      "tier": "project",
+      "content": "Project memory says contradictory generated-file instructions should be collapsed after merge.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "bm009-x1",
+      "tier": "session",
+      "content": "Stale note says both code generation workflows can coexist safely after the merge.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "bm009-s1",
+    "bm009-p1"
+  ],
+  "gold_invalid_ids": [
+    "bm009-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "bm009-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "bm009-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

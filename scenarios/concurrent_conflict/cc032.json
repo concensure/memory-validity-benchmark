@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc032",
+  "family": "concurrent_conflict",
+  "split": "holdout",
+  "task": "Publish the release artifact after confirming no other agent has already published it.",
+  "repo_state_fingerprint": "cc032-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "cc032-s1",
+      "tier": "session",
+      "content": "Publisher-Agent-A acquired the release artifact slot for v4.0.0 at 11:00 after the tag was pushed.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc032-p1",
+      "tier": "project",
+      "content": "Release artifact slots are locked per version to prevent duplicate publishes to the registry.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc032-p2",
+      "tier": "project",
+      "content": "Publisher-Agent-A's artifact is 80% uploaded; the registry entry is not yet marked as complete.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc032-l1",
+      "tier": "long_term",
+      "content": "When two agents both claim a release artifact slot, check upload completion before allowing a second.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc032-x1",
+      "tier": "session",
+      "content": "Publisher-Agent-B also acquired the release slot for v4.0.0 at 11:02 from a parallel pipeline job.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two publisher agents both claim the artifact release slot for the same version"
+    },
+    {
+      "id": "cc032-x2",
+      "tier": "project",
+      "content": "Old release note says duplicate publish attempts are rejected by the registry's idempotency check.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc032-s1",
+    "cc032-p1",
+    "cc032-p2",
+    "cc032-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc032-x1",
+    "cc032-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc032-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc032-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc032-p2",
+        "cc032-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

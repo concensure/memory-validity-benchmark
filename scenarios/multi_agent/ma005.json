@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ma005",
+  "family": "multi_agent",
+  "split": "holdout",
+  "task": "Coordinate cloud-facing gateway work.",
+  "repo_state_fingerprint": "ma005-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "ma005-s1",
+      "tier": "session",
+      "content": "Hosted control plane must reuse canonical Go core logic instead of reimplementing validation rules.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ma005-p1",
+      "tier": "project",
+      "content": "Project memory says tenant and billing models must stay separate from memory engine models.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ma005-x1",
+      "tier": "session",
+      "content": "Stale platform note says hosted gateway may implement a simplified memory engine independently.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ma005-s1",
+    "ma005-p1"
+  ],
+  "gold_invalid_ids": [
+    "ma005-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "ma005-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ma005-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

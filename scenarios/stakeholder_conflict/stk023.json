@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk023",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Apply the dependency upgrade policy from the security team, not the PM's freeze request.",
+  "repo_state_fingerprint": "stk023-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "stk023-s1",
+      "tier": "session",
+      "content": "Security team issued a binding dependency upgrade requirement in session 42: CVE-critical dependencies must be patched within 7 days.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk023-p1",
+      "tier": "project",
+      "content": "Security team patching requirements override PM feature freeze requests when CVE severity is critical.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk023-p2",
+      "tier": "project",
+      "content": "The current lodash vulnerability is rated CVSS 9.8 and requires an upgrade to lodash 4.17.21 immediately.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk023-l1",
+      "tier": "long_term",
+      "content": "When a security team CVE patch requirement conflicts with a PM feature freeze, apply the patch first.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk023-x1",
+      "tier": "project",
+      "content": "PM instruction (session 43): freeze all dependency changes this sprint to stabilize the release candidate.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM dependency freeze conflicts with security team's binding 7-day CVE patch requirement"
+    },
+    {
+      "id": "stk023-x2",
+      "tier": "project",
+      "content": "Old release note says dependency updates were deferred during release stabilization periods in previous cycles.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk023-s1",
+    "stk023-p1",
+    "stk023-p2",
+    "stk023-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk023-x1",
+    "stk023-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk023-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk023-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk023-p2",
+        "stk023-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

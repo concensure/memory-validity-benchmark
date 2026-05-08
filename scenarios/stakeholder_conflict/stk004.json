@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk004",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Apply the security policy from the CISO, not the PM's feature scope expansion.",
+  "repo_state_fingerprint": "stk004-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "stk004-s1",
+      "tier": "session",
+      "content": "CISO issued a binding security requirement in session 20: all user data exports must be encrypted at rest.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk004-p1",
+      "tier": "project",
+      "content": "CISO security requirements have the highest organizational priority and override PM feature scope requests.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk004-p2",
+      "tier": "project",
+      "content": "Export encryption must use AES-256 with keys managed in the approved key management service.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk004-l1",
+      "tier": "long_term",
+      "content": "When a CISO security requirement conflicts with a PM feature request, apply the security requirement first.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk004-x1",
+      "tier": "project",
+      "content": "PM instruction (session 21): allow unencrypted data exports for enterprise customers to reduce download friction.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM export friction request conflicts with binding CISO encryption requirement"
+    },
+    {
+      "id": "stk004-x2",
+      "tier": "project",
+      "content": "Old enterprise note says some customers were granted exceptions to encryption requirements in the past.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk004-s1",
+    "stk004-p1",
+    "stk004-p2",
+    "stk004-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk004-x1",
+    "stk004-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk004-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk004-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk004-p2",
+        "stk004-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

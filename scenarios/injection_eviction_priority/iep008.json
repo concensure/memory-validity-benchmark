@@ -1,0 +1,66 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iep008",
+  "family": "injection_eviction_priority",
+  "split": "public",
+  "task": "Write the database migration script for the schema change. Context window is nearly exhausted.",
+  "repo_state_fingerprint": "iep008-repo-v1",
+  "token_budget": 101,
+  "candidate_memories": [
+    {
+      "id": "iep008-p1",
+      "tier": "project",
+      "content": "Database migrations must be wrapped in a transaction with an explicit ROLLBACK statement in the catch block. An untransacted migration that fails partway through will leave the schema in a corrupt state requiring manual intervention and extended downtime. Test the rollback path in staging before deploying.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iep008-p2",
+      "tier": "project",
+      "content": "Migration files must be sequentially numbered and placed in db/migrations/; use alembic revision --autogenerate.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iep008-l1",
+      "tier": "long_term",
+      "content": "All migration scripts must have a corresponding down-migration that reverts the change.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iep008-s1",
+      "tier": "session",
+      "content": "Target migration adds a non-null column to the orders table; requires a default value for existing rows.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iep008-p1",
+    "iep008-p2",
+    "iep008-l1",
+    "iep008-s1"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "iep008-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iep008-p2",
+        "iep008-l1",
+        "iep008-s1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

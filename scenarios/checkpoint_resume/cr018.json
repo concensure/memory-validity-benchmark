@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr018",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Continue the search index rebuild at shard 7 without rebuilding shards 1\u20136.",
+  "repo_state_fingerprint": "cr018-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "cr018-s1",
+      "tier": "session",
+      "content": "Index rebuild log shows shards 1\u20136 rebuilt and marked as ready; shard 7 is the next rebuild target.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr018-p1",
+      "tier": "project",
+      "content": "Re-rebuilding completed shards wastes hours of compute and briefly removes already-rebuilt data from queries.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr018-p2",
+      "tier": "project",
+      "content": "Shards 8\u201312 have not been rebuilt and must be completed after shard 7.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr018-l1",
+      "tier": "long_term",
+      "content": "When a shard rebuild is interrupted, check the shard readiness log before resuming to target only incomplete shards.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr018-x1",
+      "tier": "session",
+      "content": "Take the entire search index offline and rebuild all 12 shards from scratch for a consistent index.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full offline rebuild; correct behavior is to resume at shard 7"
+    },
+    {
+      "id": "cr018-x2",
+      "tier": "project",
+      "content": "Old search note says rebuilding all shards simultaneously produces a more consistent index than partial rebuilds.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr018-s1",
+    "cr018-p1",
+    "cr018-p2",
+    "cr018-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr018-x1",
+    "cr018-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr018-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr018-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr018-p2",
+        "cr018-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

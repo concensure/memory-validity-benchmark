@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr015",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Resume the audit log replay at event 2,300 without replaying already-verified events.",
+  "repo_state_fingerprint": "cr015-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "cr015-s1",
+      "tier": "session",
+      "content": "Replay log shows events 1\u20132,299 replayed and verified against expected state; event 2,300 is the next replay target.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr015-p1",
+      "tier": "project",
+      "content": "Re-replaying verified events could produce duplicate state transitions and corrupt the replay baseline.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr015-p2",
+      "tier": "project",
+      "content": "Events 2,301\u20135,000 have not been replayed and must be processed after event 2,300.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr015-l1",
+      "tier": "long_term",
+      "content": "When an audit replay is interrupted, check the verification log before resuming to avoid state corruption.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr015-x1",
+      "tier": "session",
+      "content": "Clear the replay state and re-replay all 5,000 events from event 1 for a clean baseline.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full clear and re-replay; correct behavior is to resume from event 2,300"
+    },
+    {
+      "id": "cr015-x2",
+      "tier": "project",
+      "content": "Old audit note says re-replaying from the beginning ensures the final state matches the expected baseline.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr015-s1",
+    "cr015-p1",
+    "cr015-p2",
+    "cr015-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr015-x1",
+    "cr015-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr015-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr015-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr015-p2",
+        "cr015-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

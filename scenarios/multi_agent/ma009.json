@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ma009",
+  "family": "multi_agent",
+  "split": "public",
+  "task": "Coordinate implementer and reviewer on replay-audit traces.",
+  "repo_state_fingerprint": "ma009-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "ma009-s1",
+      "tier": "session",
+      "content": "Implementer writes the patch but reviewer verifies step-level audit completeness for replay.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ma009-p1",
+      "tier": "project",
+      "content": "Project memory says replay tracks need deterministic logs for reads, writes, and promotions.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ma009-x1",
+      "tier": "session",
+      "content": "Stale process note says replay trace quality can be inferred later from final outcomes alone.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ma009-s1",
+    "ma009-p1"
+  ],
+  "gold_invalid_ids": [
+    "ma009-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "ma009-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ma009-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

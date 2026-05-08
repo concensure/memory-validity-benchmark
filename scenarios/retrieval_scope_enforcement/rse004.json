@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rse004",
+  "family": "retrieval_scope_enforcement",
+  "split": "public",
+  "task": "[Project: Atlas/production] Set the log level for Atlas services in the production environment.",
+  "repo_state_fingerprint": "rse004-repo-v1",
+  "token_budget": 205,
+  "candidate_memories": [
+    {
+      "id": "rse004-p1",
+      "tier": "project",
+      "content": "[Project: Atlas / env: production] Log level must be WARN in production; INFO or DEBUG logs are prohibited in production due to PII exposure risk.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rse004-l1",
+      "tier": "long_term",
+      "content": "[Project: Atlas] PII scrubbing only applies to WARN+ level structured logs; enabling INFO in production has caused PII leaks in prior incidents.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rse004-x1",
+      "tier": "project",
+      "content": "[Project: Atlas / env: staging] Log level is DEBUG in staging to aid diagnosis; this setting must not be copied to production.",
+      "validity": "irrelevant",
+      "bucket": "critical",
+      "notes": "note: scope=staging; explicitly not for production"
+    },
+    {
+      "id": "rse004-x2",
+      "tier": "project",
+      "content": "[Project: Helios / env: production] Log level is INFO in production; Helios scrubs PII at the log router level.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: scope=Helios; different project, different scrubbing approach"
+    },
+    {
+      "id": "rse004-x3",
+      "tier": "long_term",
+      "content": "[General] Log verbosity should be reduced in production to minimise storage costs; WARN or ERROR is typical.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: general guidance, Atlas-specific rule is stricter"
+    },
+    {
+      "id": "rse004-x4",
+      "tier": "session",
+      "content": "[Project: Atlas] Recent audit found 3 services logging at INFO in production; this incident is the motivation for this task.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rse004-p1",
+    "rse004-l1"
+  ],
+  "gold_invalid_ids": [
+    "rse004-x1",
+    "rse004-x2",
+    "rse004-x3",
+    "rse004-x4"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rse004-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rse004-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cp008",
+  "family": "consensus_promotion",
+  "split": "holdout",
+  "task": "Reject promotion when only one unique agent confirms the fact twice.",
+  "repo_state_fingerprint": "cp008-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cp008-s1",
+      "tier": "session",
+      "content": "The same agent restated the fact in two places but no second independent agent confirmed it.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cp008-p1",
+      "tier": "project",
+      "content": "Project memory says independent confirming agents matter more than repeated self-confirmation.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cp008-x1",
+      "tier": "session",
+      "content": "Old shortcut says duplicate self-confirmation is enough to satisfy multi-agent promotion checks.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cp008-s1",
+    "cp008-p1"
+  ],
+  "gold_invalid_ids": [
+    "cp008-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cp008-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cp008-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

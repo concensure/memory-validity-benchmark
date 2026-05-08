@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps002",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Resolve the race condition in the session cache that causes stale session reads.",
+  "repo_state_fingerprint": "tps002-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps002-s1",
+      "tier": "session",
+      "content": "Current test reproduces stale reads when two goroutines update the session cache within 50ms of each other.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps002-p1",
+      "tier": "project",
+      "content": "Session cache writes must use a compare-and-swap operation to prevent lost updates under concurrent writes.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps002-p2",
+      "tier": "project",
+      "content": "The session cache key format changed in the last sprint; the CAS operation must use the new key format.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps002-l1",
+      "tier": "long_term",
+      "content": "Compare-and-swap is preferred over mutex locks for high-frequency cache updates to reduce contention.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps002-s2",
+      "tier": "session",
+      "content": "The stale read issue does not affect read-only session queries; only writes need the CAS fix.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps002-n01",
+      "tier": "project",
+      "content": "The session cache was migrated from Memcache to Redis in Q1.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps002-n02",
+      "tier": "session",
+      "content": "User onboarding flow was redesigned with a new progress indicator in session 8.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps002-n03",
+      "tier": "project",
+      "content": "Old cache note: session TTL was 2 hours before it was changed to 30 minutes.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps002-n04",
+      "tier": "long_term",
+      "content": "Always invalidate related cache keys when updating a parent key.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps002-n05",
+      "tier": "session",
+      "content": "The homepage A/B test was concluded with variant B winning in session 12.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps002-n06",
+      "tier": "project",
+      "content": "Redis is also used for job queue state and feature flag caching.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps002-n07",
+      "tier": "session",
+      "content": "Session 9 note: support team requested bulk user export capability.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps002-n08",
+      "tier": "project",
+      "content": "Old session guide: session cache reads used a 100ms timeout before the SLA tightened.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps002-n09",
+      "tier": "long_term",
+      "content": "Old lesson: Redis SETNX was the correct CAS operation before Lua scripting was available.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps002-n10",
+      "tier": "session",
+      "content": "Memory profiling from session 11 showed no leaks in the session manager.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps002-n11",
+      "tier": "project",
+      "content": "The mobile app connects to the session API through the API gateway.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps002-n12",
+      "tier": "session",
+      "content": "The session expiry banner was added to the frontend in session 14.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps002-n13",
+      "tier": "project",
+      "content": "The CDN is configured to bypass the cache for all /session/* routes.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps002-n14",
+      "tier": "long_term",
+      "content": "Old practice: mutex locks were used for session cache updates before CAS was adopted.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps002-n15",
+      "tier": "project",
+      "content": "Session data is replicated to a read replica for analytics queries.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps002-s1",
+    "tps002-p1",
+    "tps002-p2",
+    "tps002-l1",
+    "tps002-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps002-n01",
+    "tps002-n02",
+    "tps002-n03",
+    "tps002-n04",
+    "tps002-n05",
+    "tps002-n06",
+    "tps002-n07",
+    "tps002-n08",
+    "tps002-n09",
+    "tps002-n10",
+    "tps002-n11",
+    "tps002-n12",
+    "tps002-n13",
+    "tps002-n14",
+    "tps002-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps002-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps002-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps002-p2",
+        "tps002-l1",
+        "tps002-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

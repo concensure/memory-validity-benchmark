@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rvb009",
+  "family": "retrieval_vocabulary_bridge",
+  "split": "holdout",
+  "task": "Analytics queries are slowing down the transactional DB. Make sure analytics reads don't go to the write database.",
+  "repo_state_fingerprint": "rvb009-repo-v1",
+  "token_budget": 196,
+  "candidate_memories": [
+    {
+      "id": "rvb009-p1",
+      "tier": "project",
+      "content": "analytics-svc is configured to route all SELECT queries to the read replica via READ_DB_URL; any query hitting the primary is a misconfiguration.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb009-l1",
+      "tier": "long_term",
+      "content": "Analytics and reporting workloads must always target the read replica, never the primary; the primary is reserved for transactional writes only.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb009-p2",
+      "tier": "project",
+      "content": "READ_DB_URL is set per service in vault:/secret/services/{name}/db; verify analytics-svc is reading the correct vault path, not the shared DEFAULT_DB_URL.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rvb009-x1",
+      "tier": "project",
+      "content": "The read replica has a replication lag of up to 5 s; analytics queries must tolerate slightly stale data.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: replication lag is a trade-off, not the routing fix"
+    },
+    {
+      "id": "rvb009-x2",
+      "tier": "long_term",
+      "content": "Database connection pools should be sized separately for read and write paths to prevent analytics from exhausting write connections.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: pool sizing is a related concern, not the primary fix"
+    },
+    {
+      "id": "rvb009-x3",
+      "tier": "session",
+      "content": "Primary DB CPU spiked to 95% during the analytics batch run; confirmed due to analytics queries hitting the primary.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rvb009-p1",
+    "rvb009-l1",
+    "rvb009-p2"
+  ],
+  "gold_invalid_ids": [
+    "rvb009-x1",
+    "rvb009-x2",
+    "rvb009-x3"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rvb009-p1",
+        "rvb009-l1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rvb009-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

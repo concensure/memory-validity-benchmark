@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps014",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the configuration drift that caused production to use development feature flags.",
+  "repo_state_fingerprint": "tps014-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps014-s1",
+      "tier": "session",
+      "content": "Production deployment is serving the dark_mode feature to all users because the dev feature flag config was deployed.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps014-p1",
+      "tier": "project",
+      "content": "The production deployment must use config/flags.prod.yaml; the pipeline accidentally deployed config/flags.dev.yaml.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps014-p2",
+      "tier": "project",
+      "content": "The pipeline error occurred when the Helm values override was removed in the last release PR.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps014-l1",
+      "tier": "long_term",
+      "content": "When removing a Helm override, verify the fallback config file path points to the correct environment config.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps014-s2",
+      "tier": "session",
+      "content": "Only the dark_mode and beta_checkout flags are affected; all other production flags are correctly configured.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps014-n01",
+      "tier": "project",
+      "content": "Helm is used for Kubernetes deployments with per-environment values files.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps014-n02",
+      "tier": "session",
+      "content": "Session 5 note: the product team added three new feature flags for the Q2 launch.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps014-n03",
+      "tier": "long_term",
+      "content": "Old practice: feature flags were managed in the database before moving to YAML config files.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps014-n04",
+      "tier": "project",
+      "content": "The feature flag service caches flag values for 60 seconds; a restart is not required for flag changes.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps014-n05",
+      "tier": "session",
+      "content": "Session 13 note: the A/B testing framework was updated to support traffic splitting by user cohort.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps014-n06",
+      "tier": "project",
+      "content": "Old flag guide: the development config enabled all flags by default for easier local testing.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps014-n07",
+      "tier": "long_term",
+      "content": "Feature flag configs must be environment-specific and validated in CI before deployment.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps014-n08",
+      "tier": "session",
+      "content": "Session 9 note: the rollout team increased the dark_mode flag to 10% in production last week.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps014-n09",
+      "tier": "project",
+      "content": "The staging environment uses a third set of flag configs that mirror production with some exceptions.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps014-n10",
+      "tier": "session",
+      "content": "Session 4 note: the feature flag dashboard was updated to show per-flag rollout percentages.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps014-n11",
+      "tier": "project",
+      "content": "Feature flags are evaluated server-side for authenticated users and client-side for anonymous users.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps014-n12",
+      "tier": "long_term",
+      "content": "Config file promotion from dev to prod must be gated by an explicit environment selector, not a file path convention.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps014-n13",
+      "tier": "session",
+      "content": "Session 11 note: the engineering team added lint rules to prevent hardcoded flag values in code.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps014-n14",
+      "tier": "project",
+      "content": "Old Helm guide: the values override was added to handle a one-time config divergence between environments.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps014-n15",
+      "tier": "project",
+      "content": "The CI pipeline validates Helm charts with helm lint before allowing merges.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps014-s1",
+    "tps014-p1",
+    "tps014-p2",
+    "tps014-l1",
+    "tps014-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps014-n01",
+    "tps014-n02",
+    "tps014-n03",
+    "tps014-n04",
+    "tps014-n05",
+    "tps014-n06",
+    "tps014-n07",
+    "tps014-n08",
+    "tps014-n09",
+    "tps014-n10",
+    "tps014-n11",
+    "tps014-n12",
+    "tps014-n13",
+    "tps014-n14",
+    "tps014-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps014-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps014-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps014-p2",
+        "tps014-l1",
+        "tps014-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

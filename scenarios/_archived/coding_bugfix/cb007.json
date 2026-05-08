@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cb007",
+  "family": "coding_bugfix",
+  "split": "holdout",
+  "task": "Fix scheduler starvation in background job queue.",
+  "repo_state_fingerprint": "cb007-repo-v1",
+  "token_budget": 220,
+  "candidate_memories": [
+    {
+      "id": "cb007-s1",
+      "tier": "session",
+      "content": "Observed starvation happens when retry queue is drained before fresh jobs every tick.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cb007-p1",
+      "tier": "project",
+      "content": "Project memory says scheduler fairness was changed to weighted round-robin last release.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cb007-x1",
+      "tier": "session",
+      "content": "Stale task note claims starvation is caused by SQLite WAL checkpoint timing.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cb007-s1",
+    "cb007-p1"
+  ],
+  "gold_invalid_ids": [
+    "cb007-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cb007-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cb007-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

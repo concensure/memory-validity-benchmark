@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt004",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Run migrations for the backend service without inheriting DBA tooling migration behavior.",
+  "repo_state_fingerprint": "nt004-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "nt004-s1",
+      "tier": "session",
+      "content": "Backend service migration runner applies SQLite WAL migrations in strict version order.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt004-p1",
+      "tier": "project",
+      "content": "Backend migrations use an embedded runner with versioned up/down functions, not shell scripts.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt004-p2",
+      "tier": "project",
+      "content": "Migration version tracking is stored in the local SQLite schema_versions table.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt004-l1",
+      "tier": "long_term",
+      "content": "When migration tooling spans multiple repos, confirm the embedded runner spec before modifying.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt004-x1",
+      "tier": "project",
+      "content": "DBA tooling: run_migration executes shell scripts via psql and logs results to a central registry.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: DBA tooling migration approach conflicts with the embedded SQLite runner"
+    },
+    {
+      "id": "nt004-x2",
+      "tier": "project",
+      "content": "Old infra note says migration behavior should be standardized across all database-using services.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt004-s1",
+    "nt004-p1",
+    "nt004-p2",
+    "nt004-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt004-x1",
+    "nt004-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt004-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt004-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt004-p2",
+        "nt004-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

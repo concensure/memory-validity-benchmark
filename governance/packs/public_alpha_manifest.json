@@ -1,0 +1,32 @@
+{
+  "schema_version": "mvi-pack-manifest-v1",
+  "pack_id": "public-alpha-150-launch",
+  "pack_type": "public",
+  "status": "frozen-local",
+  "description": "Frozen local public pack for MVP-era MVI scoring and transparent iteration.",
+  "scenario_count": 100,
+  "families": {
+    "branch_merge": 10,
+    "coding_bugfix": 10,
+    "consensus_promotion": 9,
+    "handoff_resume": 10,
+    "multi_agent": 10,
+    "neutral_minimal": 11,
+    "openclaw_style": 10,
+    "project_isolation": 10,
+    "refactor": 10,
+    "stale_memory": 10
+  },
+  "scenario_ids": [
+    "bm001","bm002","bm003","bm004","bm005","bm006","bm007","bm008","bm011","bm012",
+    "cb001","cb002","cb003","cb004","cb005","cb006","cb008","cb009","cb011","cb012",
+    "cp001","cp002","cp003","cp004","cp005","cp006","cp007","cp011","cp012",
+    "hr001","hr002","hr003","hr004","hr005","hr007","hr008","hr009","hr011","hr012",
+    "ma001","ma002","ma003","ma004","ma006","ma007","ma008","ma009","ma011","ma012",
+    "nm001","nm002","nm003","nm004","nm005","nm006","nm007","nm008","nm011","nm012","nm013",
+    "oc001","oc002","oc003","oc004","oc005","oc007","oc008","oc009","oc011","oc012",
+    "pi001","pi002","pi003","pi004","pi005","pi006","pi007","pi008","pi011","pi012",
+    "rf001","rf002","rf003","rf004","rf005","rf006","rf008","rf009","rf011","rf012",
+    "sm001","sm002","sm003","sm004","sm005","sm007","sm008","sm009","sm011","sm012"
+  ]
+}

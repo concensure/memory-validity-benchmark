@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "sm003",
+  "family": "stale_memory",
+  "split": "public",
+  "task": "Filter contradicted deployment notes from context.",
+  "repo_state_fingerprint": "sm003-repo-v1",
+  "token_budget": 155,
+  "candidate_memories": [
+    {
+      "id": "sm003-s1",
+      "tier": "session",
+      "content": "Active deployment path uses versioned schema checks and diagnostics endpoints.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sm003-p1",
+      "tier": "project",
+      "content": "Project memory says contradicted deployment instructions must be suppressed before injection.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sm003-x1",
+      "tier": "session",
+      "content": "Old note says schema version checks can be skipped on reopen.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "sm003-s1",
+    "sm003-p1"
+  ],
+  "gold_invalid_ids": [
+    "sm003-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "sm003-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "sm003-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

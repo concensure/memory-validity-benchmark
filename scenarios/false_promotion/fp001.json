@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp001",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Fix the connection retry logic using current session evidence, not the promoted retry rule.",
+  "repo_state_fingerprint": "fp001-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "fp001-s1",
+      "tier": "session",
+      "content": "Current integration tests show the promoted '3 retries with exponential backoff' rule causes thundering herd.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp001-p1",
+      "tier": "project",
+      "content": "Project policy now requires retry jitter; the exponential-only approach is no longer the standard.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp001-p2",
+      "tier": "project",
+      "content": "The correct retry pattern is capped exponential backoff with \u00b125% jitter, not pure exponential.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp001-l1",
+      "tier": "long_term",
+      "content": "When session evidence contradicts a long-term memory, trust the evidence and initiate a demotion review.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp001-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 5): use 3 retries with pure exponential backoff for all transient failures.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted retry rule was based on a single low-traffic test; evidence shows it causes herd under load"
+    },
+    {
+      "id": "fp001-x2",
+      "tier": "project",
+      "content": "Old promotion note says the retry rule was validated by the API team and should be treated as authoritative.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp001-s1",
+    "fp001-p1",
+    "fp001-p2",
+    "fp001-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp001-x1",
+    "fp001-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp001-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp001-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp001-p2",
+        "fp001-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "sm008",
+  "family": "stale_memory",
+  "split": "public",
+  "task": "Suppress old schema assumptions after run artifacts gain evaluation fields.",
+  "repo_state_fingerprint": "sm008-repo-v1",
+  "token_budget": 155,
+  "candidate_memories": [
+    {
+      "id": "sm008-s1",
+      "tier": "session",
+      "content": "Run artifacts now include evaluation metrics and legacy consumers must be updated or gated by version.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sm008-p1",
+      "tier": "project",
+      "content": "Project memory says schema evolution must be explicit and compatibility-aware.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sm008-x1",
+      "tier": "session",
+      "content": "Stale note says extra evaluation fields can be ignored without version checks in every harness.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "sm008-s1",
+    "sm008-p1"
+  ],
+  "gold_invalid_ids": [
+    "sm008-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "sm008-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "sm008-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

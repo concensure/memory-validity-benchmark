@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cp010",
+  "family": "consensus_promotion",
+  "split": "holdout",
+  "task": "Reject promotion when project memory is still scoped to a temporary migration.",
+  "repo_state_fingerprint": "cp010-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "cp010-s1",
+      "tier": "session",
+      "content": "The candidate memory was useful during a migration but should expire when the migration ends.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cp010-p1",
+      "tier": "project",
+      "content": "Project memory says temporary migration context should not be promoted to durable long-term memory.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cp010-x1",
+      "tier": "session",
+      "content": "Old heuristic says any repeated migration note deserves permanent retention.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cp010-s1",
+    "cp010-p1"
+  ],
+  "gold_invalid_ids": [
+    "cp010-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cp010-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cp010-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

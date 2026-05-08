@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed016",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the Auth0 integration after Auth0 deprecated the legacy /oauth/ro endpoint.",
+  "repo_state_fingerprint": "ed016-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "ed016-s1",
+      "tier": "session",
+      "content": "Authentication flows fail with 410; Auth0 removed the legacy /oauth/ro endpoint for resource owner password grant.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed016-p1",
+      "tier": "project",
+      "content": "Auth0 resource owner password grant must now use the /oauth/token endpoint with grant_type=password.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed016-p2",
+      "tier": "project",
+      "content": "The new endpoint requires a client_secret in the request body when client authentication is required.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed016-l1",
+      "tier": "long_term",
+      "content": "When an identity provider removes an auth endpoint, update the grant type request before changing token parsing.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed016-x1",
+      "tier": "project",
+      "content": "Auth0 integration note (session 10): authenticate users via the /oauth/ro endpoint with username and password.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: Auth0 /oauth/ro endpoint removed; /oauth/token with grant_type=password is required"
+    },
+    {
+      "id": "ed016-x2",
+      "tier": "project",
+      "content": "Old auth note says /oauth/ro was the standard approach for resource owner password grant in Auth0.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed016-s1",
+    "ed016-p1",
+    "ed016-p2",
+    "ed016-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed016-x1",
+    "ed016-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed016-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed016-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed016-p2",
+        "ed016-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

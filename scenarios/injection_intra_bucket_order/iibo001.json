@@ -1,0 +1,66 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iibo001",
+  "family": "injection_intra_bucket_order",
+  "split": "public",
+  "task": "Investigate why the job scheduler is running tasks in duplicate. Both scheduler instances report active status.",
+  "repo_state_fingerprint": "iibo001-repo-v1",
+  "token_budget": 215,
+  "candidate_memories": [
+    {
+      "id": "iibo001-p1",
+      "tier": "project",
+      "content": "Only one scheduler instance may hold the distributed leader lease at a time. Any instance that detects it does not hold a valid lease must immediately stop processing and enter standby mode.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iibo001-s1",
+      "tier": "session",
+      "content": "Duplicate task execution observed since 09:15 UTC. Both scheduler instances report active=true; the distributed lock may have failed to renew.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iibo001-p2",
+      "tier": "project",
+      "content": "Distributed lock renewal interval is every 10 s; if a scheduler misses 3 renewals the lock expires automatically.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iibo001-l1",
+      "tier": "long_term",
+      "content": "Previous duplicate scheduling incident (2025-08) was caused by a network partition preventing lock renewal; check network connectivity between scheduler instances first.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iibo001-p1",
+    "iibo001-s1",
+    "iibo001-p2",
+    "iibo001-l1"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "iibo001-p1",
+        "iibo001-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iibo001-p2",
+        "iibo001-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

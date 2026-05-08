@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc004",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Modify the deployment config after confirming no other agent holds edit rights.",
+  "repo_state_fingerprint": "cc004-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "cc004-s1",
+      "tier": "session",
+      "content": "DevOps-A took edit rights on deployment.yaml at 08:30 to update the replica count.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc004-p1",
+      "tier": "project",
+      "content": "Deployment config must have single-agent edit rights during an active deploy to prevent conflicts.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc004-p2",
+      "tier": "project",
+      "content": "DevOps-A's replica count change is waiting for CI approval before being applied.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc004-l1",
+      "tier": "long_term",
+      "content": "When deployment config ownership is contested, check CI state and agent logs before any edit.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc004-x1",
+      "tier": "session",
+      "content": "SRE-B also acquired edit rights on deployment.yaml at 08:45 to update the resource limits.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents both hold edit rights on the same deployment config file"
+    },
+    {
+      "id": "cc004-x2",
+      "tier": "project",
+      "content": "Old ops note says deployment config conflicts are low-risk and can be resolved by the last writer.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc004-s1",
+    "cc004-p1",
+    "cc004-p2",
+    "cc004-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc004-x1",
+    "cc004-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc004-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc004-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc004-p2",
+        "cc004-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

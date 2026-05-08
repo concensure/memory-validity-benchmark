@@ -1,0 +1,69 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rde002",
+  "family": "retrieval_deduplication",
+  "split": "public",
+  "task": "Configure the editor and linter settings for the new Go service repository to match team standards.",
+  "repo_state_fingerprint": "rde002-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "rde002-p1",
+      "tier": "project",
+      "content": "Go source files use tabs for indentation (gofmt default); spaces are not permitted. .editorconfig must set indent_style=tab, indent_size=4 for *.go files.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rde002-p2",
+      "tier": "project",
+      "content": "Use tabs not spaces in Go files.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "deduplication: superseded by rde002-p1; missing .editorconfig detail"
+    },
+    {
+      "id": "rde002-l1",
+      "tier": "long_term",
+      "content": "Indentation: tabs, not spaces, for all Go code per gofmt convention.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "deduplication: superseded by rde002-p1; no editor config detail"
+    },
+    {
+      "id": "rde002-x1",
+      "tier": "project",
+      "content": "Python files in the monorepo use 4-space indentation per PEP 8; this is separate from the Go convention.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rde002-x2",
+      "tier": "session",
+      "content": "gofmt is run as part of the CI lint step; files not conforming to gofmt will fail CI.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rde002-p1"
+  ],
+  "gold_invalid_ids": [
+    "rde002-p2",
+    "rde002-l1",
+    "rde002-x1",
+    "rde002-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rde002-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

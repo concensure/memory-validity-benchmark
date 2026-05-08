@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc007",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Trigger the cache invalidation after confirming no other agent has already queued it.",
+  "repo_state_fingerprint": "cc007-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cc007-s1",
+      "tier": "session",
+      "content": "Cache-Invalidator-A queued a full product catalog invalidation at 12:00 for the release.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc007-p1",
+      "tier": "project",
+      "content": "Cache invalidation must be idempotent but should not be triggered twice within a release window.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc007-p2",
+      "tier": "project",
+      "content": "Cache-Invalidator-A's queue entry is visible in the invalidation log with a pending status.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc007-l1",
+      "tier": "long_term",
+      "content": "When two agents both queue the same invalidation, deduplicate before allowing both to execute.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc007-x1",
+      "tier": "session",
+      "content": "Cache-Invalidator-B queued an identical full product catalog invalidation at 12:01.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents both queued the same cache invalidation within a release window"
+    },
+    {
+      "id": "cc007-x2",
+      "tier": "project",
+      "content": "Old ops note says duplicate invalidation requests are harmless because cache writes are idempotent.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc007-s1",
+    "cc007-p1",
+    "cc007-p2",
+    "cc007-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc007-x1",
+    "cc007-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc007-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc007-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc007-p2",
+        "cc007-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

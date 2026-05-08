@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr008",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Continue the model training from epoch 12 without restarting training from epoch 1.",
+  "repo_state_fingerprint": "cr008-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cr008-s1",
+      "tier": "session",
+      "content": "Training checkpoint at epoch 12 was saved with validation loss 0.32; resuming from this checkpoint is confirmed.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr008-p1",
+      "tier": "project",
+      "content": "Restarting training from epoch 1 discards 12 epochs of gradient descent and wastes GPU hours.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr008-p2",
+      "tier": "project",
+      "content": "Epochs 13\u201330 have not been trained; they must complete after resuming from the epoch 12 checkpoint.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr008-l1",
+      "tier": "long_term",
+      "content": "When training is interrupted, load the checkpoint weights and optimizer state before resuming.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr008-x1",
+      "tier": "session",
+      "content": "Restart training from epoch 1 with the same hyperparameters to ensure full training reproducibility.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full restart; correct behavior is to resume from the epoch 12 checkpoint"
+    },
+    {
+      "id": "cr008-x2",
+      "tier": "project",
+      "content": "Old ML note says restarting from epoch 1 is the only way to ensure reproducible training results.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr008-s1",
+    "cr008-p1",
+    "cr008-p2",
+    "cr008-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr008-x1",
+    "cr008-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr008-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr008-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr008-p2",
+        "cr008-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

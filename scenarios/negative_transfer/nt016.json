@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt016",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement parse_config for the server without importing CLI config parsing behavior.",
+  "repo_state_fingerprint": "nt016-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "nt016-s1",
+      "tier": "session",
+      "content": "Server parse_config reads TOML from the config directory and applies environment variable overrides.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt016-p1",
+      "tier": "project",
+      "content": "Server config is read once at startup; hot-reload requires an explicit SIGHUP or API trigger.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt016-p2",
+      "tier": "project",
+      "content": "Server config parsing must validate all required keys before the service accepts connections.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt016-l1",
+      "tier": "long_term",
+      "content": "When parse_config spans CLI and server contexts, confirm the reload and validation semantics first.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt016-x1",
+      "tier": "project",
+      "content": "CLI: parse_config reads flags and env vars at each invocation; no config file is ever written.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: CLI flag-based config model is incompatible with the file-based server config"
+    },
+    {
+      "id": "nt016-x2",
+      "tier": "project",
+      "content": "Old tooling note says config parsing should be unified so CLI and server share the same logic.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt016-s1",
+    "nt016-p1",
+    "nt016-p2",
+    "nt016-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt016-x1",
+    "nt016-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt016-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt016-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt016-p2",
+        "nt016-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

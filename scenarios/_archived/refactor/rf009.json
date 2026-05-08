@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rf009",
+  "family": "refactor",
+  "split": "public",
+  "task": "Separate promotion reporting from core promotion logic.",
+  "repo_state_fingerprint": "rf009-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "rf009-s1",
+      "tier": "session",
+      "content": "Reporting and dashboards should not own promotion decisions or memory validity semantics.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rf009-p1",
+      "tier": "project",
+      "content": "Project memory says observation layers must not reimplement promotion rules.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rf009-x1",
+      "tier": "session",
+      "content": "Stale note says reporting code can embed simplified promotion shortcuts because it is read-mostly.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rf009-s1",
+    "rf009-p1"
+  ],
+  "gold_invalid_ids": [
+    "rf009-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "rf009-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rf009-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

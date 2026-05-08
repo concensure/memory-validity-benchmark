@@ -1,0 +1,69 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rde005",
+  "family": "retrieval_deduplication",
+  "split": "public",
+  "task": "Set the HTTP client timeout for the outbound call to the shipping API.",
+  "repo_state_fingerprint": "rde005-repo-v1",
+  "token_budget": 172,
+  "candidate_memories": [
+    {
+      "id": "rde005-p1",
+      "tier": "project",
+      "content": "Outbound HTTP client timeout for shipping-api calls is 10 s (3 s connect + 7 s read); configured via SHIPPING_CLIENT_TIMEOUT_MS=10000 in config/production.yaml.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rde005-p2",
+      "tier": "project",
+      "content": "Shipping API timeout is 10 seconds.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "deduplication: superseded by rde005-p1; no connect/read breakdown or config key"
+    },
+    {
+      "id": "rde005-l1",
+      "tier": "long_term",
+      "content": "HTTP client timeouts should always be explicit; never rely on OS defaults for outbound API calls.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rde005-x1",
+      "tier": "project",
+      "content": "Old timeout was 30 s before the shipping API SLA was tightened in 2024; 10 s is the current value.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: historical context, current value already in p1"
+    },
+    {
+      "id": "rde005-x2",
+      "tier": "session",
+      "content": "Shipping API P99 latency is currently 4.2 s; 10 s timeout provides adequate headroom.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rde005-p1"
+  ],
+  "gold_invalid_ids": [
+    "rde005-p2",
+    "rde005-l1",
+    "rde005-x1",
+    "rde005-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rde005-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

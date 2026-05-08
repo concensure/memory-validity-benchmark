@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp005",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Implement the rate limit fix using session evidence, not the promoted rate limit rule.",
+  "repo_state_fingerprint": "fp005-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "fp005-s1",
+      "tier": "session",
+      "content": "Current API monitoring shows the promoted '100 requests/minute per user' limit blocks legitimate bulk imports.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp005-p1",
+      "tier": "project",
+      "content": "Project product requirements show bulk import users need a minimum of 1000 requests/minute.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp005-p2",
+      "tier": "project",
+      "content": "Correct approach is tiered rate limits: 100 req/min for interactive users and 1000 req/min for import-scoped tokens.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp005-l1",
+      "tier": "long_term",
+      "content": "When session monitoring shows legitimate users being blocked, trust the evidence over the promoted rate rule.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp005-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 7): apply a 100 requests/minute rate limit to all authenticated users.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted universal rate limit was based on interactive user patterns; import workloads need a higher tier"
+    },
+    {
+      "id": "fp005-x2",
+      "tier": "project",
+      "content": "Old promotion note says the 100 req/min limit was validated during a load test and should apply universally.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp005-s1",
+    "fp005-p1",
+    "fp005-p2",
+    "fp005-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp005-x1",
+    "fp005-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp005-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp005-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp005-p2",
+        "fp005-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

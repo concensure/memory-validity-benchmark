@@ -1,0 +1,93 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "lha014",
+  "family": "long_horizon_accumulation",
+  "split": "holdout",
+  "task": "Step 6 of 20 \u2014 dependency upgrade chain: upgrade shared-lib to v4.0 after upgrading its transitive dependency proto-lib to v3.0. Steps 1\u20135 complete. proto-lib was upgraded at step 4; this invalidated the shared-lib v3.x compatibility layer.",
+  "repo_state_fingerprint": "lha014-repo-v1",
+  "token_budget": 240,
+  "candidate_memories": [
+    {
+      "id": "lha014-s1",
+      "tier": "session",
+      "content": "Step 5 checkpoint: proto-lib v3.0 upgrade complete and validated; shared-lib v3.x uses proto-lib v2.x API which is no longer available.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 5"
+    },
+    {
+      "id": "lha014-p1",
+      "tier": "project",
+      "content": "shared-lib v4.0 is required because it is the first version compatible with proto-lib v3.0; v3.x versions of shared-lib will not compile after the proto-lib upgrade.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 4; compatibility constraint from proto-lib upgrade"
+    },
+    {
+      "id": "lha014-p2",
+      "tier": "project",
+      "content": "shared-lib v4.0 migration guide is in vendor/shared-lib/v4-migration.md; 3 API changes affect this codebase.",
+      "validity": "valid",
+      "bucket": "supporting",
+      "notes": "created_at_step: 5"
+    },
+    {
+      "id": "lha014-l1",
+      "tier": "long_term",
+      "content": "Transitive dependency upgrades must be validated bottom-up; never skip an intermediate version without confirming compatibility at each level.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha014-x1",
+      "tier": "project",
+      "content": "Step 2 plan: upgrade shared-lib to v3.5 for incremental migration; v3.5 is compatible with proto-lib v2.x.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 4; proto-lib v3.0 upgrade makes v3.5 incompatible; must go to v4.0"
+    },
+    {
+      "id": "lha014-x2",
+      "tier": "session",
+      "content": "Step 3 note: shared-lib v3.5 upgrade blocked on proto-lib upgrade completing.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 5; proto-lib upgrade complete; v3.5 path no longer viable"
+    }
+  ],
+  "gold_valid_ids": [
+    "lha014-s1",
+    "lha014-p1",
+    "lha014-p2",
+    "lha014-l1"
+  ],
+  "gold_invalid_ids": [
+    "lha014-x1",
+    "lha014-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "lha014-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "lha014-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "lha014-p2",
+        "lha014-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.06,
+    "ideal": 1.0
+  }
+}

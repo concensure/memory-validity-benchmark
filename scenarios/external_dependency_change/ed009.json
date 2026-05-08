@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed009",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the GitHub API integration after GitHub removed the deprecated v3 search rate limit header.",
+  "repo_state_fingerprint": "ed009-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "ed009-s1",
+      "tier": "session",
+      "content": "Rate limit tracking is broken; GitHub removed the X-RateLimit-Search-Remaining header in February 2024.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed009-p1",
+      "tier": "project",
+      "content": "GitHub API search rate limits must now be read from the x-ratelimit-remaining header in the resource-specific context.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed009-p2",
+      "tier": "project",
+      "content": "The GitHub API also deprecated the link header pagination in favor of cursor-based pagination tokens.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed009-l1",
+      "tier": "long_term",
+      "content": "When a VCS provider removes a rate limit header, update rate limit tracking before making more API calls.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed009-x1",
+      "tier": "project",
+      "content": "GitHub API note (session 8): read remaining search rate limit from the X-RateLimit-Search-Remaining response header.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: X-RateLimit-Search-Remaining header removed from GitHub API responses"
+    },
+    {
+      "id": "ed009-x2",
+      "tier": "project",
+      "content": "Old GitHub note says search rate limit headers are stable across GitHub API versions.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed009-s1",
+    "ed009-p1",
+    "ed009-p2",
+    "ed009-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed009-x1",
+    "ed009-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed009-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed009-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed009-p2",
+        "ed009-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

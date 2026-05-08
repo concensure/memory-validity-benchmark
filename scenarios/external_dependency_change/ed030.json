@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed030",
+  "family": "external_dependency_change",
+  "split": "holdout",
+  "task": "Fix the .NET client after Microsoft deprecated the HttpWebRequest class in .NET 6.",
+  "repo_state_fingerprint": "ed030-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "ed030-s1",
+      "tier": "session",
+      "content": "Build warnings indicate HttpWebRequest is marked obsolete; Microsoft deprecated it in .NET 6.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed030-p1",
+      "tier": "project",
+      "content": "HTTP requests must now use HttpClient with HttpRequestMessage for all outbound HTTP calls.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed030-p2",
+      "tier": "project",
+      "content": "HttpClient supports HTTP/2 and HTTP/3 by default in .NET 6; HttpWebRequest did not.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed030-l1",
+      "tier": "long_term",
+      "content": "When Microsoft deprecates an HTTP class, migrate to HttpClient before targeting .NET 7 or higher.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed030-x1",
+      "tier": "project",
+      "content": ".NET HTTP note (session 5): use HttpWebRequest.Create() to make HTTP requests for maximum control.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: HttpWebRequest deprecated in .NET 6; HttpClient is the required replacement"
+    },
+    {
+      "id": "ed030-x2",
+      "tier": "project",
+      "content": "Old .NET note says HttpWebRequest is still functional in .NET 6 despite the deprecation warning.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed030-s1",
+    "ed030-p1",
+    "ed030-p2",
+    "ed030-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed030-x1",
+    "ed030-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed030-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed030-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed030-p2",
+        "ed030-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

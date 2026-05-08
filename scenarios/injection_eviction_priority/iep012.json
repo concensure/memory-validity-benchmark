@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iep012",
+  "family": "injection_eviction_priority",
+  "split": "public",
+  "task": "Upgrade the orders-svc dependency on the shared-lib from v2.1 to v3.0. Context is nearly full.",
+  "repo_state_fingerprint": "iep012-repo-v1",
+  "token_budget": 99,
+  "candidate_memories": [
+    {
+      "id": "iep012-p1",
+      "tier": "project",
+      "content": "shared-lib v3.0 contains a breaking change: the ProcessOrder() function signature changed from (ctx, order) to (ctx, order, opts). Any caller not updated to pass opts will panic at runtime. Audit all call sites in orders-svc before upgrading; update every call site in the same PR as the dependency bump.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iep012-p2",
+      "tier": "project",
+      "content": "shared-lib changelog is in vendor/shared-lib/CHANGELOG.md; review the v3.0 migration section.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iep012-l1",
+      "tier": "long_term",
+      "content": "Dependency major version bumps require a PR description that lists all breaking changes and confirms all call sites have been audited.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iep012-p1",
+    "iep012-p2",
+    "iep012-l1"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "iep012-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iep012-p2",
+        "iep012-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

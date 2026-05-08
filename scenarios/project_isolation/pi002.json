@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pi002",
+  "family": "project_isolation",
+  "split": "public",
+  "task": "Keep benchmark harness memory out of product repository context.",
+  "repo_state_fingerprint": "pi002-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "pi002-s1",
+      "tier": "session",
+      "content": "Harness-specific JSON bundle assumptions should not leak into core product memory selection.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pi002-p1",
+      "tier": "project",
+      "content": "Project memory says benchmark repo details are out of scope for product patching unless explicitly imported.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pi002-x1",
+      "tier": "session",
+      "content": "Foreign note says benchmark schema changes are always relevant to any repo with JSON tooling.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pi002-s1",
+    "pi002-p1"
+  ],
+  "gold_invalid_ids": [
+    "pi002-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "pi002-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pi002-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

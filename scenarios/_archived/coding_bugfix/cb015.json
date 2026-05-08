@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cb015",
+  "family": "coding_bugfix",
+  "split": "holdout",
+  "task": "Fix consensus tally when one approver retracts an earlier promotion vote.",
+  "repo_state_fingerprint": "cb015-repo-v1",
+  "token_budget": 225,
+  "candidate_memories": [
+    {
+      "id": "cb015-s1",
+      "tier": "session",
+      "content": "Promotion tally still counts a retracted approval as active consensus.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cb015-p1",
+      "tier": "project",
+      "content": "Project memory says retracted votes must be excluded from promotion quorum checks.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cb015-x1",
+      "tier": "session",
+      "content": "Old note says promotion votes are append-only and never need rollback handling.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cb015-s1",
+    "cb015-p1"
+  ],
+  "gold_invalid_ids": [
+    "cb015-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cb015-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cb015-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

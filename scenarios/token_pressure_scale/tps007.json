@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps007",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the incorrect access control after the role inheritance chain was updated.",
+  "repo_state_fingerprint": "tps007-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps007-s1",
+      "tier": "session",
+      "content": "Reviewer role now has write access to configuration settings after the role inheritance chain was changed.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps007-p1",
+      "tier": "project",
+      "content": "Reviewer role must inherit from ReadOnly, not from Editor; the inheritance was changed by mistake in the last deploy.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps007-p2",
+      "tier": "project",
+      "content": "The role inheritance config is in access/roles.yaml; the Reviewer entry must reference ReadOnly as its parent.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps007-l1",
+      "tier": "long_term",
+      "content": "After any role inheritance change, run a full permission regression test before deploying to production.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps007-s2",
+      "tier": "session",
+      "content": "The misconfiguration only affects the Reviewer role; the Contributor and Owner roles are unaffected.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps007-n01",
+      "tier": "project",
+      "content": "The RBAC system was migrated from a flat role model to an inheritance-based model in 2023.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps007-n02",
+      "tier": "session",
+      "content": "Session 4 note: the admin panel was updated to show role inheritance chains visually.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps007-n03",
+      "tier": "long_term",
+      "content": "Old lesson: flat RBAC models were simpler to audit but harder to manage as the role count grew.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps007-n04",
+      "tier": "project",
+      "content": "The permission cache is refreshed every 5 minutes; a fresh session will pick up role changes immediately.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps007-n05",
+      "tier": "session",
+      "content": "Session 10 note: the security team completed a quarterly access review and found no violations.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps007-n06",
+      "tier": "project",
+      "content": "Old RBAC guide: Reviewer role had direct write access to configuration before the inheritance model was introduced.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps007-n07",
+      "tier": "long_term",
+      "content": "Role inheritance chains must be documented and tested for unintended permission escalation.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps007-n08",
+      "tier": "session",
+      "content": "The compliance team requested a role audit report in session 14.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps007-n09",
+      "tier": "project",
+      "content": "Roles are also used to filter analytics dashboards; the Reviewer role sees aggregate-only metrics.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps007-n10",
+      "tier": "session",
+      "content": "Session 7 note: a new Analyst role was added for the data team without write access.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps007-n11",
+      "tier": "project",
+      "content": "The role inheritance config is deployed via GitOps and requires a two-person approval.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps007-n12",
+      "tier": "long_term",
+      "content": "When modifying role inheritance, test both the changed role and all roles that inherit from it.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps007-n13",
+      "tier": "session",
+      "content": "Session 11 note: the support team role was restricted to read-only access.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps007-n14",
+      "tier": "project",
+      "content": "Old RBAC config: Reviewer and Editor shared the same parent role before the inheritance refactor.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps007-n15",
+      "tier": "project",
+      "content": "The API enforces role checks at both the gateway level and the service handler level.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps007-s1",
+    "tps007-p1",
+    "tps007-p2",
+    "tps007-l1",
+    "tps007-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps007-n01",
+    "tps007-n02",
+    "tps007-n03",
+    "tps007-n04",
+    "tps007-n05",
+    "tps007-n06",
+    "tps007-n07",
+    "tps007-n08",
+    "tps007-n09",
+    "tps007-n10",
+    "tps007-n11",
+    "tps007-n12",
+    "tps007-n13",
+    "tps007-n14",
+    "tps007-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps007-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps007-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps007-p2",
+        "tps007-l1",
+        "tps007-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

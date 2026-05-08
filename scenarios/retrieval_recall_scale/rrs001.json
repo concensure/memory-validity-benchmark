@@ -1,0 +1,154 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rrs001",
+  "family": "retrieval_recall_scale",
+  "split": "public",
+  "task": "Fix intermittent 401 errors in payment-svc following vault key rotation yesterday. Candidate pool drawn from a 180-entry store spanning 12 projects.",
+  "repo_state_fingerprint": "rrs001-repo-v1",
+  "token_budget": 240,
+  "candidate_memories": [
+    {
+      "id": "rrs001-s1",
+      "tier": "session",
+      "content": "401 errors in payment-svc began at 14:02 UTC, two hours after vault key rotation completed at 12:00 UTC.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs001-p1",
+      "tier": "project",
+      "content": "payment-svc auth middleware reads signing keys from vault:/secret/payment/jwt; falls back to ENV on vault unreachable.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs001-p2",
+      "tier": "project",
+      "content": "Token cache TTL in auth_middleware.py is 60 s; stale keys can persist up to 60 s after rotation.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs001-l1",
+      "tier": "long_term",
+      "content": "After vault key rotation, restart payment-svc auth workers to flush the in-process key cache immediately.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs001-x1",
+      "tier": "session",
+      "content": "New rate limiter deployed at 09:30 UTC reduced API p99 latency by 12 ms on average.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs001-x2",
+      "tier": "project",
+      "content": "user-svc login was migrated from basic auth to OAuth 2.0 PKCE last quarter; no impact on payment-svc.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs001-x3",
+      "tier": "project",
+      "content": "payment-svc used ENV-only keys before vault integration in Q1 2024; those keys were rotated at that time.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: pre-vault history, vault integration supersedes"
+    },
+    {
+      "id": "rrs001-x4",
+      "tier": "long_term",
+      "content": "All services use HS256 for JWT signing; algorithm config lives in jwt_config.yaml per service.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs001-x5",
+      "tier": "project",
+      "content": "User portal session tokens expire after 24 h and are stored in Redis, not in the payment vault.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs001-x6",
+      "tier": "session",
+      "content": "Vault health checks are passing; the vault cluster itself is healthy and reachable.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs001-x7",
+      "tier": "project",
+      "content": "Prior 401 incident in 2025-03 was caused by expired SSL certs on the vault proxy, not key rotation.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: different root cause, not applicable here"
+    },
+    {
+      "id": "rrs001-x8",
+      "tier": "project",
+      "content": "payment-svc DB pool is 50 connections with 30 s timeout; no changes in the last 48 h.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs001-x9",
+      "tier": "long_term",
+      "content": "2FA enrollment is mandatory for admin roles; service accounts are exempt from 2FA.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs001-x10",
+      "tier": "session",
+      "content": "API gateway throughput is nominal; no alerts on downstream error budgets outside payment-svc.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rrs001-s1",
+    "rrs001-p1",
+    "rrs001-p2",
+    "rrs001-l1"
+  ],
+  "gold_invalid_ids": [
+    "rrs001-x1",
+    "rrs001-x2",
+    "rrs001-x3",
+    "rrs001-x4",
+    "rrs001-x5",
+    "rrs001-x6",
+    "rrs001-x7",
+    "rrs001-x8",
+    "rrs001-x9",
+    "rrs001-x10"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "rrs001-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rrs001-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rrs001-p2",
+        "rrs001-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

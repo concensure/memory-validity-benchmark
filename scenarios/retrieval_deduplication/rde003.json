@@ -1,0 +1,70 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rde003",
+  "family": "retrieval_deduplication",
+  "split": "public",
+  "task": "Load the service auth token for the billing API client. The token must not come from environment variables.",
+  "repo_state_fingerprint": "rde003-repo-v1",
+  "token_budget": 178,
+  "candidate_memories": [
+    {
+      "id": "rde003-p1",
+      "tier": "project",
+      "content": "Auth tokens for all service clients must be loaded from vault at runtime using the AppRole path vault:/secret/services/{service-name}/token; loading from ENV vars or config files is prohibited.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rde003-p2",
+      "tier": "project",
+      "content": "Token must come from vault only, not ENV.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "deduplication: superseded by rde003-p1; missing AppRole path detail"
+    },
+    {
+      "id": "rde003-l1",
+      "tier": "long_term",
+      "content": "Never load service credentials from environment variables; use vault AppRole.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "deduplication: superseded by rde003-p1; missing specific path format"
+    },
+    {
+      "id": "rde003-x1",
+      "tier": "project",
+      "content": "Old setup used BILLING_API_TOKEN env var; this was migrated to vault in 2024.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: historical migration note, not the current rule"
+    },
+    {
+      "id": "rde003-x2",
+      "tier": "session",
+      "content": "Vault is reachable; AppRole auth is healthy.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rde003-p1"
+  ],
+  "gold_invalid_ids": [
+    "rde003-p2",
+    "rde003-l1",
+    "rde003-x1",
+    "rde003-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rde003-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

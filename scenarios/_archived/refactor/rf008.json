@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rf008",
+  "family": "refactor",
+  "split": "public",
+  "task": "Extract branch-aware memory utilities without changing default repository behavior.",
+  "repo_state_fingerprint": "rf008-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "rf008-s1",
+      "tier": "session",
+      "content": "Branch-aware helpers should expose drift state without making branch semantics mandatory for all retrievals.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rf008-p1",
+      "tier": "project",
+      "content": "Project memory says optional behavior must remain optional after refactor extraction.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rf008-x1",
+      "tier": "session",
+      "content": "Old refactor note says every retrieval path should enforce branch metadata even in single-branch repos.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rf008-s1",
+    "rf008-p1"
+  ],
+  "gold_invalid_ids": [
+    "rf008-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "rf008-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rf008-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

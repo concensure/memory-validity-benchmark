@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr023",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Resume the data ingestion pipeline at file 67 without re-ingesting files 1\u201366.",
+  "repo_state_fingerprint": "cr023-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "cr023-s1",
+      "tier": "session",
+      "content": "Ingestion log shows files 1\u201366 ingested and deduplicated in the target store; file 67 is the next ingestion target.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr023-p1",
+      "tier": "project",
+      "content": "Re-ingesting completed files triggers duplicate detection logic and wastes downstream storage.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr023-p2",
+      "tier": "project",
+      "content": "Files 68\u2013150 have not been ingested and must be processed after file 67.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr023-l1",
+      "tier": "long_term",
+      "content": "When an ingestion pipeline is interrupted, read the ingestion log to confirm completed files before resuming.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr023-x1",
+      "tier": "session",
+      "content": "Delete the ingested data and re-ingest all 150 files from file 1 for a clean ingestion run.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full deletion and re-ingest; correct behavior is to resume from file 67"
+    },
+    {
+      "id": "cr023-x2",
+      "tier": "project",
+      "content": "Old ingestion note says re-ingesting from the beginning ensures the deduplication logic runs on a clean slate.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr023-s1",
+    "cr023-p1",
+    "cr023-p2",
+    "cr023-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr023-x1",
+    "cr023-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr023-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr023-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr023-p2",
+        "cr023-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

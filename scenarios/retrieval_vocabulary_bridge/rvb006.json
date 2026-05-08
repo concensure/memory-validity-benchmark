@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rvb006",
+  "family": "retrieval_vocabulary_bridge",
+  "split": "public",
+  "task": "A memory leak in the PDF renderer is crashing all workers in the same pod. Isolate the failure so the crash doesn't spread.",
+  "repo_state_fingerprint": "rvb006-repo-v1",
+  "token_budget": 197,
+  "candidate_memories": [
+    {
+      "id": "rvb006-p1",
+      "tier": "project",
+      "content": "PDF renderer runs in a separate worker pool behind a bulkhead (semaphore size=4); bulkhead prevents renderer failures from consuming all shared worker threads.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb006-l1",
+      "tier": "long_term",
+      "content": "Resource-intensive or failure-prone operations must be placed behind a bulkhead to prevent thread exhaustion from cascading to unrelated workloads.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb006-p2",
+      "tier": "project",
+      "content": "Bulkhead semaphore size for the renderer is tunable via PDF_RENDERER_CONCURRENCY env var; default is 4.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rvb006-x1",
+      "tier": "project",
+      "content": "The main worker pool has 50 threads; PDF rendering was using all 50 threads before the bulkhead was introduced.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: problem description, not the fix"
+    },
+    {
+      "id": "rvb006-x2",
+      "tier": "long_term",
+      "content": "Process isolation (separate OS process) is a stronger form of isolation but adds IPC overhead; use bulkhead for in-process isolation.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: process isolation is a different mechanism"
+    },
+    {
+      "id": "rvb006-x3",
+      "tier": "session",
+      "content": "Memory leak in renderer reported upstream; fix expected in renderer-lib v3.1.2, due next week.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rvb006-p1",
+    "rvb006-l1",
+    "rvb006-p2"
+  ],
+  "gold_invalid_ids": [
+    "rvb006-x1",
+    "rvb006-x2",
+    "rvb006-x3"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rvb006-p1",
+        "rvb006-l1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rvb006-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

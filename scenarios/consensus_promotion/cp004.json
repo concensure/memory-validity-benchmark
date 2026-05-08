@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cp004",
+  "family": "consensus_promotion",
+  "split": "public",
+  "task": "Hold promotion when review queue still marks the memory stale.",
+  "repo_state_fingerprint": "cp004-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "cp004-s1",
+      "tier": "session",
+      "content": "The candidate memory is still under review because repo drift invalidated part of its premise.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cp004-p1",
+      "tier": "project",
+      "content": "Project memory says review-needed memory must not become long-term context.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cp004-x1",
+      "tier": "session",
+      "content": "Old shortcut says review queue membership is only advisory and does not affect promotion.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cp004-s1",
+    "cp004-p1"
+  ],
+  "gold_invalid_ids": [
+    "cp004-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cp004-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cp004-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

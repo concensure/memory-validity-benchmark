@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "hr005",
+  "family": "handoff_resume",
+  "split": "public",
+  "task": "Resume long-term promotion hardening.",
+  "repo_state_fingerprint": "hr005-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "hr005-s1",
+      "tier": "session",
+      "content": "Current state already requires confirming consensus and citation quality for long-term promotion.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "hr005-p1",
+      "tier": "project",
+      "content": "Project memory says contradictory consensus must block promotion completely.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "hr005-x1",
+      "tier": "session",
+      "content": "Outdated note says any two consensus records are enough even if one rejects.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "hr005-s1",
+    "hr005-p1"
+  ],
+  "gold_invalid_ids": [
+    "hr005-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "hr005-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "hr005-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

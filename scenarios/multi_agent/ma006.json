@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ma006",
+  "family": "multi_agent",
+  "split": "public",
+  "task": "Coordinate planner and reviewer on branch-merge memory handling.",
+  "repo_state_fingerprint": "ma006-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "ma006-s1",
+      "tier": "session",
+      "content": "Planner owns merge strategy notes while reviewer checks for stale branch assumptions after integration.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ma006-p1",
+      "tier": "project",
+      "content": "Project memory says merged branch memory must be revalidated before becoming trusted project context.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ma006-x1",
+      "tier": "session",
+      "content": "Old coordination note says branch-specific assumptions remain valid automatically after every merge.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ma006-s1",
+    "ma006-p1"
+  ],
+  "gold_invalid_ids": [
+    "ma006-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "ma006-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ma006-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pi009",
+  "family": "project_isolation",
+  "split": "holdout",
+  "task": "Keep similar benchmark family labels from causing project memory bleed.",
+  "repo_state_fingerprint": "pi009-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "pi009-s1",
+      "tier": "session",
+      "content": "Matching scenario-family terminology across repos should not cause retrieval from the wrong project store.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pi009-p1",
+      "tier": "project",
+      "content": "Project memory says family labels are weaker than project scope in retrieval decisions.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pi009-x1",
+      "tier": "session",
+      "content": "Foreign note says similar family labels are enough to justify long-term memory reuse across repos.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pi009-s1",
+    "pi009-p1"
+  ],
+  "gold_invalid_ids": [
+    "pi009-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "pi009-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pi009-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

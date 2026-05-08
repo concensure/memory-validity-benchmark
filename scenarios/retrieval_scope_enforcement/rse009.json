@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rse009",
+  "family": "retrieval_scope_enforcement",
+  "split": "holdout",
+  "task": "[Project: Ember/checkout-squad] Name feature flags created by the Ember checkout squad.",
+  "repo_state_fingerprint": "rse009-repo-v1",
+  "token_budget": 204,
+  "candidate_memories": [
+    {
+      "id": "rse009-p1",
+      "tier": "project",
+      "content": "[Project: Ember / squad: checkout] Feature flag names follow the pattern {squad}_{feature}_{variant}: e.g. checkout_express_v2. No hyphens; underscores only.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rse009-l1",
+      "tier": "long_term",
+      "content": "[Project: Ember] Flag naming convention is enforced by the flag-lint CI check; non-conformant names will fail the pipeline.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rse009-x1",
+      "tier": "project",
+      "content": "[Project: Atlas / squad: platform] Feature flag names follow {team}-{feature}-{env}: e.g. platform-dark-mode-prod. Hyphens, not underscores.",
+      "validity": "irrelevant",
+      "bucket": "critical",
+      "notes": "note: scope=Atlas/platform; different convention, conflicts if injected"
+    },
+    {
+      "id": "rse009-x2",
+      "tier": "project",
+      "content": "[Project: Ember / squad: payments] Payments squad flags follow the same Ember convention: payments_{feature}_{variant}.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: confirms Ember convention but names a different squad"
+    },
+    {
+      "id": "rse009-x3",
+      "tier": "long_term",
+      "content": "[General] Feature flag names should be descriptive and include the owning team; specific formats vary by project.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: general guidance, Ember-specific format is authoritative"
+    },
+    {
+      "id": "rse009-x4",
+      "tier": "session",
+      "content": "[Project: Ember] New checkout flag being created: fast checkout with pre-filled address for returning users.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rse009-p1",
+    "rse009-l1"
+  ],
+  "gold_invalid_ids": [
+    "rse009-x1",
+    "rse009-x2",
+    "rse009-x3",
+    "rse009-x4"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rse009-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rse009-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

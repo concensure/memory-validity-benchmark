@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt005",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement schedule_task for the data pipeline without inheriting job queue semantics.",
+  "repo_state_fingerprint": "nt005-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "nt005-s1",
+      "tier": "session",
+      "content": "Data pipeline schedule_task should enqueue a batch processing job at a user-specified offset.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt005-p1",
+      "tier": "project",
+      "content": "Pipeline scheduling uses cron-style offset expressions; jobs are idempotent within a window.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt005-p2",
+      "tier": "project",
+      "content": "Pipeline task IDs are derived from content hash; duplicate schedules are silently deduplicated.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt005-l1",
+      "tier": "long_term",
+      "content": "When schedule_task appears in multiple services, verify the scheduling model before implementing.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt005-x1",
+      "tier": "project",
+      "content": "Job queue: schedule_task enqueues a persistent job with retry semantics and a priority weight.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: job queue scheduling semantics conflict with the pipeline's offset model"
+    },
+    {
+      "id": "nt005-x2",
+      "tier": "project",
+      "content": "Old platform note says scheduling should be unified across pipelines and job queues eventually.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt005-s1",
+    "nt005-p1",
+    "nt005-p2",
+    "nt005-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt005-x1",
+    "nt005-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt005-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt005-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt005-p2",
+        "nt005-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

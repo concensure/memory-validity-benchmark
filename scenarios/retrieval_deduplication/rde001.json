@@ -1,0 +1,70 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rde001",
+  "family": "retrieval_deduplication",
+  "split": "public",
+  "task": "Configure the pre-commit hook for commit signing in the new service repository.",
+  "repo_state_fingerprint": "rde001-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "rde001-p1",
+      "tier": "project",
+      "content": "All commits must be GPG-signed; unsigned commits are rejected by CI. Configure via .gitconfig: gpg.program=gpg2, commit.gpgsign=true. The pre-commit hook verifies the signature before push.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rde001-p2",
+      "tier": "project",
+      "content": "All commits should be signed with GPG.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "deduplication: superseded by rde001-p1; less complete, missing config details"
+    },
+    {
+      "id": "rde001-l1",
+      "tier": "long_term",
+      "content": "GPG signing required for commits per security policy. Set commit.gpgsign=true.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "deduplication: superseded by rde001-p1; missing hook and gpg.program detail"
+    },
+    {
+      "id": "rde001-x1",
+      "tier": "long_term",
+      "content": "Team policy: sign all commits. This has been required since 2024.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "deduplication: oldest version, no config detail, superseded by rde001-p1"
+    },
+    {
+      "id": "rde001-x2",
+      "tier": "session",
+      "content": "Code review approvals require two team leads to sign off before merge; sign-off is separate from GPG commit signing.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rde001-p1"
+  ],
+  "gold_invalid_ids": [
+    "rde001-p2",
+    "rde001-l1",
+    "rde001-x1",
+    "rde001-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rde001-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

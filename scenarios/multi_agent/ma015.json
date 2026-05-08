@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ma015",
+  "family": "multi_agent",
+  "split": "holdout",
+  "task": "Coordinate architect and implementer during branch-aware retrieval redesign.",
+  "repo_state_fingerprint": "ma015-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "ma015-s1",
+      "tier": "session",
+      "content": "Architect owns the retrieval contract while implementer changes only the branch-filter execution path.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ma015-p1",
+      "tier": "project",
+      "content": "Project memory says contract ownership and implementation ownership should remain distinct under concurrency.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ma015-x1",
+      "tier": "session",
+      "content": "Old note says both agents should revise contract and implementation together in the same patch.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ma015-s1",
+    "ma015-p1"
+  ],
+  "gold_invalid_ids": [
+    "ma015-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "ma015-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ma015-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

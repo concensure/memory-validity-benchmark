@@ -1,0 +1,146 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rrs002",
+  "family": "retrieval_recall_scale",
+  "split": "public",
+  "task": "Execute step 5 of the PostgreSQL 14\u219216 upgrade: migrate the orders schema and validate constraints. Candidate pool retrieved from a 220-entry store across 8 services.",
+  "repo_state_fingerprint": "rrs002-repo-v1",
+  "token_budget": 250,
+  "candidate_memories": [
+    {
+      "id": "rrs002-s1",
+      "tier": "session",
+      "content": "pg_upgrade dry-run on staging completed without errors; schema diff shows 3 renamed system columns to address before step 5.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs002-p1",
+      "tier": "project",
+      "content": "orders schema migration must run inside a transaction; roll back the entire step if any constraint violation occurs.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs002-p2",
+      "tier": "project",
+      "content": "Three system columns renamed in pg16: pg_catalog.pg_class.relhasoids removed; update queries that reference it.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs002-l1",
+      "tier": "long_term",
+      "content": "After schema migration, run ANALYZE on all migrated tables before re-enabling application traffic.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs002-x1",
+      "tier": "project",
+      "content": "inventory-svc uses a separate PostgreSQL 13 cluster; its migration is not part of this upgrade.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs002-x2",
+      "tier": "session",
+      "content": "Nightly backup completed at 02:00 UTC; backup is confirmed restorable.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs002-x3",
+      "tier": "project",
+      "content": "Old note from pg12\u219214 migration: CHECK constraints were not validated by default; this was fixed in pg14.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: pg12\u219214 guidance, not applicable to pg14\u219216"
+    },
+    {
+      "id": "rrs002-x4",
+      "tier": "long_term",
+      "content": "Redis cache should be flushed after major schema changes to prevent stale ORM-cached field maps.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs002-x5",
+      "tier": "project",
+      "content": "orders table has 42 M rows; full-table scans should use parallel workers (max_parallel_workers_per_gather=4).",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs002-x6",
+      "tier": "session",
+      "content": "Database connection pool on app-svc was reduced to 10 during the maintenance window.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs002-x7",
+      "tier": "project",
+      "content": "alembic migration runner is pinned to version 1.11.3; do not upgrade alembic mid-migration.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs002-x8",
+      "tier": "long_term",
+      "content": "Schema migration run-books must be stored in docs/migrations/ and linked in the release notes.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs002-x9",
+      "tier": "session",
+      "content": "QA environment migration failed at step 3 due to missing index on orders.customer_id; fixed before step 5.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: step 3 issue already resolved, not blocking step 5"
+    }
+  ],
+  "gold_valid_ids": [
+    "rrs002-s1",
+    "rrs002-p1",
+    "rrs002-p2",
+    "rrs002-l1"
+  ],
+  "gold_invalid_ids": [
+    "rrs002-x1",
+    "rrs002-x2",
+    "rrs002-x3",
+    "rrs002-x4",
+    "rrs002-x5",
+    "rrs002-x6",
+    "rrs002-x7",
+    "rrs002-x8",
+    "rrs002-x9"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "rrs002-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rrs002-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rrs002-p2",
+        "rrs002-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

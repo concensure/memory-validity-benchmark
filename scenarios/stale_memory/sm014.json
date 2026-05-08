@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "sm014",
+  "family": "stale_memory",
+  "split": "holdout",
+  "task": "Filter outdated leakage assumptions after project-scope policies expanded.",
+  "repo_state_fingerprint": "sm014-repo-v1",
+  "token_budget": 160,
+  "candidate_memories": [
+    {
+      "id": "sm014-s1",
+      "tier": "session",
+      "content": "Cross-project leakage controls are stricter now and old permissive retrieval assumptions are no longer valid.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sm014-p1",
+      "tier": "project",
+      "content": "Project memory says project scope outranks semantic similarity in retrieval.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sm014-x1",
+      "tier": "session",
+      "content": "Old note says similar terminology justifies cross-project memory reuse by default.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "sm014-s1",
+    "sm014-p1"
+  ],
+  "gold_invalid_ids": [
+    "sm014-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "sm014-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "sm014-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

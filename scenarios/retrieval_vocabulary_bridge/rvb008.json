@@ -1,0 +1,85 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rvb008",
+  "family": "retrieval_vocabulary_bridge",
+  "split": "public",
+  "task": "Write the results of a price calculation to both the orders DB and the analytics DB atomically. Coordinate the writes across the two services.",
+  "repo_state_fingerprint": "rvb008-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "rvb008-p1",
+      "tier": "project",
+      "content": "Price write coordination uses the outbox pattern (a form of two-phase commit avoidance): the price is written to a local outbox table in the orders DB transaction, then a relay publishes it to analytics-svc asynchronously.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb008-l1",
+      "tier": "long_term",
+      "content": "Do not use two-phase commit (2PC) for cross-service writes; the outbox pattern achieves at-least-once delivery without distributed locks or blocking across services.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb008-p2",
+      "tier": "project",
+      "content": "Outbox relay uses Debezium CDC on the orders.outbox table; messages land in the price-events Kafka topic within 500 ms.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rvb008-x1",
+      "tier": "long_term",
+      "content": "Two-phase commit coordinates writes across multiple databases but holds locks on all participants during the prepare phase, causing blocking.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: 2PC is described but is the anti-pattern for this system"
+    },
+    {
+      "id": "rvb008-x2",
+      "tier": "project",
+      "content": "Analytics DB is read-only from the application layer; all writes go through the event pipeline.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: constraint description, not the coordination mechanism"
+    },
+    {
+      "id": "rvb008-x3",
+      "tier": "session",
+      "content": "Data inconsistency between orders DB and analytics DB was reported in 2 rows; root cause is a missing outbox entry during a prior deploy.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: specific prior incident, not a current constraint"
+    }
+  ],
+  "gold_valid_ids": [
+    "rvb008-p1",
+    "rvb008-l1",
+    "rvb008-p2"
+  ],
+  "gold_invalid_ids": [
+    "rvb008-x1",
+    "rvb008-x2",
+    "rvb008-x3"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rvb008-p1",
+        "rvb008-l1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rvb008-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "mabp001",
+  "family": "multi_agent_belief_propagation",
+  "split": "public",
+  "task": "Worker agent: update order-svc to call the fulfillment API. The orchestrator issued a correction at step 6; apply the corrected endpoint.",
+  "repo_state_fingerprint": "mabp001-repo-v1",
+  "token_budget": 225,
+  "candidate_memories": [
+    {
+      "id": "mabp001-s1",
+      "tier": "session",
+      "content": "[orchestrator at step 6] CORRECTION: fulfillment API endpoint is /api/v2/fulfillment/orders, not /api/v1/orders. All workers must use the v2 path; v1 returns 404.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "creating_agent: orchestrator; correction_step: 6"
+    },
+    {
+      "id": "mabp001-p1",
+      "tier": "project",
+      "content": "fulfillment-svc requires Authorization: Bearer <token> with the service account token from vault:/secret/services/order-svc/fulfillment-token.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "mabp001-p2",
+      "tier": "project",
+      "content": "fulfillment API rate limit is 500 req/s; order-svc must implement exponential backoff on 429 responses.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp001-l1",
+      "tier": "long_term",
+      "content": "When integrating with fulfillment, validate the response schema against contracts/fulfillment_v2.json before processing.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp001-x1",
+      "tier": "project",
+      "content": "[architect at step 2] fulfillment API endpoint is /api/v1/orders; use POST for new orders, GET for status.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "creating_agent: architect; contradicted_by: orchestrator correction at step 6"
+    }
+  ],
+  "gold_valid_ids": [
+    "mabp001-s1",
+    "mabp001-p1",
+    "mabp001-p2",
+    "mabp001-l1"
+  ],
+  "gold_invalid_ids": [
+    "mabp001-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "mabp001-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "mabp001-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "mabp001-p2",
+        "mabp001-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.07,
+    "ideal": 1.0
+  }
+}

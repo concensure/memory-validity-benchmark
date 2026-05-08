@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd013",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Implement the new feature flag system using the updated preference for static config over dynamic.",
+  "repo_state_fingerprint": "pd013-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "pd013-s1",
+      "tier": "session",
+      "content": "User directed in session 32: stop adding runtime feature flag checks; use build-time static config instead.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd013-p1",
+      "tier": "project",
+      "content": "Feature flag policy (updated session 32): feature availability must be determined at build time, not runtime.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd013-p2",
+      "tier": "project",
+      "content": "Runtime feature flag library calls in new code are no longer permitted under the updated policy.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd013-l1",
+      "tier": "long_term",
+      "content": "When feature flag strategy changes, replace runtime checks with build-time constants in touched files.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd013-x1",
+      "tier": "project",
+      "content": "Feature flag policy (session 8): use a runtime feature flag service for all new feature gates for flexibility.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old runtime feature flag preference superseded by static build-time mandate in session 32"
+    },
+    {
+      "id": "pd013-x2",
+      "tier": "project",
+      "content": "Old product note says runtime flags were chosen so features could be toggled without a redeploy.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd013-s1",
+    "pd013-p1",
+    "pd013-p2",
+    "pd013-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd013-x1",
+    "pd013-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd013-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd013-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd013-p2",
+        "pd013-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

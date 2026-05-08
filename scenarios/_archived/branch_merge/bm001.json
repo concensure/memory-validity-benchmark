@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "bm001",
+  "family": "branch_merge",
+  "split": "public",
+  "task": "Handle memory invalidation after a file rename on a feature branch.",
+  "repo_state_fingerprint": "bm001-repo-v1",
+  "token_budget": 210,
+  "candidate_memories": [
+    {
+      "id": "bm001-s1",
+      "tier": "session",
+      "content": "Feature branch renamed the parser entry file and old path-specific guidance is now stale.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "bm001-p1",
+      "tier": "project",
+      "content": "Project memory says rename-aware invalidation should update file-target assumptions without losing semantic task context.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "bm001-x1",
+      "tier": "session",
+      "content": "Old note says file-level memories remain valid across renames if the function names look similar.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "bm001-s1",
+    "bm001-p1"
+  ],
+  "gold_invalid_ids": [
+    "bm001-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "bm001-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "bm001-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

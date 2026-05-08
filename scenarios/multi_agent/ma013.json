@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ma013",
+  "family": "multi_agent",
+  "split": "holdout",
+  "task": "Coordinate reviewer and benchmark maintainer on holdout secrecy.",
+  "repo_state_fingerprint": "ma013-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "ma013-s1",
+      "tier": "session",
+      "content": "Reviewer checks metrics while benchmark maintainer ensures holdout specifics stay out of public outputs.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ma013-p1",
+      "tier": "project",
+      "content": "Project memory says governance and scoring responsibilities should stay distinct but coordinated.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ma013-x1",
+      "tier": "session",
+      "content": "Old note says public reviewers can inspect full holdout details if they promise not to share them.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ma013-s1",
+    "ma013-p1"
+  ],
+  "gold_invalid_ids": [
+    "ma013-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "ma013-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ma013-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

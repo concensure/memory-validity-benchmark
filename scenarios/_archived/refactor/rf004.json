@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rf004",
+  "family": "refactor",
+  "split": "public",
+  "task": "Refactor auth claim parsing into shared package.",
+  "repo_state_fingerprint": "rf004-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "rf004-s1",
+      "tier": "session",
+      "content": "Claim parsing must keep support for optional team scope because CLI and API both depend on it.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rf004-p1",
+      "tier": "project",
+      "content": "Project memory says shared auth packages may not import request context types.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rf004-x1",
+      "tier": "session",
+      "content": "Stale memory says CLI auth path can ignore team scopes entirely.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rf004-s1",
+    "rf004-p1"
+  ],
+  "gold_invalid_ids": [
+    "rf004-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "rf004-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rf004-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

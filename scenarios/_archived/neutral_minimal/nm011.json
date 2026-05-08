@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nm011",
+  "family": "neutral_minimal",
+  "split": "public",
+  "task": "Remove a duplicate blank line in a small fixture file.",
+  "repo_state_fingerprint": "nm011-repo-v1",
+  "token_budget": 100,
+  "candidate_memories": [
+    {
+      "id": "nm011-s1",
+      "tier": "session",
+      "content": "The fix is obvious from the diff and broader historical memory would only add noise.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nm011-p1",
+      "tier": "project",
+      "content": "Project memory says tiny local edits should reward disciplined non-injection.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nm011-x1",
+      "tier": "session",
+      "content": "Old note says even whitespace fixes benefit from loading adjacent project memories.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nm011-s1",
+    "nm011-p1"
+  ],
+  "gold_invalid_ids": [
+    "nm011-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "nm011-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nm011-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

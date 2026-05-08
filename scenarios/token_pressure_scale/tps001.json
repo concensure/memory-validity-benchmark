@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps001",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the null pointer panic in the payment processor under high concurrency.",
+  "repo_state_fingerprint": "tps001-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps001-s1",
+      "tier": "session",
+      "content": "Payment processor panics when charge_id is nil; stack trace points to processor/charge.go:147.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps001-p1",
+      "tier": "project",
+      "content": "Charge ID must be validated as non-nil before the mutex is acquired in the charge handler.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps001-p2",
+      "tier": "project",
+      "content": "The charge handler was refactored last sprint; lock acquisition was moved 12 lines earlier.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps001-l1",
+      "tier": "long_term",
+      "content": "In concurrent systems, validate shared resource IDs before acquiring any lock to prevent nil-deref panics.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps001-s2",
+      "tier": "session",
+      "content": "Reviewer flagged that the same nil-check is missing in the refund path; fix both together.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps001-n01",
+      "tier": "project",
+      "content": "Old note: the charge handler used to validate the ID at the end of the function.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps001-n02",
+      "tier": "session",
+      "content": "The payment dashboard was redesigned in session 3 to use a new color scheme.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps001-n03",
+      "tier": "project",
+      "content": "Database connection pool was upgraded from pgx v3 to pgx v4 in March.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps001-n04",
+      "tier": "session",
+      "content": "Integration test for the refund flow passed in the last CI run.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps001-n05",
+      "tier": "project",
+      "content": "The billing team uses Stripe Radar for fraud detection.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps001-n06",
+      "tier": "long_term",
+      "content": "Mutex acquisition order should follow the dependency graph to avoid deadlocks.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps001-n07",
+      "tier": "session",
+      "content": "Session 2 note: the payment dashboard button color was updated.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps001-n08",
+      "tier": "project",
+      "content": "Old architecture note: charge handler was single-threaded before the concurrency upgrade.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps001-n09",
+      "tier": "session",
+      "content": "A memory leak was fixed in the reporting module in session 15.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps001-n10",
+      "tier": "project",
+      "content": "The finance team exports payment data weekly for reconciliation.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps001-n11",
+      "tier": "long_term",
+      "content": "Old lesson: always use context.Background for payment operations.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps001-n12",
+      "tier": "session",
+      "content": "The analytics dashboard was integrated with Amplitude in session 7.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps001-n13",
+      "tier": "project",
+      "content": "The payment service was originally written in Python; the Go rewrite was completed in 2022.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps001-n14",
+      "tier": "session",
+      "content": "Session 5 note: the checkout page loading time was improved by 200ms.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps001-n15",
+      "tier": "project",
+      "content": "Old guide: the charge handler timeout was 30 seconds before the SLA was updated.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps001-s1",
+    "tps001-p1",
+    "tps001-p2",
+    "tps001-l1",
+    "tps001-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps001-n01",
+    "tps001-n02",
+    "tps001-n03",
+    "tps001-n04",
+    "tps001-n05",
+    "tps001-n06",
+    "tps001-n07",
+    "tps001-n08",
+    "tps001-n09",
+    "tps001-n10",
+    "tps001-n11",
+    "tps001-n12",
+    "tps001-n13",
+    "tps001-n14",
+    "tps001-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps001-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps001-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps001-p2",
+        "tps001-l1",
+        "tps001-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

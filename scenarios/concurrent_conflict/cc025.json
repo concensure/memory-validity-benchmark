@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc025",
+  "family": "concurrent_conflict",
+  "split": "holdout",
+  "task": "Trigger the model retraining job after confirming no concurrent training run is active.",
+  "repo_state_fingerprint": "cc025-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cc025-s1",
+      "tier": "session",
+      "content": "ML-Agent-A launched a model retraining job for the fraud detector at 22:00 using today's data.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc025-p1",
+      "tier": "project",
+      "content": "Model retraining jobs must be single-run per model; concurrent runs produce an undefined model artifact.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc025-p2",
+      "tier": "project",
+      "content": "ML-Agent-A's run is at 15% completion; the new model artifact is not yet written.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc025-l1",
+      "tier": "long_term",
+      "content": "When two agents both trigger a model retraining job, check run ownership before either proceeds.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc025-x1",
+      "tier": "session",
+      "content": "ML-Agent-B also launched a fraud detector retraining job at 22:05 from a parallel data pipeline trigger.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two ML agents both claim ownership of the same model retraining run"
+    },
+    {
+      "id": "cc025-x2",
+      "tier": "project",
+      "content": "Old ML note says concurrent training runs produce independent models that can be evaluated and the better one promoted.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc025-s1",
+    "cc025-p1",
+    "cc025-p2",
+    "cc025-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc025-x1",
+    "cc025-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc025-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc025-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc025-p2",
+        "cc025-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

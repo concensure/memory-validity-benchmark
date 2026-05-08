@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cp011",
+  "family": "consensus_promotion",
+  "split": "public",
+  "task": "Reject promotion when consensus was reached before a requirement change invalidated the premise.",
+  "repo_state_fingerprint": "cp011-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "cp011-s1",
+      "tier": "session",
+      "content": "The team agreed earlier, but a later requirement change undermined the memory's original basis.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cp011-p1",
+      "tier": "project",
+      "content": "Project memory says consensus must remain valid under current requirements, not just historical agreement.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cp011-x1",
+      "tier": "session",
+      "content": "Old promotion note says once consensus is logged, later requirement changes do not affect it.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cp011-s1",
+    "cp011-p1"
+  ],
+  "gold_invalid_ids": [
+    "cp011-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cp011-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cp011-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp021",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Implement the authorization fix using session evidence, not the promoted check order rule.",
+  "repo_state_fingerprint": "fp021-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "fp021-s1",
+      "tier": "session",
+      "content": "Current security audit shows the promoted 'check authentication before authorization' rule allows unauthenticated role checks.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp021-p1",
+      "tier": "project",
+      "content": "Project security review shows the authorization layer should reject unauthenticated requests immediately.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp021-p2",
+      "tier": "project",
+      "content": "Correct order is authentication, then coarse authorization (role exists), then fine authorization (action allowed).",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp021-l1",
+      "tier": "long_term",
+      "content": "When session security audits reveal a promoted rule leaves a gap, demote and implement the complete check order.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp021-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 5): always check authentication before performing any authorization check.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted two-step rule was correct but missed the coarse authorization step between auth and fine auth"
+    },
+    {
+      "id": "fp021-x2",
+      "tier": "project",
+      "content": "Old promotion note says the two-step auth \u2192 authz order was confirmed by the security team as the standard.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp021-s1",
+    "fp021-p1",
+    "fp021-p2",
+    "fp021-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp021-x1",
+    "fp021-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp021-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp021-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp021-p2",
+        "fp021-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

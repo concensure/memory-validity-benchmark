@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc034",
+  "family": "concurrent_conflict",
+  "split": "holdout",
+  "task": "Apply the cost optimization config after confirming no other agent is mid-optimization.",
+  "repo_state_fingerprint": "cc034-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cc034-s1",
+      "tier": "session",
+      "content": "Cost-Agent-A started applying the new cloud resource optimization config at 18:00.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc034-p1",
+      "tier": "project",
+      "content": "Resource optimization configs must be applied by a single agent to prevent partial or conflicting changes.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc034-p2",
+      "tier": "project",
+      "content": "Cost-Agent-A has resized 8 of 20 targeted instances; the remaining 12 are still on the old config.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc034-l1",
+      "tier": "long_term",
+      "content": "When two agents both claim the optimization task, check instance resize counts before proceeding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc034-x1",
+      "tier": "session",
+      "content": "Cost-Agent-B also started applying the cloud resource optimization config at 18:04.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two cost optimization agents both claim they are resizing the same instance pool"
+    },
+    {
+      "id": "cc034-x2",
+      "tier": "project",
+      "content": "Old cloud note says concurrent optimization passes are safe because instances can only be resized down.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc034-s1",
+    "cc034-p1",
+    "cc034-p2",
+    "cc034-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc034-x1",
+    "cc034-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc034-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc034-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc034-p2",
+        "cc034-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

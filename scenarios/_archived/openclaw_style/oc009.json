@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "oc009",
+  "family": "openclaw_style",
+  "split": "public",
+  "task": "Handle a conflicting instruction during a multi-step verification flow.",
+  "repo_state_fingerprint": "oc009-repo-v1",
+  "token_budget": 240,
+  "candidate_memories": [
+    {
+      "id": "oc009-s1",
+      "tier": "session",
+      "content": "A later instruction narrows scope and earlier broad cleanup guidance should no longer drive the workflow.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "oc009-p1",
+      "tier": "project",
+      "content": "Project memory says newer explicit constraints outrank older generic execution habits.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "oc009-x1",
+      "tier": "session",
+      "content": "Stale instruction says broad cleanup and full-suite verification should still happen before any scoped fix.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "oc009-s1",
+    "oc009-p1"
+  ],
+  "gold_invalid_ids": [
+    "oc009-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "oc009-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "oc009-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

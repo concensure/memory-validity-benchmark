@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd005",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Apply the updated error handling preference: return Result types instead of throwing exceptions.",
+  "repo_state_fingerprint": "pd005-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "pd005-s1",
+      "tier": "session",
+      "content": "User directed in session 27: stop throwing exceptions for expected errors; return Result/Either types instead.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd005-p1",
+      "tier": "project",
+      "content": "Error handling policy (updated session 27): all expected errors must be expressed as Result return values.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd005-p2",
+      "tier": "project",
+      "content": "Unhandled exception paths in files touched during this task should be migrated to Result returns.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd005-l1",
+      "tier": "long_term",
+      "content": "When error handling preference changes, treat exception-throwing for expected errors as a pattern violation.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd005-x1",
+      "tier": "project",
+      "content": "Error handling policy (session 8): throw typed exceptions for all error conditions to simplify call sites.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old exception-throwing preference superseded by Result type mandate in session 27"
+    },
+    {
+      "id": "pd005-x2",
+      "tier": "project",
+      "content": "Old error note says typed exceptions were chosen because the team found Result types verbose in early review.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd005-s1",
+    "pd005-p1",
+    "pd005-p2",
+    "pd005-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd005-x1",
+    "pd005-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd005-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd005-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd005-p2",
+        "pd005-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

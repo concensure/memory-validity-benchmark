@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr030",
+  "family": "checkpoint_resume",
+  "split": "holdout",
+  "task": "Continue the feature flag audit at flag 21 without re-auditing flags 1\u201320.",
+  "repo_state_fingerprint": "cr030-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cr030-s1",
+      "tier": "session",
+      "content": "Audit log shows flags 1\u201320 reviewed with outdated flags identified for removal; flag 21 is the next audit target.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr030-p1",
+      "tier": "project",
+      "content": "Re-auditing completed flags would re-mark already-cleared flags as pending and create duplicate removal tickets.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr030-p2",
+      "tier": "project",
+      "content": "Flags 22\u201360 have not been audited and must be reviewed after flag 21.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr030-l1",
+      "tier": "long_term",
+      "content": "When a feature flag audit is interrupted, check the audit log to resume from the next unreviewed flag.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr030-x1",
+      "tier": "session",
+      "content": "Reset all audit statuses and re-audit all 60 feature flags from flag 1 for a complete audit cycle.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full reset and restart; correct behavior is to resume the audit from flag 21"
+    },
+    {
+      "id": "cr030-x2",
+      "tier": "project",
+      "content": "Old product note says re-auditing all flags from the beginning ensures no flag is missed in the cleanup cycle.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr030-s1",
+    "cr030-p1",
+    "cr030-p2",
+    "cr030-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr030-x1",
+    "cr030-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr030-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr030-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr030-p2",
+        "cr030-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

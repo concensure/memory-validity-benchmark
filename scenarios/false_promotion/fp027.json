@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp027",
+  "family": "false_promotion",
+  "split": "holdout",
+  "task": "Implement the circuit breaker fix using session evidence, not the promoted threshold rule.",
+  "repo_state_fingerprint": "fp027-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "fp027-s1",
+      "tier": "session",
+      "content": "Current reliability testing shows the promoted '50% error rate circuit break threshold' opens too late.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp027-p1",
+      "tier": "project",
+      "content": "Project SRE analysis shows a 20% error rate over 30 seconds is sufficient to indicate a failing dependency.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp027-p2",
+      "tier": "project",
+      "content": "Correct thresholds are 20% error rate over 30 seconds for open, 0% error rate over 60 seconds for half-open.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp027-l1",
+      "tier": "long_term",
+      "content": "When session reliability tests show a promoted threshold opens too late, demote and tighten the threshold.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp027-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 5): open the circuit breaker when error rate exceeds 50% over 60 seconds.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted 50% threshold was based on noisy environments; 20% is a better early-warning threshold"
+    },
+    {
+      "id": "fp027-x2",
+      "tier": "project",
+      "content": "Old promotion note says the 50% threshold was validated by the reliability team to avoid false trips.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp027-s1",
+    "fp027-p1",
+    "fp027-p2",
+    "fp027-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp027-x1",
+    "fp027-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp027-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp027-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp027-p2",
+        "fp027-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

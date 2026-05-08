@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iep013",
+  "family": "injection_eviction_priority",
+  "split": "holdout",
+  "task": "Pass the handoff context to the next agent in the pipeline before this agent's session ends. Token budget is critically constrained.",
+  "repo_state_fingerprint": "iep013-repo-v1",
+  "token_budget": 98,
+  "candidate_memories": [
+    {
+      "id": "iep013-p1",
+      "tier": "project",
+      "content": "Before ending this agent session, write a handoff record to the shared-state store with: completed_steps (list), current_artifact_path, next_step_description, and blocking_issues. The next agent will not have access to this session's context and will fail if the handoff record is missing or incomplete.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iep013-p2",
+      "tier": "project",
+      "content": "Handoff record format is defined in agent_protocol/handoff_schema.json; validate before writing.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iep013-l1",
+      "tier": "long_term",
+      "content": "All multi-agent pipelines must have a handoff record between every agent boundary; loss of handoff data is the primary cause of pipeline failures.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iep013-p1",
+    "iep013-p2",
+    "iep013-l1"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "iep013-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iep013-p2",
+        "iep013-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

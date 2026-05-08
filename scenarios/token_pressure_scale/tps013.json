@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps013",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the incorrect search results after the inverted index tokenizer was changed.",
+  "repo_state_fingerprint": "tps013-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps013-s1",
+      "tier": "session",
+      "content": "Search results for hyphenated terms now return zero results after the tokenizer was changed to split on hyphens.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps013-p1",
+      "tier": "project",
+      "content": "The search analyzer must use the custom_compound tokenizer that preserves hyphenated terms as single tokens.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps013-p2",
+      "tier": "project",
+      "content": "The tokenizer was changed from custom_compound to standard in the last index rebuild without testing hyphenated queries.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps013-l1",
+      "tier": "long_term",
+      "content": "When changing search analyzers, run a regression test with the full query log before rebuilding the index.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps013-s2",
+      "tier": "session",
+      "content": "Non-hyphenated search queries return correct results; only hyphenated product names and brand names are affected.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps013-n01",
+      "tier": "project",
+      "content": "The search index was rebuilt on April 12 as part of the quarterly index maintenance.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps013-n02",
+      "tier": "session",
+      "content": "Session 6 note: the search team added boosting for exact phrase matches.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps013-n03",
+      "tier": "long_term",
+      "content": "Old lesson: the standard tokenizer was used before custom tokenizers were introduced for multi-language support.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps013-n04",
+      "tier": "project",
+      "content": "Elasticsearch is used for full-text search; the version is 8.12.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps013-n05",
+      "tier": "session",
+      "content": "Session 11 note: synonym support was added for common brand name abbreviations.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps013-n06",
+      "tier": "project",
+      "content": "Old search guide: the custom_compound tokenizer was added to handle German compound words.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps013-n07",
+      "tier": "long_term",
+      "content": "Search analyzer changes must be validated with production query samples before a full index rebuild.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps013-n08",
+      "tier": "session",
+      "content": "Session 4 note: the search ranking model was updated with a new TF-IDF weighting.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps013-n09",
+      "tier": "project",
+      "content": "The search index has 8.5 million documents and rebuilds take approximately 4 hours.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps013-n10",
+      "tier": "session",
+      "content": "A search accuracy report in session 9 showed 94% relevance for non-hyphenated queries.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps013-n11",
+      "tier": "project",
+      "content": "Faceted filters are implemented as Elasticsearch aggregations, not as index-level filters.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps013-n12",
+      "tier": "long_term",
+      "content": "When choosing tokenizers, test with real production queries that include edge cases like hyphens and numbers.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps013-n13",
+      "tier": "session",
+      "content": "Session 7 note: the autocomplete feature was extended to support partial word matching.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps013-n14",
+      "tier": "project",
+      "content": "Old index guide: the index rebuild was triggered manually by the search team before it was automated.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps013-n15",
+      "tier": "project",
+      "content": "Search queries go through the API gateway with a 2-second timeout before falling back to the database.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps013-s1",
+    "tps013-p1",
+    "tps013-p2",
+    "tps013-l1",
+    "tps013-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps013-n01",
+    "tps013-n02",
+    "tps013-n03",
+    "tps013-n04",
+    "tps013-n05",
+    "tps013-n06",
+    "tps013-n07",
+    "tps013-n08",
+    "tps013-n09",
+    "tps013-n10",
+    "tps013-n11",
+    "tps013-n12",
+    "tps013-n13",
+    "tps013-n14",
+    "tps013-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps013-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps013-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps013-p2",
+        "tps013-l1",
+        "tps013-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

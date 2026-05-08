@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt015",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement check_permissions for the RBAC service without using file system permission checks.",
+  "repo_state_fingerprint": "nt015-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "nt015-s1",
+      "tier": "session",
+      "content": "RBAC service check_permissions evaluates role assignments and resource policies from the policy store.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt015-p1",
+      "tier": "project",
+      "content": "RBAC evaluation requires the user's role list, the resource type, and the requested action.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt015-p2",
+      "tier": "project",
+      "content": "Permissions are cached per session; the cache is invalidated on role assignment changes.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt015-l1",
+      "tier": "long_term",
+      "content": "When check_permissions spans RBAC and file systems, confirm the policy model before implementing.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt015-x1",
+      "tier": "project",
+      "content": "File system: check_permissions inspects POSIX mode bits and ACL entries on the file inode.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: POSIX file permission model is incompatible with the role-based policy evaluation"
+    },
+    {
+      "id": "nt015-x2",
+      "tier": "project",
+      "content": "Old security note says permission checking should be abstracted to a single check_permissions call.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt015-s1",
+    "nt015-p1",
+    "nt015-p2",
+    "nt015-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt015-x1",
+    "nt015-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt015-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt015-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt015-p2",
+        "nt015-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

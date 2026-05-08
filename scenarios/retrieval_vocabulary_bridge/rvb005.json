@@ -1,0 +1,85 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rvb005",
+  "family": "retrieval_vocabulary_bridge",
+  "split": "public",
+  "task": "Order placement spans 3 services (inventory, payment, shipping). When one step fails, partial writes must be undone. Design the rollback.",
+  "repo_state_fingerprint": "rvb005-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "rvb005-p1",
+      "tier": "project",
+      "content": "Order placement uses the saga pattern: each service step publishes a compensating event on failure; the saga orchestrator triggers compensations in reverse order.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb005-l1",
+      "tier": "long_term",
+      "content": "Distributed operations that span multiple services must use sagas with compensating transactions, not two-phase commit, to avoid distributed locks.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb005-p2",
+      "tier": "project",
+      "content": "Compensation events are defined in saga/compensations.go; each step has a named compensating handler that must be idempotent.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rvb005-x1",
+      "tier": "project",
+      "content": "Order placement uses a PostgreSQL transaction for the orders table; this is a local transaction, not a distributed one.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: local transaction \u2260 saga; different scope"
+    },
+    {
+      "id": "rvb005-x2",
+      "tier": "long_term",
+      "content": "Two-phase commit is available for distributed writes but requires all participants to hold locks during the prepare phase, causing contention.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: 2PC is the alternative pattern, not what's used here"
+    },
+    {
+      "id": "rvb005-x3",
+      "tier": "session",
+      "content": "Inventory rollback failed in the last 2 incidents because the compensating handler was not idempotent; this was fixed in v2.3.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: bug fixed in v2.3, compensation handler is now idempotent"
+    }
+  ],
+  "gold_valid_ids": [
+    "rvb005-p1",
+    "rvb005-l1",
+    "rvb005-p2"
+  ],
+  "gold_invalid_ids": [
+    "rvb005-x1",
+    "rvb005-x2",
+    "rvb005-x3"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rvb005-p1",
+        "rvb005-l1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rvb005-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

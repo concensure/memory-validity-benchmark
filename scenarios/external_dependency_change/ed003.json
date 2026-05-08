@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed003",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the SendGrid email client after the provider removed the legacy v2 send API.",
+  "repo_state_fingerprint": "ed003-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "ed003-s1",
+      "tier": "session",
+      "content": "Email delivery failures show 404 responses; SendGrid removed the v2 /mail/send endpoint in January 2024.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed003-p1",
+      "tier": "project",
+      "content": "Current email integration must use the SendGrid v3 API endpoint at /v3/mail/send.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed003-p2",
+      "tier": "project",
+      "content": "SendGrid v3 requires a personalizations array in the request body; the v2 to/from format is not accepted.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed003-l1",
+      "tier": "long_term",
+      "content": "When an email provider removes an API version, update the client payload structure as well as the endpoint.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed003-x1",
+      "tier": "project",
+      "content": "SendGrid integration note (session 6): use the v2 API at /mail/send with to, from, subject, and text fields.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: SendGrid v2 /mail/send endpoint removed; v3 /v3/mail/send is required"
+    },
+    {
+      "id": "ed003-x2",
+      "tier": "project",
+      "content": "Old email note says the v2 API is simpler to use and is still documented in internal wikis.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed003-s1",
+    "ed003-p1",
+    "ed003-p2",
+    "ed003-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed003-x1",
+    "ed003-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed003-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed003-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed003-p2",
+        "ed003-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

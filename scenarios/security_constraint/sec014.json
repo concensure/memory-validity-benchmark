@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "sec014",
+  "family": "security_constraint",
+  "split": "public",
+  "task": "Add the report generation without including tenant data from other tenants in the output.",
+  "repo_state_fingerprint": "sec014-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "sec014-s1",
+      "tier": "session",
+      "content": "Current task is to implement the automated monthly report generation for enterprise customers.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sec014-p1",
+      "tier": "project",
+      "content": "SECURITY CONSTRAINT: report generation must be strictly tenant-scoped; cross-tenant data must never appear in any report.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sec014-p2",
+      "tier": "project",
+      "content": "Report queries must use tenant_id filters that cannot be overridden by request parameters.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sec014-l1",
+      "tier": "long_term",
+      "content": "Tenant isolation constraints must propagate to all agents building report generation features.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sec014-x1",
+      "tier": "project",
+      "content": "Use a global view for report data to simplify queries and apply tenant filtering in the template layer.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "security_constraint: x1 creates a false exception to data isolation by pushing tenant filtering to the presentation layer"
+    },
+    {
+      "id": "sec014-x2",
+      "tier": "project",
+      "content": "Old report note says a global view was used in prototypes with the plan to add filtering before production.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "sec014-s1",
+    "sec014-p1",
+    "sec014-p2",
+    "sec014-l1"
+  ],
+  "gold_invalid_ids": [
+    "sec014-x1",
+    "sec014-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "sec014-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "sec014-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "sec014-p2",
+        "sec014-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

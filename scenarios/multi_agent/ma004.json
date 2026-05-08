@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ma004",
+  "family": "multi_agent",
+  "split": "public",
+  "task": "Coordinate extension-facing transport work.",
+  "repo_state_fingerprint": "ma004-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "ma004-s1",
+      "tier": "session",
+      "content": "Shared transport client should reuse the same stdio and HTTP contract without forking memory semantics.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ma004-p1",
+      "tier": "project",
+      "content": "Project memory says private extension code should sit outside the open local core.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ma004-x1",
+      "tier": "session",
+      "content": "Obsolete note says extension transport can redefine memory tiers for UI convenience.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ma004-s1",
+    "ma004-p1"
+  ],
+  "gold_invalid_ids": [
+    "ma004-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "ma004-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ma004-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iep014",
+  "family": "injection_eviction_priority",
+  "split": "holdout",
+  "task": "Serve the cached search results for the product catalog. Token budget is nearly exhausted by prior context.",
+  "repo_state_fingerprint": "iep014-repo-v1",
+  "token_budget": 100,
+  "candidate_memories": [
+    {
+      "id": "iep014-p1",
+      "tier": "project",
+      "content": "Cached search results must be invalidated before serving if the catalog version in the cache header does not match the current catalog_version in the metadata store. Serving stale results after a catalog update causes incorrect availability information to be shown to customers, resulting in failed orders.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iep014-p2",
+      "tier": "project",
+      "content": "Catalog version is stored in Redis at key catalog:version; check on every cache read before serving.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iep014-l1",
+      "tier": "long_term",
+      "content": "Cache invalidation must be synchronous with catalog updates; do not use TTL-based expiry as the sole invalidation mechanism for catalog data.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iep014-p1",
+    "iep014-p2",
+    "iep014-l1"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "iep014-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iep014-p2",
+        "iep014-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

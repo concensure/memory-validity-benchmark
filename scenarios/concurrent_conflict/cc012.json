@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc012",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Write the deployment manifest after confirming no parallel manifest generation is running.",
+  "repo_state_fingerprint": "cc012-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "cc012-s1",
+      "tier": "session",
+      "content": "Release-A is generating the deployment manifest for version 2.7.1 at 11:00.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc012-p1",
+      "tier": "project",
+      "content": "Manifest generation is idempotent but must be single-agent to prevent race conditions on the output file.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc012-p2",
+      "tier": "project",
+      "content": "Release-A's manifest is partially written; the output file is not yet syntactically valid.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc012-l1",
+      "tier": "long_term",
+      "content": "When two agents generate the same manifest, check the output file validity before merging.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc012-x1",
+      "tier": "session",
+      "content": "Release-B also started manifest generation for version 2.7.1 at 11:02 after the same release trigger.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents are simultaneously writing to the same deployment manifest file"
+    },
+    {
+      "id": "cc012-x2",
+      "tier": "project",
+      "content": "Old release note says manifest generation conflicts can be resolved by comparing checksums.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc012-s1",
+    "cc012-p1",
+    "cc012-p2",
+    "cc012-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc012-x1",
+    "cc012-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc012-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc012-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc012-p2",
+        "cc012-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt025",
+  "family": "negative_transfer",
+  "split": "holdout",
+  "task": "Implement fetch_user for the admin panel without importing customer portal fetch logic.",
+  "repo_state_fingerprint": "nt025-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "nt025-s1",
+      "tier": "session",
+      "content": "Admin panel fetch_user retrieves the full internal user record including audit flags and role list.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt025-p1",
+      "tier": "project",
+      "content": "Admin fetch returns internal metadata fields that must never be exposed to the customer portal.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt025-p2",
+      "tier": "project",
+      "content": "Admin user records include fields like is_flagged, internal_notes, and raw_billing_state.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt025-l1",
+      "tier": "long_term",
+      "content": "When fetch_user spans admin and portal, confirm which fields are safe to expose before coding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt025-x1",
+      "tier": "project",
+      "content": "Customer portal: fetch_user returns a public profile with display name, email, and plan tier only.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: customer portal user record omits internal fields required by the admin panel"
+    },
+    {
+      "id": "nt025-x2",
+      "tier": "project",
+      "content": "Old API note says fetch_user should return a unified record and let the caller filter sensitive fields.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt025-s1",
+    "nt025-p1",
+    "nt025-p2",
+    "nt025-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt025-x1",
+    "nt025-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt025-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt025-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt025-p2",
+        "nt025-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

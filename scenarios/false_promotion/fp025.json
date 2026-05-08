@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp025",
+  "family": "false_promotion",
+  "split": "holdout",
+  "task": "Fix the backup retention using session evidence, not the promoted retention duration rule.",
+  "repo_state_fingerprint": "fp025-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "fp025-s1",
+      "tier": "session",
+      "content": "Current DR testing shows the promoted '7-day backup retention' leaves gaps for detecting slow-onset data corruption.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp025-p1",
+      "tier": "project",
+      "content": "Project DR review shows data corruption can take up to 30 days to manifest; 7-day retention is insufficient.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp025-p2",
+      "tier": "project",
+      "content": "Correct retention is 30 days for full backups and 7 days for incremental backups.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp025-l1",
+      "tier": "long_term",
+      "content": "When DR tests expose gaps in a promoted retention rule, demote and extend retention before the next incident.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp025-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 4): retain database backups for 7 days to balance storage cost and recovery needs.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted 7-day retention was based on operational failures; slow-onset data corruption needs 30 days"
+    },
+    {
+      "id": "fp025-x2",
+      "tier": "project",
+      "content": "Old promotion note says 7-day retention was confirmed by the ops team as compliant with the DR policy.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp025-s1",
+    "fp025-p1",
+    "fp025-p2",
+    "fp025-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp025-x1",
+    "fp025-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp025-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp025-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp025-p2",
+        "fp025-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

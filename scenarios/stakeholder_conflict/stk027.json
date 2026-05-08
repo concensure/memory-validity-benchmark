@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk027",
+  "family": "stakeholder_conflict",
+  "split": "holdout",
+  "task": "Use the release naming convention from the brand team, not the PM's version shorthand.",
+  "repo_state_fingerprint": "stk027-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "stk027-s1",
+      "tier": "session",
+      "content": "Brand team issued a binding release naming policy in session 50: releases must use the codename system, not version numbers.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk027-p1",
+      "tier": "project",
+      "content": "Brand team naming policies are binding on all external-facing release communications and documentation.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk027-p2",
+      "tier": "project",
+      "content": "The codename system uses city names in alphabetical order; the next release is codenamed Amsterdam.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk027-l1",
+      "tier": "long_term",
+      "content": "When a PM uses version numbers in release communications, apply the codename and document the version mapping.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk027-x1",
+      "tier": "project",
+      "content": "PM instruction (session 51): name the release 'v4.2' in all customer communications for clarity.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM version number naming conflicts with brand team's binding codename release policy"
+    },
+    {
+      "id": "stk027-x2",
+      "tier": "project",
+      "content": "Old release note says version numbers were used in customer communications before the codename policy was introduced.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk027-s1",
+    "stk027-p1",
+    "stk027-p2",
+    "stk027-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk027-x1",
+    "stk027-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk027-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk027-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk027-p2",
+        "stk027-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

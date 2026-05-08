@@ -1,0 +1,138 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rrs004",
+  "family": "retrieval_recall_scale",
+  "split": "public",
+  "task": "Roll out the dark_mode_v2 feature flag to 100% of users. Flag state must be consistent across all edge nodes. Candidate pool from a 190-entry store spanning feature-flag, frontend, and infra projects.",
+  "repo_state_fingerprint": "rrs004-repo-v1",
+  "token_budget": 240,
+  "candidate_memories": [
+    {
+      "id": "rrs004-s1",
+      "tier": "session",
+      "content": "dark_mode_v2 is currently at 25% rollout; 3 edge nodes in eu-west-1 are still serving the old 10% config due to a cache lag.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs004-p1",
+      "tier": "project",
+      "content": "Feature flag changes propagate to edge nodes within 60 s via the flag sync daemon; a forced flush is available via flagctl flush --flag dark_mode_v2.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs004-p2",
+      "tier": "project",
+      "content": "dark_mode_v2 depends on the theme_service being deployed; confirm theme_service v2.3.1 is live on all regions before 100% rollout.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs004-l1",
+      "tier": "long_term",
+      "content": "Always verify flag consistency across all edge nodes before declaring a flag fully rolled out; use flagctl status --all-nodes.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs004-x1",
+      "tier": "project",
+      "content": "dark_mode_v1 was retired in 2024; all references to dark_mode_v1 in client code were cleaned up.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: v1 retirement completed, not relevant to v2 rollout"
+    },
+    {
+      "id": "rrs004-x2",
+      "tier": "session",
+      "content": "Frontend team is monitoring error rates during the rollout; no spikes observed so far.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs004-x3",
+      "tier": "project",
+      "content": "Feature flags for payments features require product manager approval before any rollout change.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs004-x4",
+      "tier": "long_term",
+      "content": "Feature flags must not persist beyond 90 days; create a cleanup ticket when creating any new flag.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs004-x5",
+      "tier": "session",
+      "content": "CDN cache for static assets was purged this morning; this is unrelated to feature flag state.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs004-x6",
+      "tier": "project",
+      "content": "ab_test_checkout flag is at 50% rollout and must not be changed during the dark_mode_v2 rollout to avoid confounding.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs004-x7",
+      "tier": "project",
+      "content": "flagctl CLI requires FLAGCTL_TOKEN env var; token is in vault:/secret/infra/flagctl.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs004-x8",
+      "tier": "session",
+      "content": "eu-west-1 region had a network partition 3 days ago; all services recovered fully.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: network event resolved, only relevant as context for cache lag"
+    }
+  ],
+  "gold_valid_ids": [
+    "rrs004-s1",
+    "rrs004-p1",
+    "rrs004-p2",
+    "rrs004-l1"
+  ],
+  "gold_invalid_ids": [
+    "rrs004-x1",
+    "rrs004-x2",
+    "rrs004-x3",
+    "rrs004-x4",
+    "rrs004-x5",
+    "rrs004-x6",
+    "rrs004-x7",
+    "rrs004-x8"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "rrs004-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rrs004-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rrs004-p2",
+        "rrs004-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

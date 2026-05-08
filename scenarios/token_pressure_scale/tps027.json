@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps027",
+  "family": "token_pressure_scale",
+  "split": "holdout",
+  "task": "Fix the broken session invalidation after the distributed cache was replaced with a local cache.",
+  "repo_state_fingerprint": "tps027-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps027-s1",
+      "tier": "session",
+      "content": "Sessions remain valid after logout because the new local cache is per-instance and invalidation does not propagate.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps027-p1",
+      "tier": "project",
+      "content": "The session store must use the distributed Redis cache for invalidation to propagate across all service instances.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps027-p2",
+      "tier": "project",
+      "content": "The local cache was introduced as a performance optimization but invalidation was not considered.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps027-l1",
+      "tier": "long_term",
+      "content": "The bug manifests when a user logs out on instance A and then makes a request to instance B.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps027-s2",
+      "tier": "session",
+      "content": "Session 2 note: a support ticket confirmed users can still access protected resources after logging out.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps027-n01",
+      "tier": "project",
+      "content": "The service is deployed with 6 instances behind a round-robin load balancer.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps027-n02",
+      "tier": "session",
+      "content": "Session 8 note: the infrastructure team added a Redis cluster for distributed caching.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps027-n03",
+      "tier": "long_term",
+      "content": "Old practice: sessions were stored in a single-instance PostgreSQL before Redis was introduced.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps027-n04",
+      "tier": "project",
+      "content": "The local cache uses an LRU eviction policy with a 5-minute TTL.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps027-n05",
+      "tier": "session",
+      "content": "Session 3 note: the security team performed a session fixation vulnerability audit.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps027-n06",
+      "tier": "project",
+      "content": "Old session guide: session invalidation was instantaneous when a single instance served all requests.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps027-n07",
+      "tier": "long_term",
+      "content": "Session invalidation must use a distributed store whenever more than one service instance serves requests.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps027-n08",
+      "tier": "session",
+      "content": "Session 11 note: the performance team measured a 30% latency reduction with the local cache.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps027-n09",
+      "tier": "project",
+      "content": "Redis is shared with the job queue and the rate limiter; separate key namespaces are used.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps027-n10",
+      "tier": "session",
+      "content": "Session 6 note: the load balancer was updated to use session-aware sticky routing for the API.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps027-n11",
+      "tier": "project",
+      "content": "The service supports horizontal scaling up to 20 instances during peak load.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps027-n12",
+      "tier": "long_term",
+      "content": "Performance optimizations that change cache scope must be audited for correctness across multiple instances.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps027-n13",
+      "tier": "session",
+      "content": "Session 9 note: the security team added a session activity audit log for compliance purposes.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps027-n14",
+      "tier": "project",
+      "content": "Old cache config: the Redis cache was set as the primary session store in the original architecture design.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps027-n15",
+      "tier": "project",
+      "content": "The session TTL in Redis is 30 minutes with sliding expiration on each authenticated request.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps027-s1",
+    "tps027-p1",
+    "tps027-p2",
+    "tps027-l1",
+    "tps027-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps027-n01",
+    "tps027-n02",
+    "tps027-n03",
+    "tps027-n04",
+    "tps027-n05",
+    "tps027-n06",
+    "tps027-n07",
+    "tps027-n08",
+    "tps027-n09",
+    "tps027-n10",
+    "tps027-n11",
+    "tps027-n12",
+    "tps027-n13",
+    "tps027-n14",
+    "tps027-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps027-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps027-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps027-p2",
+        "tps027-l1",
+        "tps027-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

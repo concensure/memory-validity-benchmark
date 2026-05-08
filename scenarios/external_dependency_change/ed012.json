@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed012",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the Slack API client after Slack removed the legacy incoming webhook payload format.",
+  "repo_state_fingerprint": "ed012-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "ed012-s1",
+      "tier": "session",
+      "content": "Slack messages fail to post; Slack removed the text-only payload format for incoming webhooks in March 2024.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed012-p1",
+      "tier": "project",
+      "content": "Slack incoming webhooks now require a blocks array with at least one section block for message delivery.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed012-p2",
+      "tier": "project",
+      "content": "The old text top-level field is still accepted but ignored if a blocks array is present.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed012-l1",
+      "tier": "long_term",
+      "content": "When a messaging platform changes its webhook payload format, update message composition before changing URLs.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed012-x1",
+      "tier": "project",
+      "content": "Slack integration note (session 7): post messages via the incoming webhook URL with a JSON body containing text.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: Slack no longer accepts text-only payloads; blocks array is required"
+    },
+    {
+      "id": "ed012-x2",
+      "tier": "project",
+      "content": "Old Slack note says the text field in the webhook payload is the simplest way to send formatted messages.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed012-s1",
+    "ed012-p1",
+    "ed012-p2",
+    "ed012-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed012-x1",
+    "ed012-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed012-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed012-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed012-p2",
+        "ed012-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

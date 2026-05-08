@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd017",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Implement new date handling using the updated preference for UTC-only timestamps.",
+  "repo_state_fingerprint": "pd017-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "pd017-s1",
+      "tier": "session",
+      "content": "User directed in session 36: stop storing local timezone timestamps; all timestamps must be UTC-only.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd017-p1",
+      "tier": "project",
+      "content": "Timestamp policy (updated session 36): all stored and transmitted timestamps must be in UTC ISO 8601 format.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd017-p2",
+      "tier": "project",
+      "content": "Timezone-aware timestamp handling in files touched during this task should be migrated to UTC.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd017-l1",
+      "tier": "long_term",
+      "content": "When timestamp policy changes, audit all date fields in touched models before writing new code.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd017-x1",
+      "tier": "project",
+      "content": "Timestamp policy (session 9): store timestamps in local timezone to avoid conversion overhead at query time.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old local-timezone preference superseded by UTC-only mandate in session 36"
+    },
+    {
+      "id": "pd017-x2",
+      "tier": "project",
+      "content": "Old data note says local timezone timestamps were chosen to simplify display in the user's region.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd017-s1",
+    "pd017-p1",
+    "pd017-p2",
+    "pd017-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd017-x1",
+    "pd017-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd017-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd017-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd017-p2",
+        "pd017-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

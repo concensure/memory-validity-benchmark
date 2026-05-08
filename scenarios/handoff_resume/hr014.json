@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "hr014",
+  "family": "handoff_resume",
+  "split": "holdout",
+  "task": "Resume consensus-promotion evaluation after audit fields expanded.",
+  "repo_state_fingerprint": "hr014-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "hr014-s1",
+      "tier": "session",
+      "content": "Audit fields are already available and the next step is to wire them into promotion scoring.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "hr014-p1",
+      "tier": "project",
+      "content": "Project memory says consensus evaluation should reuse audit evidence instead of inventing new traces.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "hr014-x1",
+      "tier": "session",
+      "content": "Stale note says promotion scoring can infer consensus quality from final selected memories only.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "hr014-s1",
+    "hr014-p1"
+  ],
+  "gold_invalid_ids": [
+    "hr014-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "hr014-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "hr014-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

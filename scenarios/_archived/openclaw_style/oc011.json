@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "oc011",
+  "family": "openclaw_style",
+  "split": "public",
+  "task": "Continue a bounded repo repair after a previous agent mixed public and holdout outputs.",
+  "repo_state_fingerprint": "oc011-repo-v1",
+  "token_budget": 250,
+  "candidate_memories": [
+    {
+      "id": "oc011-s1",
+      "tier": "session",
+      "content": "The next step must isolate output handling before any more edits because mixed bundles already contaminated the report directory.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "oc011-p1",
+      "tier": "project",
+      "content": "Project memory says workflow recovery should first restore boundary integrity, then continue feature work.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "oc011-x1",
+      "tier": "session",
+      "content": "Stale note says regenerating every report artifact is the fastest recovery regardless of contamination scope.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "oc011-s1",
+    "oc011-p1"
+  ],
+  "gold_invalid_ids": [
+    "oc011-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "oc011-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "oc011-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

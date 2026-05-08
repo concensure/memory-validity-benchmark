@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cp006",
+  "family": "consensus_promotion",
+  "split": "public",
+  "task": "Reject long-term promotion after citation supersession.",
+  "repo_state_fingerprint": "cp006-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "cp006-s1",
+      "tier": "session",
+      "content": "The cited design doc was replaced and the candidate memory still points to the old version.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cp006-p1",
+      "tier": "project",
+      "content": "Project memory says superseded citations reduce trust and can block promotion.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cp006-x1",
+      "tier": "session",
+      "content": "Old note says once a fact has citations, later citation drift does not matter.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cp006-s1",
+    "cp006-p1"
+  ],
+  "gold_invalid_ids": [
+    "cp006-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cp006-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cp006-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt008",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement cache_result for the API cache without using CDN cache semantics.",
+  "repo_state_fingerprint": "nt008-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "nt008-s1",
+      "tier": "session",
+      "content": "API cache cache_result stores a computed value keyed by user ID and request hash for 60 seconds.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt008-p1",
+      "tier": "project",
+      "content": "API cache operates in the application layer; keys include the authentication scope.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt008-p2",
+      "tier": "project",
+      "content": "API cache entries are invalidated by user action events, not by HTTP cache-control headers.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt008-l1",
+      "tier": "long_term",
+      "content": "When cache_result spans API and CDN layers, confirm the invalidation model before implementing.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt008-x1",
+      "tier": "project",
+      "content": "CDN cache: cache_result stores an HTTP response keyed by URL with cache-control header TTL.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: CDN cache semantics (URL keys, HTTP headers) are wrong for the auth-scoped API cache"
+    },
+    {
+      "id": "nt008-x2",
+      "tier": "project",
+      "content": "Old architecture note says caching layers should be unified under a single cache_result API.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt008-s1",
+    "nt008-p1",
+    "nt008-p2",
+    "nt008-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt008-x1",
+    "nt008-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt008-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt008-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt008-p2",
+        "nt008-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

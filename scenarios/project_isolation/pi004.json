@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pi004",
+  "family": "project_isolation",
+  "split": "public",
+  "task": "Prevent long-term lesson overreach when two repos share validation terminology.",
+  "repo_state_fingerprint": "pi004-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "pi004-s1",
+      "tier": "session",
+      "content": "A general validation lesson is transferable, but repo-specific package names are not.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pi004-p1",
+      "tier": "project",
+      "content": "Project memory says transferable lessons should be abstract while repo-specific details stay isolated.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pi004-x1",
+      "tier": "session",
+      "content": "Foreign detail note says package import paths from another repo can be safely reused with the same validation labels.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pi004-s1",
+    "pi004-p1"
+  ],
+  "gold_invalid_ids": [
+    "pi004-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "pi004-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pi004-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

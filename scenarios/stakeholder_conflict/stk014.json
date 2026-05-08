@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk014",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Apply the monitoring policy from the platform team, not the PM's silent failure request.",
+  "repo_state_fingerprint": "stk014-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "stk014-s1",
+      "tier": "session",
+      "content": "Platform team issued a binding monitoring requirement in session 27: all background jobs must emit failure alerts.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk014-p1",
+      "tier": "project",
+      "content": "Platform team monitoring requirements are binding; they protect SLA reporting and incident response.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk014-p2",
+      "tier": "project",
+      "content": "Failure alerts must include job name, error message, and retry count to enable rapid incident triage.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk014-l1",
+      "tier": "long_term",
+      "content": "When a PM requests silent failure handling to hide noise, apply the monitoring requirement and adjust alert thresholds.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk014-x1",
+      "tier": "project",
+      "content": "PM instruction (session 28): make the email notification job fail silently to avoid alert fatigue from retry noise.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM silent failure request conflicts with platform team's binding failure alert requirement"
+    },
+    {
+      "id": "stk014-x2",
+      "tier": "project",
+      "content": "Old ops note says some low-priority jobs were configured to fail silently before the monitoring policy was set.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk014-s1",
+    "stk014-p1",
+    "stk014-p2",
+    "stk014-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk014-x1",
+    "stk014-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk014-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk014-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk014-p2",
+        "stk014-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

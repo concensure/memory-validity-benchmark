@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed022",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the iOS SDK after Apple deprecated the UIWebView class in iOS 17.",
+  "repo_state_fingerprint": "ed022-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "ed022-s1",
+      "tier": "session",
+      "content": "App submission fails App Store Review; Apple deprecated UIWebView and requires WKWebView in iOS 17.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed022-p1",
+      "tier": "project",
+      "content": "All web content rendering must use WKWebView; UIWebView calls are rejected during App Store submission.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed022-p2",
+      "tier": "project",
+      "content": "WKWebView requires a delegate pattern instead of UIWebViewDelegate for navigation events.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed022-l1",
+      "tier": "long_term",
+      "content": "When Apple deprecates a UI class, migrate all usages before the next App Store submission.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed022-x1",
+      "tier": "project",
+      "content": "iOS development note (session 9): use UIWebView for rendering web content within the app for simplicity.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: Apple deprecated UIWebView in iOS 17; WKWebView is required for App Store submission"
+    },
+    {
+      "id": "ed022-x2",
+      "tier": "project",
+      "content": "Old iOS note says UIWebView is still functional on older iOS versions and migration can wait.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed022-s1",
+    "ed022-p1",
+    "ed022-p2",
+    "ed022-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed022-x1",
+    "ed022-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed022-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed022-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed022-p2",
+        "ed022-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd032",
+  "family": "preference_drift",
+  "split": "holdout",
+  "task": "Write the new background worker using the updated preference for pull-based over push-based.",
+  "repo_state_fingerprint": "pd032-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "pd032-s1",
+      "tier": "session",
+      "content": "User stated in session 54: switch background workers from push-based triggers to pull-based polling.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd032-p1",
+      "tier": "project",
+      "content": "Background worker policy (updated session 54): workers must poll for work, not receive pushed triggers.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd032-p2",
+      "tier": "project",
+      "content": "Push-triggered worker patterns in files touched during this task should be migrated to poll loops.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd032-l1",
+      "tier": "long_term",
+      "content": "When background worker trigger preference changes, implement the poll interval config before migrating triggers.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd032-x1",
+      "tier": "project",
+      "content": "Background worker policy (session 24): use push-based triggers from the message queue for low-latency worker starts.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old push-based trigger preference superseded by pull-based polling mandate in session 54"
+    },
+    {
+      "id": "pd032-x2",
+      "tier": "project",
+      "content": "Old worker note says push triggers were chosen because polling introduces latency for time-sensitive tasks.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd032-s1",
+    "pd032-p1",
+    "pd032-p2",
+    "pd032-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd032-x1",
+    "pd032-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd032-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd032-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd032-p2",
+        "pd032-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

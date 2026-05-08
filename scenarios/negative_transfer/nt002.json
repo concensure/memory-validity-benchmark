@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt002",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement process_payment for the order service without importing billing service assumptions.",
+  "repo_state_fingerprint": "nt002-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "nt002-s1",
+      "tier": "session",
+      "content": "Order service process_payment must only validate the payment intent ID, not charge the card directly.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt002-p1",
+      "tier": "project",
+      "content": "Order service payment processing is intentionally thin; charging is delegated to the billing service.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt002-p2",
+      "tier": "project",
+      "content": "Payment intent IDs in the order service are opaque references; they carry no amount information.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt002-l1",
+      "tier": "long_term",
+      "content": "When services share payment terminology, verify the responsibility boundary before implementing.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt002-x1",
+      "tier": "project",
+      "content": "Billing service: process_payment computes line items, applies tax, and calls the payment gateway.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: billing service payment logic is out of scope for the order service function"
+    },
+    {
+      "id": "nt002-x2",
+      "tier": "project",
+      "content": "Old architecture note says payment logic should eventually be unified across order and billing.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt002-s1",
+    "nt002-p1",
+    "nt002-p2",
+    "nt002-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt002-x1",
+    "nt002-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt002-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt002-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt002-p2",
+        "nt002-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

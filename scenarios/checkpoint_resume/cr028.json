@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr028",
+  "family": "checkpoint_resume",
+  "split": "holdout",
+  "task": "Continue the access review at role 9 without re-reviewing roles 1\u20138.",
+  "repo_state_fingerprint": "cr028-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "cr028-s1",
+      "tier": "session",
+      "content": "Access review log shows roles 1\u20138 reviewed with over-provisioned permissions documented; role 9 is next.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr028-p1",
+      "tier": "project",
+      "content": "Re-reviewing completed roles would produce duplicate remediation items and confuse the access control team.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr028-p2",
+      "tier": "project",
+      "content": "Roles 10\u201325 have not been reviewed and must be evaluated after role 9.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr028-l1",
+      "tier": "long_term",
+      "content": "When an access review is interrupted, verify the review log to identify the next role before resuming.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr028-x1",
+      "tier": "session",
+      "content": "Restart the access review from role 1 to ensure all roles are reviewed in the same governance cycle.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full restart; correct behavior is to resume the access review from role 9"
+    },
+    {
+      "id": "cr028-x2",
+      "tier": "project",
+      "content": "Old governance note says re-reviewing all roles from the beginning ensures consistent review criteria are applied.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr028-s1",
+    "cr028-p1",
+    "cr028-p2",
+    "cr028-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr028-x1",
+    "cr028-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr028-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr028-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr028-p2",
+        "cr028-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

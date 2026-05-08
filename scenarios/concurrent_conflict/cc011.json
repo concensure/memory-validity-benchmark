@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc011",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Apply the configuration rollout after confirming no other agent is mid-rollout.",
+  "repo_state_fingerprint": "cc011-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "cc011-s1",
+      "tier": "session",
+      "content": "Config-Agent-A started rolling out the new rate limit config to 50% of nodes at 16:00.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc011-p1",
+      "tier": "project",
+      "content": "Config rollouts must be single-agent to prevent nodes from receiving conflicting config values.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc011-p2",
+      "tier": "project",
+      "content": "Config-Agent-A's rollout is at 30% of nodes; the remaining 70% have not yet received the change.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc011-l1",
+      "tier": "long_term",
+      "content": "When two agents both initiate a config rollout, check rollout lock before allowing either to continue.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc011-x1",
+      "tier": "session",
+      "content": "Config-Agent-B also initiated the same rate limit config rollout at 16:03.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents simultaneously rolling out the same config change to the cluster"
+    },
+    {
+      "id": "cc011-x2",
+      "tier": "project",
+      "content": "Old config note says concurrent rollouts to different node groups are safe if percentages do not overlap.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc011-s1",
+    "cc011-p1",
+    "cc011-p2",
+    "cc011-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc011-x1",
+    "cc011-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc011-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc011-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc011-p2",
+        "cc011-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

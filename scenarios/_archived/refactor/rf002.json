@@ -1,0 +1,80 @@
+{
+  "scenario_id": "rf002",
+  "family": "refactor",
+  "task": "Split configuration loading into reusable modules without changing env override precedence.",
+  "repo_state_fingerprint": "rf002-repo-v1",
+  "token_budget": 240,
+  "candidate_memories": [
+    {
+      "id": "rf002-s1",
+      "tier": "session",
+      "content": "User reported only one bug: env variables stop overriding file config after the split.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rf002-p1",
+      "tier": "project",
+      "content": "Effective precedence is defaults < config file < env overrides.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rf002-p2",
+      "tier": "project",
+      "content": "CLI flags are parsed later and should remain outside this refactor.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rf002-l1",
+      "tier": "long_term",
+      "content": "Configuration refactors commonly regress precedence when helpers eagerly bind defaults.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rf002-l2",
+      "tier": "long_term",
+      "content": "Prefer a full rewrite of configuration loading whenever the module is touched.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rf002-s1",
+    "rf002-p1",
+    "rf002-p2",
+    "rf002-l1"
+  ],
+  "gold_invalid_ids": [
+    "rf002-l2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "rf002-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rf002-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rf002-p2",
+        "rf002-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.4,
+    "ideal": 1.0
+  },
+  "schema_version": "mvi-scenario-v1",
+  "split": "public"
+}

@@ -1,0 +1,68 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "macr003",
+  "family": "multi_agent_conflict_resolution",
+  "split": "public",
+  "task": "Set the minimum test coverage threshold for the new service in CI. Resolution strategy: role_wins \u2014 architect role takes precedence over coder role.",
+  "repo_state_fingerprint": "macr003-repo-v1",
+  "token_budget": 207,
+  "candidate_memories": [
+    {
+      "id": "macr003-p1",
+      "tier": "project",
+      "content": "[architect-agent] Minimum coverage: 85% line coverage and 75% branch coverage. This was increased from 80%/70% after the Q2 quality review to reduce regression risk in critical services.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "resolution: role_wins; role=architect; wins over coder"
+    },
+    {
+      "id": "macr003-p2",
+      "tier": "project",
+      "content": "CI enforces coverage via go test -coverprofile=coverage.out; threshold check in Makefile target check-coverage.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr003-l1",
+      "tier": "long_term",
+      "content": "Coverage thresholds are set by the architect for each service class; critical services have higher thresholds than internal tools.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr003-x1",
+      "tier": "session",
+      "content": "[coder-agent] Coverage threshold is 80% line coverage; this is what the existing service template uses.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "resolution: role_loses; role=coder; architect's updated threshold supersedes template default"
+    }
+  ],
+  "gold_valid_ids": [
+    "macr003-p1",
+    "macr003-p2",
+    "macr003-l1"
+  ],
+  "gold_invalid_ids": [
+    "macr003-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "macr003-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "macr003-p2",
+        "macr003-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

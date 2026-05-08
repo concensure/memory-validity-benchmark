@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ma003",
+  "family": "multi_agent",
+  "split": "public",
+  "task": "Coordinate benchmark and product work without cross-contamination.",
+  "repo_state_fingerprint": "ma003-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "ma003-s1",
+      "tier": "session",
+      "content": "Benchmark-specific code should remain isolated from the core orchestrator logic.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ma003-p1",
+      "tier": "project",
+      "content": "Project memory says product changes must preserve the published benchmark contract.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ma003-x1",
+      "tier": "session",
+      "content": "Old shortcut says benchmark hooks can be embedded directly into production validation code.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ma003-s1",
+    "ma003-p1"
+  ],
+  "gold_invalid_ids": [
+    "ma003-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "ma003-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ma003-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

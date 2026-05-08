@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cp003",
+  "family": "consensus_promotion",
+  "split": "public",
+  "task": "Reject promotion when branch-specific memory looks globally useful.",
+  "repo_state_fingerprint": "cp003-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "cp003-s1",
+      "tier": "session",
+      "content": "A branch-specific fix appears useful but has not been validated after merge.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cp003-p1",
+      "tier": "project",
+      "content": "Project memory says branch-scoped memories must not be promoted until merged reality confirms them.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cp003-x1",
+      "tier": "session",
+      "content": "Stale promotion note says any branch fix surviving local tests is ready for long-term memory.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cp003-s1",
+    "cp003-p1"
+  ],
+  "gold_invalid_ids": [
+    "cp003-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cp003-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cp003-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

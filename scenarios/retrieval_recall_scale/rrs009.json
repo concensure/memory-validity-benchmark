@@ -1,0 +1,137 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rrs009",
+  "family": "retrieval_recall_scale",
+  "split": "holdout",
+  "task": "Tune the inbound rate limiter on the orders API after a misconfiguration caused 429 storms during peak traffic. Candidate pool from a 195-entry store across gateway, orders, and capacity projects.",
+  "repo_state_fingerprint": "rrs009-repo-v1",
+  "token_budget": 245,
+  "candidate_memories": [
+    {
+      "id": "rrs009-s1",
+      "tier": "session",
+      "content": "Post-incident review confirmed rate limiter was set to 50 req/s per IP; correct value per capacity plan is 200 req/s.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs009-p1",
+      "tier": "project",
+      "content": "Rate limiter config lives in api-gateway/config/ratelimit.yaml; update per_ip_rps under orders_api and restart the gateway pod.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs009-p2",
+      "tier": "project",
+      "content": "Rate limit changes require load-test validation in staging before production deployment; use locust/orders_peak_scenario.py.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs009-l1",
+      "tier": "long_term",
+      "content": "After any rate limit change, monitor 429 rate on the orders API for 10 min; acceptable 429 rate is <0.5%.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs009-x1",
+      "tier": "project",
+      "content": "payment-svc has a separate rate limiter at 100 req/s per IP; not part of this incident.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs009-x2",
+      "tier": "session",
+      "content": "Orders API p99 latency is 120 ms at the corrected rate; well within SLO.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs009-x3",
+      "tier": "long_term",
+      "content": "API quota limits for third-party partners are configured separately in the partner portal, not in ratelimit.yaml.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs009-x4",
+      "tier": "project",
+      "content": "Old capacity plan from 2023 set orders API limit to 100 req/s; superseded by 2025 capacity review.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: 2023 capacity plan superseded by 2025 review"
+    },
+    {
+      "id": "rrs009-x5",
+      "tier": "session",
+      "content": "DDOS protection at the CDN level throttles to 10 000 req/s across all IPs; not a factor in this incident.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs009-x6",
+      "tier": "project",
+      "content": "Circuit breaker on orders-svc downstream calls trips at 30% error rate over 10 s; independent of rate limiting.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs009-x7",
+      "tier": "session",
+      "content": "Incident post-mortem is in progress in #incident-orders; final report due by EOD.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs009-x8",
+      "tier": "long_term",
+      "content": "Rate limit changes must be documented in the API capacity register before deployment; add an entry in docs/capacity.md.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rrs009-s1",
+    "rrs009-p1",
+    "rrs009-p2",
+    "rrs009-l1"
+  ],
+  "gold_invalid_ids": [
+    "rrs009-x1",
+    "rrs009-x2",
+    "rrs009-x3",
+    "rrs009-x4",
+    "rrs009-x5",
+    "rrs009-x6",
+    "rrs009-x7",
+    "rrs009-x8"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "rrs009-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rrs009-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rrs009-p2",
+        "rrs009-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

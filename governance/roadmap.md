@@ -13,7 +13,12 @@ Current local draft status has reached that launch-size target:
 - `150` total scenarios
 - `100` public
 - `50` holdout
-- `10` families with balanced coverage
+- `10` families with near-balanced coverage
+
+Known frozen draft imbalance:
+
+- `consensus_promotion`: `9` public / `6` holdout
+- `neutral_minimal`: `11` public / `4` holdout
 
 These scenarios remain draft-local pending the final publication decision.
 
@@ -41,11 +46,12 @@ This larger set should improve:
 
 ## Immediate Implementation Steps
 
-1. Freeze `v1` scenario and run schemas.
-2. Freeze `v1` scoring and reporting rules.
-3. Build the first official public and holdout packs.
+1. Freeze `v1` scenario, run, and bundle schemas.
+2. Freeze `v1` scoring, baseline disclosure, and reporting rules.
+3. Build and freeze the first official public and holdout pack manifests.
 4. Implement the reference harness for deterministic retrieval, orchestration replay, and execution-based tracks.
-5. Publish baseline runs from multiple systems, not only one memory implementation.
+5. Add a one-shot contract verifier for scenarios, manifests, and scoring metadata.
+6. Publish baseline runs from multiple systems, not only one memory implementation.
 
 ## Recognition Path
 

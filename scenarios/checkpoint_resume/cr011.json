@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr011",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Resume the API migration at endpoint 14 without re-migrating already-updated endpoints.",
+  "repo_state_fingerprint": "cr011-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "cr011-s1",
+      "tier": "session",
+      "content": "Migration log shows endpoints 1\u201313 updated and tested; endpoint 14 (/v1/orders/{id}) is the next migration target.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr011-p1",
+      "tier": "project",
+      "content": "Re-migrating completed endpoints could revert their v2 implementations and break already-deployed clients.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr011-p2",
+      "tier": "project",
+      "content": "Endpoints 15\u201330 have not been migrated and must be updated after endpoint 14 is complete.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr011-l1",
+      "tier": "long_term",
+      "content": "When an API migration is interrupted, check the migration log to confirm completed endpoints before resuming.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr011-x1",
+      "tier": "session",
+      "content": "Roll back all migrated endpoints and restart the API migration from endpoint 1.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full rollback and restart; correct behavior is to continue from endpoint 14"
+    },
+    {
+      "id": "cr011-x2",
+      "tier": "project",
+      "content": "Old API note says rolling back and restarting ensures all endpoints are migrated consistently.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr011-s1",
+    "cr011-p1",
+    "cr011-p2",
+    "cr011-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr011-x1",
+    "cr011-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr011-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr011-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr011-p2",
+        "cr011-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

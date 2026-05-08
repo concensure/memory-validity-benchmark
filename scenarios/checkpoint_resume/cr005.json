@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr005",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Resume the data export at record 4,500 without re-exporting already-written records.",
+  "repo_state_fingerprint": "cr005-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "cr005-s1",
+      "tier": "session",
+      "content": "Export checkpoint shows 4,500 records written to the output file; the process was interrupted during record 4,501.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr005-p1",
+      "tier": "project",
+      "content": "The output file uses an append-only format; re-exporting written records would create duplicates.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr005-p2",
+      "tier": "project",
+      "content": "Records 4,501\u201310,000 have not been exported and must be appended after resuming from the checkpoint.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr005-l1",
+      "tier": "long_term",
+      "content": "When an export is interrupted, verify the last written record ID in the checkpoint before resuming.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr005-x1",
+      "tier": "session",
+      "content": "Truncate the output file and re-export all 10,000 records from the beginning for consistency.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full re-export; correct behavior is to append records 4,501\u201310,000"
+    },
+    {
+      "id": "cr005-x2",
+      "tier": "project",
+      "content": "Old export note says re-exporting from the beginning is the safest approach after any interruption.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr005-s1",
+    "cr005-p1",
+    "cr005-p2",
+    "cr005-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr005-x1",
+    "cr005-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr005-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr005-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr005-p2",
+        "cr005-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

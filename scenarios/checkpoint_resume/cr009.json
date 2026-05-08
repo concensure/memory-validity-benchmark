@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr009",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Resume the infrastructure provisioning at resource 6 without reprovisioning resources 1\u20135.",
+  "repo_state_fingerprint": "cr009-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "cr009-s1",
+      "tier": "session",
+      "content": "Provisioning log shows resources 1\u20135 (VPC, subnets, security groups, IAM role, S3 bucket) created successfully.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr009-p1",
+      "tier": "project",
+      "content": "Reprovisioning already-created resources without destruction causes state drift in the infrastructure backend.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr009-p2",
+      "tier": "project",
+      "content": "Resources 6\u201312 (EC2 instances, load balancer, RDS cluster) have not been provisioned yet.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr009-l1",
+      "tier": "long_term",
+      "content": "When infrastructure provisioning is interrupted, import existing resources into state before continuing.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr009-x1",
+      "tier": "session",
+      "content": "Destroy all provisioned resources and reprovision from scratch for a clean infrastructure state.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full destruction and reprovision; correct behavior is to resume from resource 6"
+    },
+    {
+      "id": "cr009-x2",
+      "tier": "project",
+      "content": "Old infra note says destroying and reprovisioning from scratch is the cleanest recovery for any failure.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr009-s1",
+    "cr009-p1",
+    "cr009-p2",
+    "cr009-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr009-x1",
+    "cr009-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr009-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr009-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr009-p2",
+        "cr009-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "macr007",
+  "family": "multi_agent_conflict_resolution",
+  "split": "public",
+  "task": "Pin the PostgreSQL version for the new service. Resolution strategy: recency_wins.",
+  "repo_state_fingerprint": "macr007-repo-v1",
+  "token_budget": 206,
+  "candidate_memories": [
+    {
+      "id": "macr007-s1",
+      "tier": "session",
+      "content": "[platform-agent, written 15:20 UTC] PostgreSQL standard version updated to 16.4 following the 16.3 replication bug fix. All new services must use 16.4; 16.3 must not be used for new deployments.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "resolution: recency_wins; written 15:20 UTC; wins"
+    },
+    {
+      "id": "macr007-p1",
+      "tier": "project",
+      "content": "postgres:16.4-alpine is the required Docker base image; pin the tag explicitly in Dockerfile, do not use 16-alpine or latest.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr007-l1",
+      "tier": "long_term",
+      "content": "PostgreSQL version is platform-standardised; always check platform-standards/postgres-version.md before pinning.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr007-x1",
+      "tier": "long_term",
+      "content": "[platform-agent, written 08:00 UTC] PostgreSQL standard version is 16.3.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "resolution: recency_loses; written 08:00 UTC; superseded by macr007-s1 at 15:20 UTC after 16.4 release"
+    }
+  ],
+  "gold_valid_ids": [
+    "macr007-s1",
+    "macr007-p1",
+    "macr007-l1"
+  ],
+  "gold_invalid_ids": [
+    "macr007-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "macr007-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "macr007-p1",
+        "macr007-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

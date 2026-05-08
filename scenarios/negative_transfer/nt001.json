@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt001",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement parse_token correctly for the billing service, ignoring auth-service memory.",
+  "repo_state_fingerprint": "nt001-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "nt001-s1",
+      "tier": "session",
+      "content": "Current billing token shape carries account_id and plan_id; parsing must extract both fields.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt001-p1",
+      "tier": "project",
+      "content": "Billing token parsing must follow the billing service token spec, not the auth service contract.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt001-p2",
+      "tier": "project",
+      "content": "The billing-specific parse_token function lives in billing/tokenizer.go and is separate from auth.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt001-l1",
+      "tier": "long_term",
+      "content": "When two services share a function name, always confirm the target project spec before coding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt001-x1",
+      "tier": "project",
+      "content": "Auth service: parse_token splits on '.' and validates the user_id claim for access control.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: auth service parse_token contract is irrelevant here; wrong project scope"
+    },
+    {
+      "id": "nt001-x2",
+      "tier": "project",
+      "content": "Old shared-services note says token parsing can be centralized and reused across all services.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt001-s1",
+    "nt001-p1",
+    "nt001-p2",
+    "nt001-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt001-x1",
+    "nt001-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt001-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt001-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt001-p2",
+        "nt001-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

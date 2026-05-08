@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk010",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Implement the testing requirement from QA lead, not the PM's speed-to-delivery request.",
+  "repo_state_fingerprint": "stk010-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "stk010-s1",
+      "tier": "session",
+      "content": "QA lead issued a binding gate in session 28: all new features must pass a full regression suite before release.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk010-p1",
+      "tier": "project",
+      "content": "QA lead release gates have engineering authority; they block releases regardless of PM delivery timelines.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk010-p2",
+      "tier": "project",
+      "content": "The regression suite covers 847 test cases and runs for 45 minutes on the CI cluster.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk010-l1",
+      "tier": "long_term",
+      "content": "When a QA gate conflicts with a PM's delivery urgency, hold the release and fix regressions first.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk010-x1",
+      "tier": "project",
+      "content": "PM instruction (session 29): release the feature today with a deferred regression run to meet the stakeholder demo.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM deferred testing request conflicts with QA lead's binding regression gate"
+    },
+    {
+      "id": "stk010-x2",
+      "tier": "project",
+      "content": "Old release note says regression runs were sometimes waived for low-risk features with PM sign-off.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk010-s1",
+    "stk010-p1",
+    "stk010-p2",
+    "stk010-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk010-x1",
+    "stk010-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk010-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk010-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk010-p2",
+        "stk010-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd008",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Implement the API pagination using the updated preference for cursor-based over offset-based.",
+  "repo_state_fingerprint": "pd008-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "pd008-s1",
+      "tier": "session",
+      "content": "User stated in session 22: switch all API pagination from offset/limit to cursor-based pagination.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd008-p1",
+      "tier": "project",
+      "content": "API pagination standard (updated session 22): all list endpoints must use opaque cursor tokens.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd008-p2",
+      "tier": "project",
+      "content": "Offset/limit pagination parameters in existing endpoints must be deprecated and cursor params added.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd008-l1",
+      "tier": "long_term",
+      "content": "When pagination preference changes, add cursor support before deprecating offset params in touched endpoints.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd008-x1",
+      "tier": "project",
+      "content": "API pagination standard (session 4): use offset/limit pagination for all list endpoints for simplicity.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old offset pagination preference superseded by cursor-based mandate in session 22"
+    },
+    {
+      "id": "pd008-x2",
+      "tier": "project",
+      "content": "Old API note says offset pagination was chosen because it is easier to implement and test.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd008-s1",
+    "pd008-p1",
+    "pd008-p2",
+    "pd008-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd008-x1",
+    "pd008-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd008-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd008-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd008-p2",
+        "pd008-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

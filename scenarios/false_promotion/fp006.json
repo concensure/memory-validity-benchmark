@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp006",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Fix the token expiry logic using session evidence, not the promoted expiry duration rule.",
+  "repo_state_fingerprint": "fp006-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "fp006-s1",
+      "tier": "session",
+      "content": "Current auth monitoring shows the promoted '1-hour access token expiry' causes frequent re-auth for mobile users.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp006-p1",
+      "tier": "project",
+      "content": "Project UX research shows mobile users expect 7-day access without re-authentication.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp006-p2",
+      "tier": "project",
+      "content": "Correct approach is 1-hour access tokens with 7-day refresh tokens, not a single 1-hour token.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp006-l1",
+      "tier": "long_term",
+      "content": "When session evidence shows UX failures from the promoted rule, initiate a demotion review.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp006-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 3): access tokens must expire after 1 hour for security.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted 1-hour expiry was based on web session patterns; mobile sessions need refresh token pairing"
+    },
+    {
+      "id": "fp006-x2",
+      "tier": "project",
+      "content": "Old promotion note says the 1-hour expiry was confirmed by the security team as the maximum safe duration.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp006-s1",
+    "fp006-p1",
+    "fp006-p2",
+    "fp006-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp006-x1",
+    "fp006-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp006-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp006-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp006-p2",
+        "fp006-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

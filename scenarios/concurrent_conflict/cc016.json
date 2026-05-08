@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc016",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Update the shared API schema registry after confirming no conflicting schema edit is pending.",
+  "repo_state_fingerprint": "cc016-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "cc016-s1",
+      "tier": "session",
+      "content": "Schema-Agent-A submitted a schema update for the payments.v2 type at 09:00.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc016-p1",
+      "tier": "project",
+      "content": "Schema registry updates require a review approval before they become active; pending updates lock the type.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc016-p2",
+      "tier": "project",
+      "content": "Schema-Agent-A's update is in review; the payments.v2 type is locked until approval completes.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc016-l1",
+      "tier": "long_term",
+      "content": "When two agents submit schema updates for the same type, check pending review state first.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc016-x1",
+      "tier": "session",
+      "content": "Schema-Agent-B also submitted a schema update for payments.v2 at 09:05 with a different field change.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two schema updates for the same type are pending review simultaneously"
+    },
+    {
+      "id": "cc016-x2",
+      "tier": "project",
+      "content": "Old schema note says concurrent schema updates can be merged if they touch different fields.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc016-s1",
+    "cc016-p1",
+    "cc016-p2",
+    "cc016-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc016-x1",
+    "cc016-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc016-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc016-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc016-p2",
+        "cc016-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

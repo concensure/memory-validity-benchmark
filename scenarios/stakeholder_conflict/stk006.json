@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk006",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Implement the error handling policy from the architect, not the PM's simplified error model.",
+  "repo_state_fingerprint": "stk006-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "stk006-s1",
+      "tier": "session",
+      "content": "Architect issued a binding error handling policy in session 17: all API errors must use RFC 7807 problem+json format.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk006-p1",
+      "tier": "project",
+      "content": "Architect error handling policies are binding on all API implementations in the project.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk006-p2",
+      "tier": "project",
+      "content": "RFC 7807 requires type, title, status, and detail fields in all error responses.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk006-l1",
+      "tier": "long_term",
+      "content": "When architect error policy conflicts with a PM's simpler model request, implement the RFC 7807 format.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk006-x1",
+      "tier": "project",
+      "content": "PM instruction (session 18): return a simple error string in a message field for easier client parsing.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM simplified error request conflicts with architect's binding RFC 7807 error policy"
+    },
+    {
+      "id": "stk006-x2",
+      "tier": "project",
+      "content": "Old API note says a simple error message field was used in early endpoints before the RFC 7807 policy was set.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk006-s1",
+    "stk006-p1",
+    "stk006-p2",
+    "stk006-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk006-x1",
+    "stk006-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk006-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk006-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk006-p2",
+        "stk006-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

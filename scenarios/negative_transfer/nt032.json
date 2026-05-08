@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt032",
+  "family": "negative_transfer",
+  "split": "holdout",
+  "task": "Implement transform_record for the ETL pipeline without using the reporting transform logic.",
+  "repo_state_fingerprint": "nt032-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "nt032-s1",
+      "tier": "session",
+      "content": "ETL pipeline transform_record maps raw source fields to the canonical schema and applies type coercion.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt032-p1",
+      "tier": "project",
+      "content": "ETL transformation is stateless; each record is transformed independently without context.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt032-p2",
+      "tier": "project",
+      "content": "ETL transformations must be deterministic; the same input always produces the same output.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt032-l1",
+      "tier": "long_term",
+      "content": "When transform_record spans ETL and reporting, verify the stateless and determinism requirements.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt032-x1",
+      "tier": "project",
+      "content": "Reporting: transform_record joins the record with dimension tables and applies business formatting.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: reporting join-based transforms have external dependencies and are not stateless"
+    },
+    {
+      "id": "nt032-x2",
+      "tier": "project",
+      "content": "Old data note says transform_record should be shared between ETL ingestion and report generation.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt032-s1",
+    "nt032-p1",
+    "nt032-p2",
+    "nt032-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt032-x1",
+    "nt032-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt032-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt032-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt032-p2",
+        "nt032-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

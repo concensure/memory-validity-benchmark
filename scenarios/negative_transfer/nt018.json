@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt018",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement deploy_service for the Kubernetes deployment without importing VM deploy logic.",
+  "repo_state_fingerprint": "nt018-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "nt018-s1",
+      "tier": "session",
+      "content": "Kubernetes deploy_service applies a Helm chart and waits for the rollout to reach healthy status.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt018-p1",
+      "tier": "project",
+      "content": "K8s deployments are declarative; the function must not manage instance lifecycles imperatively.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt018-p2",
+      "tier": "project",
+      "content": "Deploy success is confirmed by checking the deployment rollout status via the K8s API.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt018-l1",
+      "tier": "long_term",
+      "content": "When deploy_service spans k8s and VM environments, confirm the declarative vs imperative model.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt018-x1",
+      "tier": "project",
+      "content": "VM deploy: deploy_service SSHs into each target host, runs the install script, and restarts the daemon.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: VM imperative SSH deploy is incompatible with declarative Kubernetes deployments"
+    },
+    {
+      "id": "nt018-x2",
+      "tier": "project",
+      "content": "Old ops note says deployment behavior should be abstracted so the same code runs on VMs and k8s.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt018-s1",
+    "nt018-p1",
+    "nt018-p2",
+    "nt018-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt018-x1",
+    "nt018-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt018-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt018-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt018-p2",
+        "nt018-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

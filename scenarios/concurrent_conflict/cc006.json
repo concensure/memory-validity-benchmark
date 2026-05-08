@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc006",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Write the integration test fixture after confirming no other agent is writing it.",
+  "repo_state_fingerprint": "cc006-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "cc006-s1",
+      "tier": "session",
+      "content": "QA-A claimed the test fixture directory at 15:00 and is generating payment integration fixtures.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc006-p1",
+      "tier": "project",
+      "content": "Test fixture directories are owned per session to prevent interleaved writes from different agents.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc006-p2",
+      "tier": "project",
+      "content": "QA-A's fixture generation is mid-run; the directory contains partial files not yet validated.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc006-l1",
+      "tier": "long_term",
+      "content": "When fixture directory ownership is contested, halt writes and check which agent's data is complete.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc006-x1",
+      "tier": "session",
+      "content": "QA-B also claimed the test fixture directory at 15:02 for billing integration fixtures.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents both write to the same test fixture directory concurrently"
+    },
+    {
+      "id": "cc006-x2",
+      "tier": "project",
+      "content": "Old test note says fixture directory collisions are harmless if agents write to different subdirectories.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc006-s1",
+    "cc006-p1",
+    "cc006-p2",
+    "cc006-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc006-x1",
+    "cc006-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc006-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc006-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc006-p2",
+        "cc006-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

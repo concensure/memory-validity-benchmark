@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "bm008",
+  "family": "branch_merge",
+  "split": "public",
+  "task": "Handle branch-specific env var drift after CI refactor.",
+  "repo_state_fingerprint": "bm008-repo-v1",
+  "token_budget": 210,
+  "candidate_memories": [
+    {
+      "id": "bm008-s1",
+      "tier": "session",
+      "content": "CI refactor changed env var names on main while the release branch still documents old names.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "bm008-p1",
+      "tier": "project",
+      "content": "Project memory says env var memories are branch-scoped until merged and validated.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "bm008-x1",
+      "tier": "session",
+      "content": "Old note says CI env vars are effectively global and can be reused across active branches.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "bm008-s1",
+    "bm008-p1"
+  ],
+  "gold_invalid_ids": [
+    "bm008-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "bm008-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "bm008-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

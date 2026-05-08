@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc017",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Apply the database connection pool resize after confirming no concurrent resize is running.",
+  "repo_state_fingerprint": "cc017-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cc017-s1",
+      "tier": "session",
+      "content": "Ops-Agent-A initiated a connection pool resize from 100 to 150 connections at 15:00.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc017-p1",
+      "tier": "project",
+      "content": "Pool resizing is a live operation; a second concurrent resize would destabilize connection state.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc017-p2",
+      "tier": "project",
+      "content": "Ops-Agent-A's resize is 70% complete; 105 of 150 connections are now established.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc017-l1",
+      "tier": "long_term",
+      "content": "When two agents both initiate a pool resize, surface the conflict before allowing a second resize.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc017-x1",
+      "tier": "session",
+      "content": "Ops-Agent-B also initiated a pool resize from 100 to 200 connections at 15:02.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents are concurrently resizing the same connection pool"
+    },
+    {
+      "id": "cc017-x2",
+      "tier": "project",
+      "content": "Old ops note says pool resizes are idempotent and concurrent resizes settle to the higher limit.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc017-s1",
+    "cc017-p1",
+    "cc017-p2",
+    "cc017-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc017-x1",
+    "cc017-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc017-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc017-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc017-p2",
+        "cc017-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

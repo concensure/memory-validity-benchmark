@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rf015",
+  "family": "refactor",
+  "split": "holdout",
+  "task": "Extract scenario-family registration into declarative metadata.",
+  "repo_state_fingerprint": "rf015-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "rf015-s1",
+      "tier": "session",
+      "content": "Family registration is expanding and should become data-driven without changing scenario semantics.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rf015-p1",
+      "tier": "project",
+      "content": "Project memory says declarative family metadata helps growth while preserving deterministic selection rules.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rf015-x1",
+      "tier": "session",
+      "content": "Old note says hard-coded family lists are safer even as the matrix expands.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rf015-s1",
+    "rf015-p1"
+  ],
+  "gold_invalid_ids": [
+    "rf015-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "rf015-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rf015-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

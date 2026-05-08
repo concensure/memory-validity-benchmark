@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk016",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Apply the auth scope decision from the security lead, not the PM's broad access request.",
+  "repo_state_fingerprint": "stk016-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "stk016-s1",
+      "tier": "session",
+      "content": "Security lead issued a binding decision in session 26: API tokens must be scoped to the minimum required permissions.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk016-p1",
+      "tier": "project",
+      "content": "Security lead scope decisions enforce least-privilege; broad access tokens are rejected regardless of PM requests.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk016-p2",
+      "tier": "project",
+      "content": "The scope review process must document the specific permissions needed before any token scope is granted.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk016-l1",
+      "tier": "long_term",
+      "content": "When a PM requests a broad-scope token to simplify integration, enforce least-privilege and run a scope review.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk016-x1",
+      "tier": "project",
+      "content": "PM instruction (session 27): issue integration partner tokens with full read/write scope to simplify their integration.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM broad scope request conflicts with security lead's binding least-privilege token policy"
+    },
+    {
+      "id": "stk016-x2",
+      "tier": "project",
+      "content": "Old integration note says full-scope tokens were used for developer testing before the scope policy was enforced.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk016-s1",
+    "stk016-p1",
+    "stk016-p2",
+    "stk016-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk016-x1",
+    "stk016-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk016-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk016-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk016-p2",
+        "stk016-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

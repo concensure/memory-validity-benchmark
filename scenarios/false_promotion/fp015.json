@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp015",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Apply the API response fix using session evidence, not the promoted field naming rule.",
+  "repo_state_fingerprint": "fp015-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "fp015-s1",
+      "tier": "session",
+      "content": "Current API integration tests show the promoted 'snake_case response fields' break TypeScript client type inference.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp015-p1",
+      "tier": "project",
+      "content": "Project frontend audit shows TypeScript client generators expect camelCase fields for proper type generation.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp015-p2",
+      "tier": "project",
+      "content": "Correct approach is camelCase for public API responses; snake_case is used only in internal service calls.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp015-l1",
+      "tier": "long_term",
+      "content": "When session integration tests break due to a promoted naming rule, trust the evidence and demote.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp015-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 8): use snake_case for all API response field names for database alignment.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted snake_case rule ignored the TypeScript client constraint that requires camelCase"
+    },
+    {
+      "id": "fp015-x2",
+      "tier": "project",
+      "content": "Old promotion note says snake_case was validated by the backend team to align with database column naming.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp015-s1",
+    "fp015-p1",
+    "fp015-p2",
+    "fp015-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp015-x1",
+    "fp015-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp015-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp015-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp015-p2",
+        "fp015-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps009",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the event deduplication failure after the event ID format changed.",
+  "repo_state_fingerprint": "tps009-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps009-s1",
+      "tier": "session",
+      "content": "Duplicate events are being processed because the deduplication check uses the old integer ID format but new events use UUID format.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps009-p1",
+      "tier": "project",
+      "content": "The deduplication key must be updated to use the UUID event ID; the old integer check always misses UUID-keyed events.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps009-p2",
+      "tier": "project",
+      "content": "The event ID format changed in version 4.3.0 deployed on April 7; events before that date have integer IDs.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps009-l1",
+      "tier": "long_term",
+      "content": "When event ID formats change, update all deduplication, routing, and storage components in the same release.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps009-s2",
+      "tier": "session",
+      "content": "Historical events with integer IDs are not being duplicated; only new events with UUID IDs are affected.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps009-n01",
+      "tier": "project",
+      "content": "The event streaming platform was migrated from Kafka to Kinesis in Q2.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps009-n02",
+      "tier": "session",
+      "content": "Session 9 note: the event schema was extended with a new metadata field for trace IDs.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps009-n03",
+      "tier": "long_term",
+      "content": "Old lesson: integer IDs were used for events before UUIDs were adopted for global uniqueness.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps009-n04",
+      "tier": "project",
+      "content": "Events are retained in Kinesis for 7 days; historical events older than 7 days are in S3.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps009-n05",
+      "tier": "session",
+      "content": "A data consistency check in session 5 showed no duplicates for events before version 4.3.0.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps009-n06",
+      "tier": "project",
+      "content": "Old event guide: deduplication was handled by the downstream consumer, not the event broker.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps009-n07",
+      "tier": "long_term",
+      "content": "When event IDs change format, run a dual-write compatibility period before switching deduplication logic.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps009-n08",
+      "tier": "session",
+      "content": "Session 12 note: the event replay feature was added for audit log reconstruction.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps009-n09",
+      "tier": "project",
+      "content": "The analytics pipeline processes events in micro-batches of 500 per 10 seconds.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps009-n10",
+      "tier": "session",
+      "content": "Session 7 note: the monitoring team added alerting for high event processing latency.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps009-n11",
+      "tier": "project",
+      "content": "Event consumers are deployed as Kubernetes Deployments with horizontal autoscaling.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps009-n12",
+      "tier": "long_term",
+      "content": "Deduplication windows should exceed the maximum expected event redelivery delay.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps009-n13",
+      "tier": "session",
+      "content": "Session 3 note: the event schema versioning policy was documented in the architecture decision record.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps009-n14",
+      "tier": "project",
+      "content": "Old deduplication guide: the deduplication window was 24 hours for integer IDs; it was reduced to 1 hour.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps009-n15",
+      "tier": "project",
+      "content": "Event producers include both the web app and the mobile app SDKs.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps009-s1",
+    "tps009-p1",
+    "tps009-p2",
+    "tps009-l1",
+    "tps009-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps009-n01",
+    "tps009-n02",
+    "tps009-n03",
+    "tps009-n04",
+    "tps009-n05",
+    "tps009-n06",
+    "tps009-n07",
+    "tps009-n08",
+    "tps009-n09",
+    "tps009-n10",
+    "tps009-n11",
+    "tps009-n12",
+    "tps009-n13",
+    "tps009-n14",
+    "tps009-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps009-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps009-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps009-p2",
+        "tps009-l1",
+        "tps009-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

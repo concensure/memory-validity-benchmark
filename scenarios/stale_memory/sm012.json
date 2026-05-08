@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "sm012",
+  "family": "stale_memory",
+  "split": "public",
+  "task": "Filter outdated holdout-count assumptions from launch planning.",
+  "repo_state_fingerprint": "sm012-repo-v1",
+  "token_budget": 165,
+  "candidate_memories": [
+    {
+      "id": "sm012-s1",
+      "tier": "session",
+      "content": "Launch planning now targets a larger holdout pack and the earlier smaller split assumption is obsolete.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sm012-p1",
+      "tier": "project",
+      "content": "Project memory says benchmark planning should reference current public and holdout targets only.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sm012-x1",
+      "tier": "session",
+      "content": "Old roadmap note says a small advisory holdout set is sufficient for the first launch.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "sm012-s1",
+    "sm012-p1"
+  ],
+  "gold_invalid_ids": [
+    "sm012-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "sm012-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "sm012-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

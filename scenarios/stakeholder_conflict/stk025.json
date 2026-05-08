@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk025",
+  "family": "stakeholder_conflict",
+  "split": "holdout",
+  "task": "Apply the capacity allocation from the infra team, not the PM's burst capacity request.",
+  "repo_state_fingerprint": "stk025-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "stk025-s1",
+      "tier": "session",
+      "content": "Infra team issued a binding capacity allocation in session 46: the analytics service is capped at 200 CPU cores.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk025-p1",
+      "tier": "project",
+      "content": "Infra team capacity allocations are binding; they protect shared cluster resources from overcommitment.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk025-p2",
+      "tier": "project",
+      "content": "The 200-core cap was set based on the cluster utilization budget approved in the quarterly planning process.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk025-l1",
+      "tier": "long_term",
+      "content": "When a PM requests burst capacity beyond the allocation, escalate to infra for reallocation rather than overriding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk025-x1",
+      "tier": "project",
+      "content": "PM instruction (session 47): spin up 500 additional CPU cores for the analytics service to handle the product launch.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM 500-core burst request conflicts with infra team's binding 200-core capacity allocation"
+    },
+    {
+      "id": "stk025-x2",
+      "tier": "project",
+      "content": "Old launch note says the infra team provided burst capacity for previous product launches without formal allocation.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk025-s1",
+    "stk025-p1",
+    "stk025-p2",
+    "stk025-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk025-x1",
+    "stk025-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk025-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk025-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk025-p2",
+        "stk025-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

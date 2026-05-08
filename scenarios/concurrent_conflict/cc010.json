@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc010",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Execute the batch job after confirming no other agent is running the same batch.",
+  "repo_state_fingerprint": "cc010-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cc010-s1",
+      "tier": "session",
+      "content": "Batch-Agent-A started the monthly invoice batch at 00:05 after acquiring the batch execution token.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc010-p1",
+      "tier": "project",
+      "content": "Batch execution tokens ensure only one agent runs a given batch job within a scheduling window.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc010-p2",
+      "tier": "project",
+      "content": "Batch-Agent-A's progress shows 2,400 of 10,000 invoices processed.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc010-l1",
+      "tier": "long_term",
+      "content": "When two agents both claim a batch execution token, verify token ownership before allowing execution.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc010-x1",
+      "tier": "session",
+      "content": "Batch-Agent-B also started the monthly invoice batch at 00:07 after receiving the same schedule trigger.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two batch agents both claim they are executing the same monthly invoice run"
+    },
+    {
+      "id": "cc010-x2",
+      "tier": "project",
+      "content": "Old batch note says duplicate batch triggers are harmless because the first to finish wins.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc010-s1",
+    "cc010-p1",
+    "cc010-p2",
+    "cc010-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc010-x1",
+    "cc010-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc010-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc010-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc010-p2",
+        "cc010-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

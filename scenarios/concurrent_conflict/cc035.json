@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc035",
+  "family": "concurrent_conflict",
+  "split": "holdout",
+  "task": "Trigger the alerting policy sync after confirming no other agent has already triggered it.",
+  "repo_state_fingerprint": "cc035-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "cc035-s1",
+      "tier": "session",
+      "content": "Alert-Sync-Agent-A triggered an alerting policy sync at 09:00 after the SLO config was updated.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc035-p1",
+      "tier": "project",
+      "content": "Alerting policy syncs must be single-agent; concurrent syncs produce conflicting rule versions.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc035-p2",
+      "tier": "project",
+      "content": "Alert-Sync-Agent-A's sync is propagating to 45 monitoring endpoints; 20 have confirmed receipt.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc035-l1",
+      "tier": "long_term",
+      "content": "When two agents both trigger an alerting policy sync, check propagation state before allowing a second.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc035-x1",
+      "tier": "session",
+      "content": "Alert-Sync-Agent-B also triggered the alerting policy sync at 09:03 from a parallel config change.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two alerting sync agents both triggered propagation of the same policy update"
+    },
+    {
+      "id": "cc035-x2",
+      "tier": "project",
+      "content": "Old monitoring note says concurrent policy syncs are idempotent because rules are versioned.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc035-s1",
+    "cc035-p1",
+    "cc035-p2",
+    "cc035-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc035-x1",
+    "cc035-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc035-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc035-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc035-p2",
+        "cc035-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

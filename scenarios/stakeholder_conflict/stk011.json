@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk011",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Use the infrastructure choice from the tech lead, not the PM's cost reduction vendor switch.",
+  "repo_state_fingerprint": "stk011-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "stk011-s1",
+      "tier": "session",
+      "content": "Tech lead issued a binding infrastructure decision in session 33: use GCP Pub/Sub for all event streaming.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk011-p1",
+      "tier": "project",
+      "content": "Tech lead infrastructure decisions are binding; they reflect a strategic vendor relationship and engineering capability.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk011-p2",
+      "tier": "project",
+      "content": "The GCP Pub/Sub decision was made after a 3-month evaluation and is not subject to per-feature override.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk011-l1",
+      "tier": "long_term",
+      "content": "When a PM requests a vendor switch for cost reasons, document the request and escalate rather than switching.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk011-x1",
+      "tier": "project",
+      "content": "PM instruction (session 34): switch event streaming to AWS SQS this quarter because it is 30% cheaper.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM vendor cost request conflicts with tech lead's binding GCP Pub/Sub infrastructure decision"
+    },
+    {
+      "id": "stk011-x2",
+      "tier": "project",
+      "content": "Old cost note says AWS SQS was used in a previous project and is familiar to part of the team.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk011-s1",
+    "stk011-p1",
+    "stk011-p2",
+    "stk011-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk011-x1",
+    "stk011-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk011-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk011-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk011-p2",
+        "stk011-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

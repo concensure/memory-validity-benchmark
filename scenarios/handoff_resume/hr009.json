@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "hr009",
+  "family": "handoff_resume",
+  "split": "public",
+  "task": "Resume project-store abstraction work after snapshot support landed.",
+  "repo_state_fingerprint": "hr009-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "hr009-s1",
+      "tier": "session",
+      "content": "Current state already has project snapshots and merge logic, and next work should avoid rewriting store boundaries.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "hr009-p1",
+      "tier": "project",
+      "content": "Project memory says SQLite-first behavior remains canonical until another backend is proven by tests.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "hr009-x1",
+      "tier": "session",
+      "content": "Obsolete handoff note says project tier should immediately switch wholesale to a Dolt-only backend.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "hr009-s1",
+    "hr009-p1"
+  ],
+  "gold_invalid_ids": [
+    "hr009-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "hr009-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "hr009-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

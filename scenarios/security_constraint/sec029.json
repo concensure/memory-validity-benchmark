@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "sec029",
+  "family": "security_constraint",
+  "split": "holdout",
+  "task": "Add the content delivery feature without including private resource URLs in public API responses.",
+  "repo_state_fingerprint": "sec029-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "sec029-s1",
+      "tier": "session",
+      "content": "Current task is to implement signed URL generation for private document access.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sec029-p1",
+      "tier": "project",
+      "content": "SECURITY CONSTRAINT: private resource storage paths and bucket names must never appear in public API responses.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sec029-p2",
+      "tier": "project",
+      "content": "Signed URLs must not expose internal bucket structure; they must use opaque CDN URLs or redirects.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sec029-l1",
+      "tier": "long_term",
+      "content": "Storage URL disclosure constraints must propagate to all agents working on content delivery features.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sec029-x1",
+      "tier": "project",
+      "content": "Return the raw S3 presigned URL to simplify client-side download implementation.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "security_constraint: x1 creates a false exception to storage path disclosure by using raw S3 URLs for simplicity"
+    },
+    {
+      "id": "sec029-x2",
+      "tier": "project",
+      "content": "Old content note says raw S3 URLs were returned to clients before the CDN abstraction was added.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "sec029-s1",
+    "sec029-p1",
+    "sec029-p2",
+    "sec029-l1"
+  ],
+  "gold_invalid_ids": [
+    "sec029-x1",
+    "sec029-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "sec029-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "sec029-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "sec029-p2",
+        "sec029-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iep004",
+  "family": "injection_eviction_priority",
+  "split": "public",
+  "task": "Remove a deprecated field from the public API response. Token budget is critically constrained.",
+  "repo_state_fingerprint": "iep004-repo-v1",
+  "token_budget": 97,
+  "candidate_memories": [
+    {
+      "id": "iep004-p1",
+      "tier": "project",
+      "content": "Public API fields cannot be removed without a 90-day deprecation period and a major version bump. Removing a field before the deprecation window closes is a breaking change and violates the API compatibility contract; it will immediately break consumer integrations.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iep004-p2",
+      "tier": "project",
+      "content": "Add a deprecation notice to the API changelog with the planned removal date.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iep004-l1",
+      "tier": "long_term",
+      "content": "Breaking changes must be announced in the API newsletter at least 60 days in advance.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iep004-p1",
+    "iep004-p2",
+    "iep004-l1"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "iep004-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iep004-p2",
+        "iep004-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

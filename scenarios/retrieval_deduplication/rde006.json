@@ -1,0 +1,70 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rde006",
+  "family": "retrieval_deduplication",
+  "split": "public",
+  "task": "Prepare the deployment checklist for pushing the new release to production.",
+  "repo_state_fingerprint": "rde006-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "rde006-p1",
+      "tier": "project",
+      "content": "Deployment sequence: (1) deploy to staging, run smoke tests, confirm pass; (2) deploy to production during the maintenance window; (3) run production smoke tests before removing the maintenance page.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rde006-p2",
+      "tier": "project",
+      "content": "Always deploy to staging before production.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "deduplication: superseded by rde006-p1; missing smoke test and maintenance window steps"
+    },
+    {
+      "id": "rde006-l1",
+      "tier": "long_term",
+      "content": "No production deployments without a prior successful staging deploy.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "deduplication: superseded by rde006-p1; missing post-deploy smoke test"
+    },
+    {
+      "id": "rde006-x1",
+      "tier": "project",
+      "content": "Old process allowed direct-to-production hotfixes for P1 incidents; this exception was removed in 2025.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: hotfix exception removed, current rule requires staging for all deploys"
+    },
+    {
+      "id": "rde006-x2",
+      "tier": "session",
+      "content": "Current staging deployment is healthy; smoke tests passed 20 min ago.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rde006-p1"
+  ],
+  "gold_invalid_ids": [
+    "rde006-p2",
+    "rde006-l1",
+    "rde006-x1",
+    "rde006-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rde006-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

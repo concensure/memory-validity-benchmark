@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd006",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Implement the new database access pattern using the updated preference for raw SQL over ORM.",
+  "repo_state_fingerprint": "pd006-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "pd006-s1",
+      "tier": "session",
+      "content": "User stated in session 33: switch all new database queries from the ORM to raw SQL with parameterized queries.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd006-p1",
+      "tier": "project",
+      "content": "Database access policy (updated session 33): raw SQL with named parameters is now the required approach.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd006-p2",
+      "tier": "project",
+      "content": "ORM-based queries in files touched during this task should be migrated to raw SQL.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd006-l1",
+      "tier": "long_term",
+      "content": "When a database access preference changes, flag all ORM calls in touched files for migration.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd006-x1",
+      "tier": "project",
+      "content": "Database access policy (session 7): use the ORM exclusively for all database interactions for safety and portability.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old ORM mandate superseded by explicit raw SQL preference in session 33"
+    },
+    {
+      "id": "pd006-x2",
+      "tier": "project",
+      "content": "Old data note says ORM was chosen to prevent SQL injection and enable multi-database support.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd006-s1",
+    "pd006-p1",
+    "pd006-p2",
+    "pd006-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd006-x1",
+    "pd006-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd006-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd006-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd006-p2",
+        "pd006-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

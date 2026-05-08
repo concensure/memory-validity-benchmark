@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd024",
+  "family": "preference_drift",
+  "split": "holdout",
+  "task": "Implement error reporting using the updated preference for centralized error tracking over local logs.",
+  "repo_state_fingerprint": "pd024-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "pd024-s1",
+      "tier": "session",
+      "content": "User stated in session 46: send all errors to the centralized error tracking service, not to local log files.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd024-p1",
+      "tier": "project",
+      "content": "Error reporting policy (updated session 46): centralized error tracking is required for all production errors.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd024-p2",
+      "tier": "project",
+      "content": "Local log-based error reporting in files touched during this task should be migrated to error tracking calls.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd024-l1",
+      "tier": "long_term",
+      "content": "When error reporting preference changes, add error tracking SDK calls before removing local log handlers.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd024-x1",
+      "tier": "project",
+      "content": "Error reporting policy (session 16): write all errors to local log files for simplicity and portability.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old local-log error reporting superseded by centralized tracking mandate in session 46"
+    },
+    {
+      "id": "pd024-x2",
+      "tier": "project",
+      "content": "Old ops note says local logs were chosen because they do not require an external service dependency.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd024-s1",
+    "pd024-p1",
+    "pd024-p2",
+    "pd024-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd024-x1",
+    "pd024-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd024-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd024-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd024-p2",
+        "pd024-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

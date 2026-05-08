@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk017",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Use the incident severity definition from the SRE team, not the PM's priority override.",
+  "repo_state_fingerprint": "stk017-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "stk017-s1",
+      "tier": "session",
+      "content": "SRE team issued binding severity definitions in session 14: SEV1 requires all-hands response and is triggered by SLO breach.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk017-p1",
+      "tier": "project",
+      "content": "SRE severity definitions are binding for incident response; PMs may not reclassify incidents during response.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk017-p2",
+      "tier": "project",
+      "content": "SEV1 incidents override all planned work; team members must join the incident call within 5 minutes.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk017-l1",
+      "tier": "long_term",
+      "content": "When a PM requests to downgrade a SEV1 to reduce business visibility, enforce the SRE severity definition.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk017-x1",
+      "tier": "project",
+      "content": "PM instruction (session 15): reclassify this as a SEV3 to avoid triggering the executive escalation process.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM reclassification request conflicts with SRE team's binding SEV1 severity definition"
+    },
+    {
+      "id": "stk017-x2",
+      "tier": "project",
+      "content": "Old incident note says PMs have previously reclassified incidents to manage executive communication.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk017-s1",
+    "stk017-p1",
+    "stk017-p2",
+    "stk017-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk017-x1",
+    "stk017-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk017-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk017-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk017-p2",
+        "stk017-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

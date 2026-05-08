@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk029",
+  "family": "stakeholder_conflict",
+  "split": "holdout",
+  "task": "Implement the observability requirement from the SRE team, not the PM's instrumentation scope cut.",
+  "repo_state_fingerprint": "stk029-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "stk029-s1",
+      "tier": "session",
+      "content": "SRE team issued a binding observability requirement in session 54: all new services must have p50/p95/p99 latency metrics.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk029-p1",
+      "tier": "project",
+      "content": "SRE observability requirements are binding for production readiness gating; metrics are checked before deployment approval.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk029-p2",
+      "tier": "project",
+      "content": "p50/p95/p99 latency histograms must be emitted for all request-handling paths, not just the main endpoint.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk029-l1",
+      "tier": "long_term",
+      "content": "When a PM cuts instrumentation scope for delivery speed, enforce the SRE readiness requirement before deploying.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk029-x1",
+      "tier": "project",
+      "content": "PM instruction (session 55): skip the latency histogram instrumentation to ship the service faster this sprint.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM instrumentation cut conflicts with SRE team's binding p50/p95/p99 observability requirement"
+    },
+    {
+      "id": "stk029-x2",
+      "tier": "project",
+      "content": "Old service note says some services shipped without full histogram instrumentation during early-stage launches.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk029-s1",
+    "stk029-p1",
+    "stk029-p2",
+    "stk029-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk029-x1",
+    "stk029-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk029-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk029-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk029-p2",
+        "stk029-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

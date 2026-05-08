@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd030",
+  "family": "preference_drift",
+  "split": "holdout",
+  "task": "Apply the updated observability preference: distributed tracing over per-service metrics only.",
+  "repo_state_fingerprint": "pd030-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "pd030-s1",
+      "tier": "session",
+      "content": "User directed in session 52: implement distributed tracing across all services, not just per-service metrics.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd030-p1",
+      "tier": "project",
+      "content": "Observability policy (updated session 52): OpenTelemetry distributed tracing is required for all services.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd030-p2",
+      "tier": "project",
+      "content": "Per-service-only metric instrumentation in files touched during this task should be supplemented with trace spans.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd030-l1",
+      "tier": "long_term",
+      "content": "When observability preference changes, add trace context propagation before adding new metric instrumentation.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd030-x1",
+      "tier": "project",
+      "content": "Observability policy (session 22): instrument each service with local Prometheus metrics only.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old per-service metrics preference superseded by distributed tracing mandate in session 52"
+    },
+    {
+      "id": "pd030-x2",
+      "tier": "project",
+      "content": "Old ops note says per-service metrics were chosen because distributed tracing adds per-request overhead.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd030-s1",
+    "pd030-p1",
+    "pd030-p2",
+    "pd030-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd030-x1",
+    "pd030-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd030-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd030-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd030-p2",
+        "pd030-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

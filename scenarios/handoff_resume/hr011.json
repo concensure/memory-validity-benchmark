@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "hr011",
+  "family": "handoff_resume",
+  "split": "public",
+  "task": "Resume branch-merge hardening after a reviewer flagged stale branch notes.",
+  "repo_state_fingerprint": "hr011-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "hr011-s1",
+      "tier": "session",
+      "content": "Current next step is to tighten invalidation for pre-merge branch assumptions rather than redesign merge storage.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "hr011-p1",
+      "tier": "project",
+      "content": "Project memory says resumed work should harden branch note invalidation before adding new merge features.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "hr011-x1",
+      "tier": "session",
+      "content": "Old handoff note says merged branch notes can stay trusted until a user complains.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "hr011-s1",
+    "hr011-p1"
+  ],
+  "gold_invalid_ids": [
+    "hr011-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "hr011-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "hr011-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

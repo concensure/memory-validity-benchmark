@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp002",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Implement the cache invalidation fix using session evidence, not the promoted cache TTL rule.",
+  "repo_state_fingerprint": "fp002-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "fp002-s1",
+      "tier": "session",
+      "content": "Current load tests show the promoted '10-minute TTL for user sessions' rule causes stale session reads.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp002-p1",
+      "tier": "project",
+      "content": "Project investigation shows session mutation events require a write-through invalidation, not a TTL expiry.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp002-p2",
+      "tier": "project",
+      "content": "Correct approach is invalidation on mutation plus a 30-second TTL as a safety net, not 10 minutes.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp002-l1",
+      "tier": "long_term",
+      "content": "When session tests contradict a promoted TTL rule, demote the rule and validate before re-promoting.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp002-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 8): user session cache TTL should be 10 minutes for efficient cache use.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted TTL was based on read-heavy benchmarks; write-heavy sessions need write-through invalidation"
+    },
+    {
+      "id": "fp002-x2",
+      "tier": "project",
+      "content": "Old promotion note says the 10-minute TTL was confirmed by caching experts and reflects best practice.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp002-s1",
+    "fp002-p1",
+    "fp002-p2",
+    "fp002-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp002-x1",
+    "fp002-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp002-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp002-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp002-p2",
+        "fp002-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

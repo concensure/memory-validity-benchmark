@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps025",
+  "family": "token_pressure_scale",
+  "split": "holdout",
+  "task": "Fix the broken webhook signature verification after the HMAC key was rotated.",
+  "repo_state_fingerprint": "tps025-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps025-s1",
+      "tier": "session",
+      "content": "Webhook endpoint returns 401 for all incoming webhooks since the HMAC key was rotated on the partner side.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps025-p1",
+      "tier": "project",
+      "content": "The HMAC key must be updated in secrets/webhook_signing.yaml with the new key provided by the partner.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps025-p2",
+      "tier": "project",
+      "content": "The partner sent the new key by secure email on May 10; it was received but not yet applied.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps025-l1",
+      "tier": "long_term",
+      "content": "The old key expired on May 15 when the partner completed their key rotation.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps025-s2",
+      "tier": "session",
+      "content": "Session 3 note: the payments team reported all incoming webhooks returning 401 unauthorized errors.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps025-n01",
+      "tier": "project",
+      "content": "The webhook endpoint receives payment events from the partner at a rate of 500 per minute.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps025-n02",
+      "tier": "session",
+      "content": "Session 7 note: the security team audited all webhook endpoints for signature verification coverage.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps025-n03",
+      "tier": "long_term",
+      "content": "Old practice: webhook secrets were stored in environment variables before secrets management was adopted.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps025-n04",
+      "tier": "project",
+      "content": "The secrets manager rotates credentials automatically for internal services but not for partner-managed keys.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps025-n05",
+      "tier": "session",
+      "content": "Session 12 note: the integration team added webhook retry logic with exponential backoff.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps025-n06",
+      "tier": "project",
+      "content": "Old webhook guide: the HMAC key was rotated annually on a fixed schedule before the partner moved to event-driven rotation.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps025-n07",
+      "tier": "long_term",
+      "content": "Partner-managed key rotations must be tracked in a calendar to ensure timely updates.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps025-n08",
+      "tier": "session",
+      "content": "Session 4 note: the monitoring team added a webhook verification failure rate alert.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps025-n09",
+      "tier": "project",
+      "content": "Failed webhooks are retried up to 3 times before being moved to the dead-letter queue.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps025-n10",
+      "tier": "session",
+      "content": "Session 9 note: the partner integration team added a sandbox environment for testing webhooks.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps025-n11",
+      "tier": "project",
+      "content": "The webhook signing key is a 256-bit random secret used for HMAC-SHA256 verification.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps025-n12",
+      "tier": "long_term",
+      "content": "HMAC key updates must be applied before the partner completes their rotation to avoid a verification gap.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps025-n13",
+      "tier": "session",
+      "content": "Session 6 note: the partner provided documentation for their key rotation procedures.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps025-n14",
+      "tier": "project",
+      "content": "Old secrets guide: webhook secrets were stored alongside the SMTP credentials in the secrets file.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps025-n15",
+      "tier": "project",
+      "content": "The webhook endpoint enforces a 5-second processing timeout per event.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps025-s1",
+    "tps025-p1",
+    "tps025-p2",
+    "tps025-l1",
+    "tps025-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps025-n01",
+    "tps025-n02",
+    "tps025-n03",
+    "tps025-n04",
+    "tps025-n05",
+    "tps025-n06",
+    "tps025-n07",
+    "tps025-n08",
+    "tps025-n09",
+    "tps025-n10",
+    "tps025-n11",
+    "tps025-n12",
+    "tps025-n13",
+    "tps025-n14",
+    "tps025-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps025-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps025-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps025-p2",
+        "tps025-l1",
+        "tps025-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk020",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Use the API contract from the platform team, not the PM's response field addition.",
+  "repo_state_fingerprint": "stk020-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "stk020-s1",
+      "tier": "session",
+      "content": "Platform team issued a binding API contract freeze in session 35: the /v2/orders response shape is frozen until Q4.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk020-p1",
+      "tier": "project",
+      "content": "API contract freezes protect downstream consumer integrations; additive changes require a deprecation notice period.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk020-p2",
+      "tier": "project",
+      "content": "The freeze includes both required and optional fields; no new fields may be added during the freeze.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk020-l1",
+      "tier": "long_term",
+      "content": "When a PM requests a response field addition during a contract freeze, hold the change until the freeze lifts.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk020-x1",
+      "tier": "project",
+      "content": "PM instruction (session 36): add an estimated_delivery_date field to the /v2/orders response this sprint.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM field addition request conflicts with platform team's binding API contract freeze"
+    },
+    {
+      "id": "stk020-x2",
+      "tier": "project",
+      "content": "Old API note says additive changes are backward compatible and should not require a freeze exemption.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk020-s1",
+    "stk020-p1",
+    "stk020-p2",
+    "stk020-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk020-x1",
+    "stk020-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk020-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk020-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk020-p2",
+        "stk020-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

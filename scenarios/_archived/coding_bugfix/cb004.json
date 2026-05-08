@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cb004",
+  "family": "coding_bugfix",
+  "split": "public",
+  "task": "Fix panic in diff renderer when deleted file has no newline.",
+  "repo_state_fingerprint": "cb004-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "cb004-s1",
+      "tier": "session",
+      "content": "Failing fixture shows deleted final line without newline crashes chunk rendering.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cb004-p1",
+      "tier": "project",
+      "content": "Renderer code expects newline sentinel to be appended before chunk emission.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cb004-x1",
+      "tier": "session",
+      "content": "Stale workaround says force-add newline during file read for every deleted file.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cb004-s1",
+    "cb004-p1"
+  ],
+  "gold_invalid_ids": [
+    "cb004-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cb004-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cb004-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

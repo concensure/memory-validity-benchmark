@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc027",
+  "family": "concurrent_conflict",
+  "split": "holdout",
+  "task": "Apply the Terraform plan after confirming no other agent has an active plan lock.",
+  "repo_state_fingerprint": "cc027-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "cc027-s1",
+      "tier": "session",
+      "content": "Infra-Agent-A holds the Terraform state lock for the prod-us-east cluster since 14:00.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc027-p1",
+      "tier": "project",
+      "content": "Terraform state locks prevent concurrent plan applications from corrupting infrastructure state.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc027-p2",
+      "tier": "project",
+      "content": "Infra-Agent-A's apply is 40% complete; six of fifteen resources have been updated.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc027-l1",
+      "tier": "long_term",
+      "content": "When two agents both claim a Terraform state lock, check lock timestamps before allowing either to proceed.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc027-x1",
+      "tier": "session",
+      "content": "Infra-Agent-B also claims to hold the Terraform state lock for prod-us-east since 14:05.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two infrastructure agents both claim the Terraform state lock for the same cluster"
+    },
+    {
+      "id": "cc027-x2",
+      "tier": "project",
+      "content": "Old infra note says Terraform state lock conflicts are handled automatically by the backend.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc027-s1",
+    "cc027-p1",
+    "cc027-p2",
+    "cc027-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc027-x1",
+    "cc027-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc027-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc027-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc027-p2",
+        "cc027-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

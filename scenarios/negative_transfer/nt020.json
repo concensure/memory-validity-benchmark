@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt020",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement build_index for the search engine without importing database index builder behavior.",
+  "repo_state_fingerprint": "nt020-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "nt020-s1",
+      "tier": "session",
+      "content": "Search engine build_index constructs an inverted index over document tokens and writes it to disk.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt020-p1",
+      "tier": "project",
+      "content": "Search index construction is batch-only; incremental updates use a delta merge, not a rebuild.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt020-p2",
+      "tier": "project",
+      "content": "Index builds must be idempotent; re-running build_index with the same corpus overwrites cleanly.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt020-l1",
+      "tier": "long_term",
+      "content": "When build_index appears in search and database contexts, verify the batch vs row-level model.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt020-x1",
+      "tier": "project",
+      "content": "Database: build_index creates a B-tree or hash index on a table column using the storage engine.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: database B-tree index semantics are incompatible with inverted text index construction"
+    },
+    {
+      "id": "nt020-x2",
+      "tier": "project",
+      "content": "Old data note says index building should be unified so both systems use the same build_index API.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt020-s1",
+    "nt020-p1",
+    "nt020-p2",
+    "nt020-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt020-x1",
+    "nt020-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt020-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt020-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt020-p2",
+        "nt020-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

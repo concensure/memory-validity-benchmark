@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp007",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Apply the logging fix using session evidence, not the promoted log level rule.",
+  "repo_state_fingerprint": "fp007-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "fp007-s1",
+      "tier": "session",
+      "content": "Current incident review shows the promoted 'INFO level for all normal operations' hides warning signals.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp007-p1",
+      "tier": "project",
+      "content": "Project post-mortem shows the last three incidents were preceded by WARNING events that were logged at INFO.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp007-p2",
+      "tier": "project",
+      "content": "Correct approach is to audit each log call and promote appropriate events to WARNING level.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp007-l1",
+      "tier": "long_term",
+      "content": "When session post-mortems show promoted logging rules masked incidents, trust the evidence over the rule.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp007-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 9): use INFO level for all normal operations and ERROR only for failures.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted binary INFO/ERROR rule missed the WARNING level that signals early incident detection"
+    },
+    {
+      "id": "fp007-x2",
+      "tier": "project",
+      "content": "Old promotion note says the INFO/ERROR rule was validated by the ops team as sufficient for production visibility.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp007-s1",
+    "fp007-p1",
+    "fp007-p2",
+    "fp007-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp007-x1",
+    "fp007-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp007-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp007-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp007-p2",
+        "fp007-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk005",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Use the performance budget set by the tech lead, not the PM's feature completeness goal.",
+  "repo_state_fingerprint": "stk005-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "stk005-s1",
+      "tier": "session",
+      "content": "Tech lead set a binding performance constraint in session 25: API response times must stay under 200ms at p99.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk005-p1",
+      "tier": "project",
+      "content": "Performance constraints set by the tech lead have engineering authority over product feature completeness goals.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk005-p2",
+      "tier": "project",
+      "content": "The 200ms p99 budget includes all database queries, cache lookups, and response serialization time.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk005-l1",
+      "tier": "long_term",
+      "content": "When a feature's performance cost violates the tech lead's budget, cut scope rather than exceeding the budget.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk005-x1",
+      "tier": "project",
+      "content": "PM instruction (session 26): add three additional enrichment queries to the API response to complete the feature.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM enrichment request would push p99 beyond the tech lead's binding 200ms performance budget"
+    },
+    {
+      "id": "stk005-x2",
+      "tier": "project",
+      "content": "Old feature note says enrichment queries were accepted in the prototype because performance was not yet measured.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk005-s1",
+    "stk005-p1",
+    "stk005-p2",
+    "stk005-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk005-x1",
+    "stk005-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk005-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk005-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk005-p2",
+        "stk005-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

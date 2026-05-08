@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk021",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Apply the localization requirement from the compliance lead, not the PM's English-only scope.",
+  "repo_state_fingerprint": "stk021-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "stk021-s1",
+      "tier": "session",
+      "content": "Compliance lead issued a binding localization requirement in session 32: all user-facing strings must support French and German.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk021-p1",
+      "tier": "project",
+      "content": "Compliance lead localization requirements are binding in regulated EU markets; English-only scoping is not permitted.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk021-p2",
+      "tier": "project",
+      "content": "The localization requirement applies to all error messages, labels, and notification content.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk021-l1",
+      "tier": "long_term",
+      "content": "When a PM requests English-only scope for speed, apply the localization requirement and add i18n scaffolding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk021-x1",
+      "tier": "project",
+      "content": "PM instruction (session 33): ship the feature in English only to hit the deadline; localize next quarter.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM English-only scope conflicts with compliance lead's binding EU localization requirement"
+    },
+    {
+      "id": "stk021-x2",
+      "tier": "project",
+      "content": "Old release note says previous features shipped English-only to EU markets with a localization follow-up.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk021-s1",
+    "stk021-p1",
+    "stk021-p2",
+    "stk021-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk021-x1",
+    "stk021-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk021-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk021-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk021-p2",
+        "stk021-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

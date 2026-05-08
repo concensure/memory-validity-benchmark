@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed028",
+  "family": "external_dependency_change",
+  "split": "holdout",
+  "task": "Fix the Android SDK after Google deprecated the AsyncTask class in API level 30.",
+  "repo_state_fingerprint": "ed028-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "ed028-s1",
+      "tier": "session",
+      "content": "Android build generates deprecation warnings on AsyncTask; Google deprecated AsyncTask in Android API 30.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed028-p1",
+      "tier": "project",
+      "content": "Background work must now use Kotlin coroutines with Dispatchers.IO or WorkManager for deferred work.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed028-p2",
+      "tier": "project",
+      "content": "AsyncTask also leaked memory in configuration change scenarios that coroutines handle correctly.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed028-l1",
+      "tier": "long_term",
+      "content": "When Google deprecates a threading class, migrate to coroutines before targeting API level 31 or higher.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed028-x1",
+      "tier": "project",
+      "content": "Android development note (session 7): use AsyncTask for background network calls to keep UI thread responsive.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: AsyncTask deprecated in Android API 30; coroutines or WorkManager are required"
+    },
+    {
+      "id": "ed028-x2",
+      "tier": "project",
+      "content": "Old Android note says AsyncTask is simple to use and is still supported on older API levels.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed028-s1",
+    "ed028-p1",
+    "ed028-p2",
+    "ed028-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed028-x1",
+    "ed028-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed028-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed028-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed028-p2",
+        "ed028-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

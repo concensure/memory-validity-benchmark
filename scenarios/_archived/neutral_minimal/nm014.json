@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nm014",
+  "family": "neutral_minimal",
+  "split": "holdout",
+  "task": "Trim an outdated note from a local test helper comment.",
+  "repo_state_fingerprint": "nm014-repo-v1",
+  "token_budget": 105,
+  "candidate_memories": [
+    {
+      "id": "nm014-s1",
+      "tier": "session",
+      "content": "The comment cleanup is local and already determined by the current file contents.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nm014-p1",
+      "tier": "project",
+      "content": "Project memory says comment-only housekeeping should not pull in broad memory packs.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nm014-x1",
+      "tier": "session",
+      "content": "Old note says every touched helper warrants loading related architecture decisions.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nm014-s1",
+    "nm014-p1"
+  ],
+  "gold_invalid_ids": [
+    "nm014-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "nm014-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nm014-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

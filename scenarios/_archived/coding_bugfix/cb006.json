@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cb006",
+  "family": "coding_bugfix",
+  "split": "public",
+  "task": "Fix cache invalidation after partial save in editor model.",
+  "repo_state_fingerprint": "cb006-repo-v1",
+  "token_budget": 205,
+  "candidate_memories": [
+    {
+      "id": "cb006-s1",
+      "tier": "session",
+      "content": "Recent test indicates partial save leaves stale symbol cache for renamed functions.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cb006-p1",
+      "tier": "project",
+      "content": "Project memory states symbol cache keys depend on file version and normalized path.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cb006-x1",
+      "tier": "session",
+      "content": "Old memory says cache only needs invalidation on full project save.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cb006-s1",
+    "cb006-p1"
+  ],
+  "gold_invalid_ids": [
+    "cb006-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cb006-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cb006-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

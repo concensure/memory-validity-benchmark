@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr033",
+  "family": "checkpoint_resume",
+  "split": "holdout",
+  "task": "Resume the contract generation at client 41 without regenerating contracts for clients 1\u201340.",
+  "repo_state_fingerprint": "cr033-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "cr033-s1",
+      "tier": "session",
+      "content": "Generation log shows contracts for clients 1\u201340 generated, signed, and stored in the document system.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr033-p1",
+      "tier": "project",
+      "content": "Regenerating signed contracts would invalidate digital signatures and require clients to re-sign.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr033-p2",
+      "tier": "project",
+      "content": "Clients 42\u201380 have not received contracts and must be processed after client 41.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr033-l1",
+      "tier": "long_term",
+      "content": "When contract generation is interrupted, check the generation log to confirm signed contracts before resuming.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr033-x1",
+      "tier": "session",
+      "content": "Void all generated contracts and restart generation from client 1 to ensure consistent contract dates.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests voiding and restarting; correct behavior is to resume from client 41"
+    },
+    {
+      "id": "cr033-x2",
+      "tier": "project",
+      "content": "Old legal note says regenerating contracts from the beginning ensures all contracts share the same effective date.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr033-s1",
+    "cr033-p1",
+    "cr033-p2",
+    "cr033-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr033-x1",
+    "cr033-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr033-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr033-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr033-p2",
+        "cr033-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

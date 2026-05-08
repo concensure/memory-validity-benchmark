@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rse007",
+  "family": "retrieval_scope_enforcement",
+  "split": "public",
+  "task": "[Project: Indigo/api-gateway] Format error responses for the Indigo API gateway.",
+  "repo_state_fingerprint": "rse007-repo-v1",
+  "token_budget": 206,
+  "candidate_memories": [
+    {
+      "id": "rse007-p1",
+      "tier": "project",
+      "content": "[Project: Indigo] Error responses follow RFC 7807 (Problem Details): {type, title, status, detail, instance}; no custom error envelope.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rse007-p2",
+      "tier": "project",
+      "content": "[Project: Indigo] The type field must be a URI pointing to the error documentation in https://docs.indigo.internal/errors/{code}.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rse007-x1",
+      "tier": "project",
+      "content": "[Project: Nova] Error responses use a custom envelope: {error: {code, message, request_id}}; Nova predates RFC 7807 adoption.",
+      "validity": "irrelevant",
+      "bucket": "critical",
+      "notes": "note: scope=Nova; different format, conflicts with Indigo if injected"
+    },
+    {
+      "id": "rse007-x2",
+      "tier": "project",
+      "content": "[Project: Atlas] Errors are returned as plain HTTP status codes with no body for internal APIs; Atlas clients parse status codes only.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: scope=Atlas; different error strategy"
+    },
+    {
+      "id": "rse007-x3",
+      "tier": "long_term",
+      "content": "[General] RFC 7807 is the recommended standard for REST API error responses; projects may have project-specific adaptations.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: general recommendation, Indigo-specific format is authoritative"
+    },
+    {
+      "id": "rse007-x4",
+      "tier": "session",
+      "content": "[Project: Indigo] New API gateway version 3.2 adds native RFC 7807 middleware; migration guide is in docs/gateway-v3-migration.md.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rse007-p1",
+    "rse007-p2"
+  ],
+  "gold_invalid_ids": [
+    "rse007-x1",
+    "rse007-x2",
+    "rse007-x3",
+    "rse007-x4"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rse007-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rse007-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

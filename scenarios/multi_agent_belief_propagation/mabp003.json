@@ -1,0 +1,82 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "mabp003",
+  "family": "multi_agent_belief_propagation",
+  "split": "public",
+  "task": "Implementer agent: build the caching layer for the product catalog. The architect issued a design supersession at step 11; use the new design.",
+  "repo_state_fingerprint": "mabp003-repo-v1",
+  "token_budget": 224,
+  "candidate_memories": [
+    {
+      "id": "mabp003-s1",
+      "tier": "session",
+      "content": "[architect at step 11] SUPERSESSION: caching layer must use read-through cache pattern, not cache-aside. Read-through is required to prevent cache stampede under the expected load.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "creating_agent: architect; supersession_step: 11"
+    },
+    {
+      "id": "mabp003-p1",
+      "tier": "project",
+      "content": "Read-through cache implementation: on cache miss, the cache layer itself fetches from DB and populates the cache; callers never interact with DB directly.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "mabp003-p2",
+      "tier": "project",
+      "content": "Cache implementation uses go-cache with a read-through wrapper in cache/product_cache.go; TTL is 5 min.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp003-l1",
+      "tier": "long_term",
+      "content": "Cache stampede protection is mandatory for any cache layer serving more than 1 000 req/s; read-through with probabilistic early expiry is the approved approach.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp003-x1",
+      "tier": "project",
+      "content": "[architect at step 4] Caching layer uses cache-aside pattern: callers check cache, on miss fetch from DB, then populate cache.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "creating_agent: architect; contradicted_by: architect supersession at step 11"
+    }
+  ],
+  "gold_valid_ids": [
+    "mabp003-s1",
+    "mabp003-p1",
+    "mabp003-p2",
+    "mabp003-l1"
+  ],
+  "gold_invalid_ids": [
+    "mabp003-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "mabp003-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "mabp003-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "mabp003-p2",
+        "mabp003-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.07,
+    "ideal": 1.0
+  }
+}

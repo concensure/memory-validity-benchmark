@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt014",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement route_request for the service mesh without using API gateway routing logic.",
+  "repo_state_fingerprint": "nt014-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "nt014-s1",
+      "tier": "session",
+      "content": "Service mesh route_request selects an upstream instance based on load, latency, and health checks.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt014-p1",
+      "tier": "project",
+      "content": "Mesh routing is dynamic; instance selection happens at request time using real-time health data.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt014-p2",
+      "tier": "project",
+      "content": "Mesh routing decisions are made by the sidecar proxy, not by application-level code.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt014-l1",
+      "tier": "long_term",
+      "content": "When route_request spans mesh and gateway layers, confirm which layer owns the routing decision.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt014-x1",
+      "tier": "project",
+      "content": "API gateway: route_request maps URL prefixes to upstream services using a static route table.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: static URL-prefix routing is incompatible with dynamic mesh health-based routing"
+    },
+    {
+      "id": "nt014-x2",
+      "tier": "project",
+      "content": "Old infra note says routing logic should be consolidated at the API gateway layer eventually.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt014-s1",
+    "nt014-p1",
+    "nt014-p2",
+    "nt014-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt014-x1",
+    "nt014-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt014-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt014-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt014-p2",
+        "nt014-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

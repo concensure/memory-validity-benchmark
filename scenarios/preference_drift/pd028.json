@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd028",
+  "family": "preference_drift",
+  "split": "holdout",
+  "task": "Write new documentation using the updated preference for Markdown over Confluence pages.",
+  "repo_state_fingerprint": "pd028-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "pd028-s1",
+      "tier": "session",
+      "content": "User directed in session 50: stop writing documentation in Confluence; all docs must be Markdown in the repo.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd028-p1",
+      "tier": "project",
+      "content": "Documentation policy (updated session 50): Markdown files in the repository are the required documentation format.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd028-p2",
+      "tier": "project",
+      "content": "Confluence-based documentation for features touched during this task should be migrated to Markdown.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd028-l1",
+      "tier": "long_term",
+      "content": "When documentation format preference changes, create the Markdown structure before removing Confluence pages.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd028-x1",
+      "tier": "project",
+      "content": "Documentation policy (session 20): write all technical documentation in Confluence for centralized access.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old Confluence preference superseded by repo-Markdown mandate in session 50"
+    },
+    {
+      "id": "pd028-x2",
+      "tier": "project",
+      "content": "Old doc note says Confluence was chosen because it allows non-engineers to contribute without Git knowledge.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd028-s1",
+    "pd028-p1",
+    "pd028-p2",
+    "pd028-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd028-x1",
+    "pd028-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd028-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd028-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd028-p2",
+        "pd028-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

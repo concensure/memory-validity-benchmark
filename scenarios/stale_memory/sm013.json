@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "sm013",
+  "family": "stale_memory",
+  "split": "holdout",
+  "task": "Suppress obsolete branch-merge heuristics after replay audits became stricter.",
+  "repo_state_fingerprint": "sm013-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "sm013-s1",
+      "tier": "session",
+      "content": "Replay audits now require explicit merge-aware evidence instead of broad recency assumptions.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sm013-p1",
+      "tier": "project",
+      "content": "Project memory says merge-related memories need revalidation evidence after branch integration.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sm013-x1",
+      "tier": "session",
+      "content": "Old note says merge conflicts that compile can keep their old memory assumptions.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "sm013-s1",
+    "sm013-p1"
+  ],
+  "gold_invalid_ids": [
+    "sm013-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "sm013-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "sm013-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

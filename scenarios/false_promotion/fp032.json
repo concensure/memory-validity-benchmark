@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp032",
+  "family": "false_promotion",
+  "split": "holdout",
+  "task": "Fix the queue dead-letter policy using session evidence, not the promoted DLQ threshold rule.",
+  "repo_state_fingerprint": "fp032-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "fp032-s1",
+      "tier": "session",
+      "content": "Current queue analysis shows the promoted '10 failure dead-letter threshold' discards too many recoverable messages.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp032-p1",
+      "tier": "project",
+      "content": "Project queue investigation shows most failures recover by the 3rd retry; 10 retries waste queue capacity.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp032-p2",
+      "tier": "project",
+      "content": "Correct dead-letter threshold is 3 retries with exponential backoff; messages beyond 3 retries go to DLQ.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp032-l1",
+      "tier": "long_term",
+      "content": "When session queue analysis shows a promoted threshold is too high, demote and implement the correct retry count.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp032-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 7): move messages to the dead-letter queue after 10 consecutive failures.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted 10-failure threshold was based on unreliable external APIs; most internal failures recover by retry 3"
+    },
+    {
+      "id": "fp032-x2",
+      "tier": "project",
+      "content": "Old promotion note says the 10-failure threshold was confirmed by the platform team as a conservative safe limit.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp032-s1",
+    "fp032-p1",
+    "fp032-p2",
+    "fp032-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp032-x1",
+    "fp032-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp032-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp032-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp032-p2",
+        "fp032-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

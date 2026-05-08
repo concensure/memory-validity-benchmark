@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps010",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the broken health check after the service endpoint was moved to a new port.",
+  "repo_state_fingerprint": "tps010-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps010-s1",
+      "tier": "session",
+      "content": "Load balancer health checks fail because the health endpoint moved from port 8080 to port 9090 in the last deploy.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps010-p1",
+      "tier": "project",
+      "content": "Load balancer health check config must be updated to target port 9090 and path /healthz.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps010-p2",
+      "tier": "project",
+      "content": "Port 9090 is now dedicated to administrative endpoints including health, metrics, and profiling.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps010-l1",
+      "tier": "long_term",
+      "content": "When administrative endpoints move to a dedicated port, update all infrastructure configs atomically.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps010-s2",
+      "tier": "session",
+      "content": "The service is still serving traffic on port 8080; only the health check is broken, not the application.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps010-n01",
+      "tier": "project",
+      "content": "The Kubernetes readiness probe uses the same health endpoint as the load balancer.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps010-n02",
+      "tier": "session",
+      "content": "Session 4 note: the monitoring team added a Grafana panel for health check latency.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps010-n03",
+      "tier": "long_term",
+      "content": "Old practice: health checks and application traffic used the same port before the admin port separation.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps010-n04",
+      "tier": "project",
+      "content": "The metrics endpoint on port 9090 exposes Prometheus-format metrics to the monitoring system.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps010-n05",
+      "tier": "session",
+      "content": "Session 11 note: the on-call team added a PagerDuty integration for health check alerts.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps010-n06",
+      "tier": "project",
+      "content": "Old health guide: the /health path returned 200 OK with a simple up response.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps010-n07",
+      "tier": "long_term",
+      "content": "Administrative and application traffic must be separated on different ports for security and monitoring clarity.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps010-n08",
+      "tier": "session",
+      "content": "Session 8 note: the SRE team updated the runbook for service health check failures.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps010-n09",
+      "tier": "project",
+      "content": "The load balancer uses a 10-second interval and 3 consecutive failures before marking a target unhealthy.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps010-n10",
+      "tier": "session",
+      "content": "Session 6 note: the deployment pipeline was updated to run smoke tests post-deploy.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps010-n11",
+      "tier": "project",
+      "content": "The firewall rules allow traffic on port 8080 from the load balancer; port 9090 requires an additional rule.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps010-n12",
+      "tier": "long_term",
+      "content": "When adding a new admin port, update firewall rules, load balancer config, and monitoring in the same change.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps010-n13",
+      "tier": "session",
+      "content": "Session 9 note: the health endpoint was extended with dependency health status fields.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps010-n14",
+      "tier": "project",
+      "content": "Old deployment guide: the port 8080 was the single port for all traffic types in the original deployment.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps010-n15",
+      "tier": "project",
+      "content": "The profiling endpoint on port 9090 requires an internal network source IP for access.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps010-s1",
+    "tps010-p1",
+    "tps010-p2",
+    "tps010-l1",
+    "tps010-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps010-n01",
+    "tps010-n02",
+    "tps010-n03",
+    "tps010-n04",
+    "tps010-n05",
+    "tps010-n06",
+    "tps010-n07",
+    "tps010-n08",
+    "tps010-n09",
+    "tps010-n10",
+    "tps010-n11",
+    "tps010-n12",
+    "tps010-n13",
+    "tps010-n14",
+    "tps010-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps010-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps010-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps010-p2",
+        "tps010-l1",
+        "tps010-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

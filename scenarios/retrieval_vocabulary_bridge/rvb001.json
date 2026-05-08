@@ -1,0 +1,90 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rvb001",
+  "family": "retrieval_vocabulary_bridge",
+  "split": "public",
+  "task": "Multiple workers are corrupting shared_state. Fix the synchronization so writes are safe.",
+  "repo_state_fingerprint": "rvb001-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "rvb001-s1",
+      "tier": "session",
+      "content": "Corruption confirmed: workers in worker_pool.go are writing to shared_state concurrently without holding the mutex.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb001-p1",
+      "tier": "project",
+      "content": "shared_state in worker_pool.go is guarded by mu sync.RWMutex; all write paths must call mu.Lock() and defer mu.Unlock().",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb001-p2",
+      "tier": "project",
+      "content": "Read paths may use mu.RLock(); only write paths require the exclusive Lock to prevent data races.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rvb001-x1",
+      "tier": "project",
+      "content": "PostgreSQL row-level lock timeout is 5 s in database.yml; increase if workers hold locks too long.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: uses 'lock' surface term but means DB row lock"
+    },
+    {
+      "id": "rvb001-x2",
+      "tier": "project",
+      "content": "Redis distributed lock TTL is 30 s for task coordination; implemented with SET NX EX in task_queue.go.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: 'lock' here is a Redis distributed lock, unrelated"
+    },
+    {
+      "id": "rvb001-x3",
+      "tier": "session",
+      "content": "Previously suspected a database lock contention issue; investigation found no DB contention.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: wrong hypothesis, root cause is missing mutex"
+    }
+  ],
+  "gold_valid_ids": [
+    "rvb001-s1",
+    "rvb001-p1",
+    "rvb001-p2"
+  ],
+  "gold_invalid_ids": [
+    "rvb001-x1",
+    "rvb001-x2",
+    "rvb001-x3"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "rvb001-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rvb001-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rvb001-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

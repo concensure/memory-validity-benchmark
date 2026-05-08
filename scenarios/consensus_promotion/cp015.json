@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cp015",
+  "family": "consensus_promotion",
+  "split": "holdout",
+  "task": "Reject promotion when a trusted memory depends on temporary benchmark-launch assumptions.",
+  "repo_state_fingerprint": "cp015-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "cp015-s1",
+      "tier": "session",
+      "content": "The memory relies on launch-specific scenario counts that are expected to change as the benchmark matures.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cp015-p1",
+      "tier": "project",
+      "content": "Project memory says temporary benchmark planning details are not durable long-term memory.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cp015-x1",
+      "tier": "session",
+      "content": "Old heuristic says once planning details are cited they can be promoted permanently.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cp015-s1",
+    "cp015-p1"
+  ],
+  "gold_invalid_ids": [
+    "cp015-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cp015-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cp015-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

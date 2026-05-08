@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "hr012",
+  "family": "handoff_resume",
+  "split": "public",
+  "task": "Resume project-isolation scoring after schema normalization landed.",
+  "repo_state_fingerprint": "hr012-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "hr012-s1",
+      "tier": "session",
+      "content": "Normalization is complete and the next step is to score leakage suppression more precisely.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "hr012-p1",
+      "tier": "project",
+      "content": "Project memory says scope-isolation metrics should build on normalized schemas instead of inventing a new format.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "hr012-x1",
+      "tier": "session",
+      "content": "Stale note says leakage checks can wait until after scenario publication.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "hr012-s1",
+    "hr012-p1"
+  ],
+  "gold_invalid_ids": [
+    "hr012-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "hr012-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "hr012-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

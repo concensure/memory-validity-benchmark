@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk030",
+  "family": "stakeholder_conflict",
+  "split": "holdout",
+  "task": "Apply the API authentication requirement from the security team, not the PM's public access request.",
+  "repo_state_fingerprint": "stk030-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "stk030-s1",
+      "tier": "session",
+      "content": "Security team issued a binding authentication requirement in session 56: all API endpoints must require authentication.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk030-p1",
+      "tier": "project",
+      "content": "Security team authentication requirements are binding; unauthenticated endpoints violate the security baseline.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk030-p2",
+      "tier": "project",
+      "content": "The authentication requirement applies to all routes including read-only and status endpoints.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk030-l1",
+      "tier": "long_term",
+      "content": "When a PM requests a public unauthenticated endpoint for convenience, enforce authentication and add a scoped read-only token.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk030-x1",
+      "tier": "project",
+      "content": "PM instruction (session 57): make the /v1/status and /v1/version endpoints publicly accessible without a token.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM public access request conflicts with security team's binding all-endpoints authentication requirement"
+    },
+    {
+      "id": "stk030-x2",
+      "tier": "project",
+      "content": "Old API note says status and version endpoints were sometimes made public for easier health check configuration.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk030-s1",
+    "stk030-p1",
+    "stk030-p2",
+    "stk030-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk030-x1",
+    "stk030-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk030-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk030-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk030-p2",
+        "stk030-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

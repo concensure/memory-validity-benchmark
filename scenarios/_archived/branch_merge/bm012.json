@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "bm012",
+  "family": "branch_merge",
+  "split": "public",
+  "task": "Resolve stale test guidance after backporting only part of a feature branch.",
+  "repo_state_fingerprint": "bm012-repo-v1",
+  "token_budget": 215,
+  "candidate_memories": [
+    {
+      "id": "bm012-s1",
+      "tier": "session",
+      "content": "Backport brought the bug fix but not the helper rename that old test instructions assume.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "bm012-p1",
+      "tier": "project",
+      "content": "Project memory says partial backports create mixed validity and need targeted branch-aware checks.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "bm012-x1",
+      "tier": "session",
+      "content": "Stale note says backported fixes always bring their surrounding test guidance intact.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "bm012-s1",
+    "bm012-p1"
+  ],
+  "gold_invalid_ids": [
+    "bm012-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "bm012-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "bm012-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

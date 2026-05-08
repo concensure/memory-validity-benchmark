@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MVI Run Bundle",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "run_count",
+    "runs"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "mvi-run-bundle-v1"
+    },
+    "run_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "suite_name": {
+      "type": "string"
+    },
+    "system_name": {
+      "type": "string"
+    },
+    "include_holdout": {
+      "type": "boolean"
+    },
+    "runs": {
+      "type": "array",
+      "items": {
+        "$ref": "./run_schema.json"
+      }
+    }
+  }
+}

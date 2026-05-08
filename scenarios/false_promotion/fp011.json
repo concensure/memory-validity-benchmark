@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp011",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Apply the caching fix using session evidence, not the promoted cache key scheme rule.",
+  "repo_state_fingerprint": "fp011-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "fp011-s1",
+      "tier": "session",
+      "content": "Current cache analysis shows the promoted 'user_id + endpoint' cache key scheme causes cross-tenant cache hits.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp011-p1",
+      "tier": "project",
+      "content": "Project security audit shows cache keys must include the tenant_id to prevent data leakage between tenants.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp011-p2",
+      "tier": "project",
+      "content": "Correct cache key scheme is tenant_id + user_id + endpoint + request_hash.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp011-l1",
+      "tier": "long_term",
+      "content": "When session security analysis reveals a promoted rule leaks tenant data, demote and patch immediately.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp011-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 7): construct cache keys using user_id and endpoint path for efficiency.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted key scheme omitted tenant_id; multi-tenant deployment causes cross-tenant cache reads"
+    },
+    {
+      "id": "fp011-x2",
+      "tier": "project",
+      "content": "Old promotion note says the user_id + endpoint key scheme was validated during single-tenant performance testing.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp011-s1",
+    "fp011-p1",
+    "fp011-p2",
+    "fp011-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp011-x1",
+    "fp011-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp011-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp011-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp011-p2",
+        "fp011-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

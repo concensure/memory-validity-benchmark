@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd031",
+  "family": "preference_drift",
+  "split": "holdout",
+  "task": "Implement new configuration validation using the updated preference for startup validation.",
+  "repo_state_fingerprint": "pd031-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "pd031-s1",
+      "tier": "session",
+      "content": "User stated in session 53: validate all configuration at startup and fail fast; do not validate lazily at use time.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd031-p1",
+      "tier": "project",
+      "content": "Config validation policy (updated session 53): all configuration must be validated before the service accepts requests.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd031-p2",
+      "tier": "project",
+      "content": "Lazy configuration validation in files touched during this task should be migrated to startup validation.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd031-l1",
+      "tier": "long_term",
+      "content": "When config validation preference changes, add a startup validation pass before removing lazy checks.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd031-x1",
+      "tier": "project",
+      "content": "Config validation policy (session 23): validate configuration lazily at the point of use to simplify startup.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old lazy validation preference superseded by startup fail-fast mandate in session 53"
+    },
+    {
+      "id": "pd031-x2",
+      "tier": "project",
+      "content": "Old startup note says lazy validation was chosen to speed up service startup during local development.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd031-s1",
+    "pd031-p1",
+    "pd031-p2",
+    "pd031-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd031-x1",
+    "pd031-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd031-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd031-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd031-p2",
+        "pd031-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

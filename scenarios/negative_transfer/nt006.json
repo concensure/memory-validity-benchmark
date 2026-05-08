@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt006",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement render_output for the web app without using CLI tool rendering assumptions.",
+  "repo_state_fingerprint": "nt006-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "nt006-s1",
+      "tier": "session",
+      "content": "Web app render_output must serialize structured data as a JSON HTTP response with status codes.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt006-p1",
+      "tier": "project",
+      "content": "Web app responses must include Content-Type: application/json and a well-formed envelope.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt006-p2",
+      "tier": "project",
+      "content": "Rendering in the web app is stateless; it must not read from disk or touch file system paths.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt006-l1",
+      "tier": "long_term",
+      "content": "When render_output appears in both UI and CLI projects, confirm the output target first.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt006-x1",
+      "tier": "project",
+      "content": "CLI tool: render_output formats structured data as ANSI-colored terminal text with line wrapping.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: CLI terminal output format is incompatible with HTTP JSON response requirements"
+    },
+    {
+      "id": "nt006-x2",
+      "tier": "project",
+      "content": "Old developer note says rendering logic could be shared as a cross-platform utility package.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt006-s1",
+    "nt006-p1",
+    "nt006-p2",
+    "nt006-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt006-x1",
+    "nt006-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt006-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt006-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt006-p2",
+        "nt006-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

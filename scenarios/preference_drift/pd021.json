@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd021",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Write new code comments using the updated preference for doc comments over inline comments.",
+  "repo_state_fingerprint": "pd021-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "pd021-s1",
+      "tier": "session",
+      "content": "User directed in session 30: remove all inline comments and use doc comments on public symbols only.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd021-p1",
+      "tier": "project",
+      "content": "Comment policy (updated session 30): doc comments on exported functions are required; inline comments are banned.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd021-p2",
+      "tier": "project",
+      "content": "Inline comments in files touched during this task should be removed and replaced with doc comment blocks.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd021-l1",
+      "tier": "long_term",
+      "content": "When comment style preference changes, apply it to all newly written and touched code.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd021-x1",
+      "tier": "project",
+      "content": "Comment policy (session 4): use inline comments freely to explain complex logic for future readers.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old inline comment preference superseded by doc-comment-only mandate in session 30"
+    },
+    {
+      "id": "pd021-x2",
+      "tier": "project",
+      "content": "Old style note says inline comments were chosen because the team found doc comments overly formal.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd021-s1",
+    "pd021-p1",
+    "pd021-p2",
+    "pd021-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd021-x1",
+    "pd021-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd021-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd021-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd021-p2",
+        "pd021-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

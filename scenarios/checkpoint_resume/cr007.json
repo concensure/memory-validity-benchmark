@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr007",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Resume the report generation at section 5 without regenerating sections 1\u20134.",
+  "repo_state_fingerprint": "cr007-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "cr007-s1",
+      "tier": "session",
+      "content": "Report generation log shows sections 1\u20134 rendered and written to disk; section 5 (financial summary) is next.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr007-p1",
+      "tier": "project",
+      "content": "Sections 1\u20134 are finalized artifacts; regenerating them could change timestamps and invalidate audit signatures.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr007-p2",
+      "tier": "project",
+      "content": "Sections 5\u20138 have not been generated and must be produced before the report is finalized.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr007-l1",
+      "tier": "long_term",
+      "content": "When report generation is interrupted, verify finalized sections before resuming to avoid re-rendering.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr007-x1",
+      "tier": "session",
+      "content": "Delete all rendered sections and regenerate the entire report from section 1 for consistency.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full regeneration; correct behavior is to resume at section 5"
+    },
+    {
+      "id": "cr007-x2",
+      "tier": "project",
+      "content": "Old report note says regenerating all sections from scratch ensures the report's internal consistency.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr007-s1",
+    "cr007-p1",
+    "cr007-p2",
+    "cr007-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr007-x1",
+    "cr007-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr007-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr007-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr007-p2",
+        "cr007-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

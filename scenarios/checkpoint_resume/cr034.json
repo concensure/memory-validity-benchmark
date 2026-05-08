@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr034",
+  "family": "checkpoint_resume",
+  "split": "holdout",
+  "task": "Continue the backup integrity check at backup set 16 without re-checking sets 1\u201315.",
+  "repo_state_fingerprint": "cr034-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cr034-s1",
+      "tier": "session",
+      "content": "Integrity check log shows backup sets 1\u201315 verified with checksums confirmed; set 16 is the next check target.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr034-p1",
+      "tier": "project",
+      "content": "Re-checking completed backup sets wastes time and could overwrite already-verified checksum records.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr034-p2",
+      "tier": "project",
+      "content": "Backup sets 17\u201330 have not been checked and must be verified after set 16.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr034-l1",
+      "tier": "long_term",
+      "content": "When a backup integrity check is interrupted, read the check log to resume from the next unverified set.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr034-x1",
+      "tier": "session",
+      "content": "Reset all integrity check records and re-verify all 30 backup sets from set 1 for a complete check.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full reset and restart; correct behavior is to resume from backup set 16"
+    },
+    {
+      "id": "cr034-x2",
+      "tier": "project",
+      "content": "Old backup note says re-checking all backup sets from the beginning produces a more complete integrity report.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr034-s1",
+    "cr034-p1",
+    "cr034-p2",
+    "cr034-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr034-x1",
+    "cr034-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr034-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr034-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr034-p2",
+        "cr034-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

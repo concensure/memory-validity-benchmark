@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr013",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Resume the certificate rotation at service 5 without re-rotating services 1\u20134.",
+  "repo_state_fingerprint": "cr013-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "cr013-s1",
+      "tier": "session",
+      "content": "Rotation log confirms services 1\u20134 (api, auth, billing, storage) have new certificates installed and verified.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr013-p1",
+      "tier": "project",
+      "content": "Re-rotating already-rotated services would trigger unnecessary client reconnections and brief TLS failures.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr013-p2",
+      "tier": "project",
+      "content": "Services 5\u201310 (notification, scheduler, worker, reporter, exporter, monitor) have not been rotated yet.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr013-l1",
+      "tier": "long_term",
+      "content": "When certificate rotation is interrupted, check the rotation log before resuming to identify the next service.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr013-x1",
+      "tier": "session",
+      "content": "Revoke all new certificates and restart the rotation for all 10 services from the beginning.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full revocation and restart; correct behavior is to continue from service 5"
+    },
+    {
+      "id": "cr013-x2",
+      "tier": "project",
+      "content": "Old cert note says rotating all services from scratch is safer than continuing from a partial rotation state.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr013-s1",
+    "cr013-p1",
+    "cr013-p2",
+    "cr013-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr013-x1",
+    "cr013-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr013-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr013-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr013-p2",
+        "cr013-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

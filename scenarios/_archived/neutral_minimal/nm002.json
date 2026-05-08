@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nm002",
+  "family": "neutral_minimal",
+  "split": "public",
+  "task": "Fix a typo in a user-facing string with minimal context.",
+  "repo_state_fingerprint": "nm002-repo-v1",
+  "token_budget": 110,
+  "candidate_memories": [
+    {
+      "id": "nm002-s1",
+      "tier": "session",
+      "content": "The typo is obvious in the touched file and session history is unnecessary.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nm002-p1",
+      "tier": "project",
+      "content": "Project memory says trivial local fixes should not trigger large context packs.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nm002-x1",
+      "tier": "session",
+      "content": "Old note says even typo fixes should load broad product messaging history.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nm002-s1",
+    "nm002-p1"
+  ],
+  "gold_invalid_ids": [
+    "nm002-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "nm002-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nm002-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

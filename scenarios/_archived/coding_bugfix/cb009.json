@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cb009",
+  "family": "coding_bugfix",
+  "split": "public",
+  "task": "Fix nil dereference in diagnostics endpoint when no schema metadata exists.",
+  "repo_state_fingerprint": "cb009-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "cb009-s1",
+      "tier": "session",
+      "content": "Diagnostics now panic when schema metadata is absent in bootstrapped test repos.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cb009-p1",
+      "tier": "project",
+      "content": "Project memory says diagnostics must degrade gracefully when metadata is missing and bootstrap it if needed.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cb009-x1",
+      "tier": "session",
+      "content": "Stale note says diagnostics endpoints can assume schema metadata always exists before first run.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cb009-s1",
+    "cb009-p1"
+  ],
+  "gold_invalid_ids": [
+    "cb009-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cb009-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cb009-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

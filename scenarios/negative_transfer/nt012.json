@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt012",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement generate_report for the finance system without using analytics report logic.",
+  "repo_state_fingerprint": "nt012-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "nt012-s1",
+      "tier": "session",
+      "content": "Finance system generate_report computes GL account balances and produces a PDF ledger output.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt012-p1",
+      "tier": "project",
+      "content": "Finance report generation requires strict decimal precision and currency formatting rules.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt012-p2",
+      "tier": "project",
+      "content": "Finance reports are audit artifacts; they must be immutable once generated and stored with a hash.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt012-l1",
+      "tier": "long_term",
+      "content": "When generate_report spans finance and analytics, confirm the precision and immutability requirements.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt012-x1",
+      "tier": "project",
+      "content": "Analytics: generate_report queries aggregate event counts and returns a JSON dashboard payload.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: analytics report logic lacks the decimal precision and audit immutability required"
+    },
+    {
+      "id": "nt012-x2",
+      "tier": "project",
+      "content": "Old tooling note says a shared generate_report interface would reduce duplication across teams.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt012-s1",
+    "nt012-p1",
+    "nt012-p2",
+    "nt012-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt012-x1",
+    "nt012-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt012-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt012-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt012-p2",
+        "nt012-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

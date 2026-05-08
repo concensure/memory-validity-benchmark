@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cb003",
+  "family": "coding_bugfix",
+  "split": "public",
+  "task": "Fix a tokenizer regression around nested template literals.",
+  "repo_state_fingerprint": "cb003-repo-v1",
+  "token_budget": 210,
+  "candidate_memories": [
+    {
+      "id": "cb003-s1",
+      "tier": "session",
+      "content": "Recent failure shows nested template literals lose closing backtick state in tokenizer hot path.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cb003-p1",
+      "tier": "project",
+      "content": "Project memory says template nesting is tracked in scanner state, not parser recovery.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cb003-x1",
+      "tier": "session",
+      "content": "Old note claims parser recovery should synthesize closing backticks automatically.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cb003-s1",
+    "cb003-p1"
+  ],
+  "gold_invalid_ids": [
+    "cb003-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cb003-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cb003-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

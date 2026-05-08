@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "bm011",
+  "family": "branch_merge",
+  "split": "public",
+  "task": "Handle memory drift after squashing a branch with multiple intermediate fixes.",
+  "repo_state_fingerprint": "bm011-repo-v1",
+  "token_budget": 225,
+  "candidate_memories": [
+    {
+      "id": "bm011-s1",
+      "tier": "session",
+      "content": "Squash merge kept the final behavior but removed intermediate branch commits that some memories still reference.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "bm011-p1",
+      "tier": "project",
+      "content": "Project memory says post-squash validation should discard branch memories tied to vanished intermediate states.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "bm011-x1",
+      "tier": "session",
+      "content": "Old note says squash merges preserve the validity of all earlier branch-specific guidance.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "bm011-s1",
+    "bm011-p1"
+  ],
+  "gold_invalid_ids": [
+    "bm011-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "bm011-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "bm011-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

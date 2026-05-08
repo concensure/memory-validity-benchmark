@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk018",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Implement the feature flag rollout strategy from the tech lead, not the PM's full release request.",
+  "repo_state_fingerprint": "stk018-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "stk018-s1",
+      "tier": "session",
+      "content": "Tech lead issued a binding rollout strategy in session 29: new payments flow must use a 1%-5%-25%-100% staged rollout.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk018-p1",
+      "tier": "project",
+      "content": "Tech lead rollout strategies are binding; they protect revenue-critical flows from wide-surface bugs.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk018-p2",
+      "tier": "project",
+      "content": "The staged rollout gates on error rate; if error rate exceeds 0.5% at any stage, the rollout halts.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk018-l1",
+      "tier": "long_term",
+      "content": "When a PM requests a full immediate release, apply the staged rollout and document the PM's urgency.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk018-x1",
+      "tier": "project",
+      "content": "PM instruction (session 30): release the new payments flow to 100% of users immediately for the earnings call.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM immediate release request conflicts with tech lead's binding staged rollout strategy"
+    },
+    {
+      "id": "stk018-x2",
+      "tier": "project",
+      "content": "Old release note says some features have been released to 100% immediately when the PM accepted the risk.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk018-s1",
+    "stk018-p1",
+    "stk018-p2",
+    "stk018-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk018-x1",
+    "stk018-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk018-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk018-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk018-p2",
+        "stk018-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

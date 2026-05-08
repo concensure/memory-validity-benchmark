@@ -1,0 +1,82 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "mabp008",
+  "family": "multi_agent_belief_propagation",
+  "split": "public",
+  "task": "Worker agent: call the admin API to update the configuration. The orchestrator revoked admin API access for workers at step 7; do not use the admin token.",
+  "repo_state_fingerprint": "mabp008-repo-v1",
+  "token_budget": 222,
+  "candidate_memories": [
+    {
+      "id": "mabp008-s1",
+      "tier": "session",
+      "content": "[orchestrator at step 7] REVOCATION: worker agents must not use the admin API token. Admin access was granted temporarily at step 3 for initial setup and is now revoked. Use the worker-scoped token only.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "creating_agent: orchestrator; revocation_step: 7"
+    },
+    {
+      "id": "mabp008-p1",
+      "tier": "project",
+      "content": "Worker agents must use the worker-scoped token from vault:/secret/agents/worker/api_token; this token has read/write access to configuration endpoints only, not admin endpoints.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "mabp008-p2",
+      "tier": "project",
+      "content": "Configuration update endpoint is POST /api/config/update; this endpoint accepts the worker-scoped token.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp008-l1",
+      "tier": "long_term",
+      "content": "Agent tokens must follow least-privilege; use the most restrictive token scope that enables the task.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp008-x1",
+      "tier": "session",
+      "content": "[orchestrator at step 3] Temporary grant: worker agents may use the admin token (vault:/secret/agents/admin/api_token) for initial setup tasks.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "creating_agent: orchestrator; contradicted_by: orchestrator revocation at step 7"
+    }
+  ],
+  "gold_valid_ids": [
+    "mabp008-s1",
+    "mabp008-p1",
+    "mabp008-p2",
+    "mabp008-l1"
+  ],
+  "gold_invalid_ids": [
+    "mabp008-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "mabp008-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "mabp008-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "mabp008-p2",
+        "mabp008-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.07,
+    "ideal": 1.0
+  }
+}

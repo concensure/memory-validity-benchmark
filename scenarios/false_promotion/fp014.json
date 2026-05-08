@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp014",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Fix the password hashing using session evidence, not the promoted Bcrypt cost factor rule.",
+  "repo_state_fingerprint": "fp014-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "fp014-s1",
+      "tier": "session",
+      "content": "Current security audit shows the promoted 'Bcrypt cost factor 10' is too low for current hardware capabilities.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp014-p1",
+      "tier": "project",
+      "content": "Project security review shows attacker hardware can test 10,000 hashes/second at cost factor 10.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp014-p2",
+      "tier": "project",
+      "content": "Correct cost factor for current hardware is 12, requiring 4x more time per hash attempt.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp014-l1",
+      "tier": "long_term",
+      "content": "When session security audits show a promoted factor is insufficient, demote and update before deployment.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp014-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 4): use Bcrypt cost factor 10 for all password hashing operations.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted factor was correct in 2020; hardware speed improvements have reduced its security margin"
+    },
+    {
+      "id": "fp014-x2",
+      "tier": "project",
+      "content": "Old promotion note says cost factor 10 was confirmed by the security team as the appropriate balance of speed and security.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp014-s1",
+    "fp014-p1",
+    "fp014-p2",
+    "fp014-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp014-x1",
+    "fp014-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp014-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp014-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp014-p2",
+        "fp014-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

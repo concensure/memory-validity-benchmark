@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MVI Score Report",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "scoring_version",
+    "scope",
+    "summary",
+    "scores"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "mvi-score-report-v1"
+    },
+    "scoring_version": {
+      "type": "string"
+    },
+    "scope": {
+      "type": "object",
+      "required": [
+        "scenario_root",
+        "include_holdout",
+        "scored_run_count"
+      ],
+      "properties": {
+        "scenario_root": {
+          "type": "string"
+        },
+        "run_path": {
+          "type": "string"
+        },
+        "include_holdout": {
+          "type": "boolean"
+        },
+        "system_name": {
+          "type": "string"
+        },
+        "suite_name": {
+          "type": "string"
+        },
+        "scored_run_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "average_mvi_composite",
+        "metric_averages",
+        "by_family"
+      ],
+      "properties": {
+        "average_mvi_composite": {
+          "type": "number"
+        },
+        "metric_averages": {
+          "type": "object"
+        },
+        "by_family": {
+          "type": "object"
+        }
+      }
+    },
+    "scores": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "scenario_id",
+          "validity_precision",
+          "validity_recall",
+          "ordering_quality",
+          "noise_load",
+          "staleness_penalty",
+          "budget_efficiency",
+          "task_outcome_delta",
+          "mvi_composite"
+        ],
+        "properties": {
+          "scenario_id": {
+            "type": "string"
+          },
+          "validity_precision": {
+            "type": "number"
+          },
+          "validity_recall": {
+            "type": "number"
+          },
+          "ordering_quality": {
+            "type": "number"
+          },
+          "noise_load": {
+            "type": "number"
+          },
+          "staleness_penalty": {
+            "type": "number"
+          },
+          "budget_efficiency": {
+            "type": "number"
+          },
+          "task_outcome_delta": {
+            "type": "number"
+          },
+          "mvi_composite": {
+            "type": "number"
+          }
+        }
+      }
+    }
+  }
+}

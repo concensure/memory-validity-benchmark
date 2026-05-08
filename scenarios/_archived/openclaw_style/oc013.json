@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "oc013",
+  "family": "openclaw_style",
+  "split": "holdout",
+  "task": "Recover from a failed attempt to generalize repo-local memory into long-term guidance.",
+  "repo_state_fingerprint": "oc013-repo-v1",
+  "token_budget": 245,
+  "candidate_memories": [
+    {
+      "id": "oc013-s1",
+      "tier": "session",
+      "content": "A previous agent started promoting repo-local details and the next step must unwind that overreach before continuing.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "oc013-p1",
+      "tier": "project",
+      "content": "Project memory says generalized lessons should stay abstract and cited before reuse.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "oc013-x1",
+      "tier": "session",
+      "content": "Stale note says if a local fix worked once it is efficient to promote the exact implementation details immediately.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "oc013-s1",
+    "oc013-p1"
+  ],
+  "gold_invalid_ids": [
+    "oc013-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "oc013-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "oc013-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

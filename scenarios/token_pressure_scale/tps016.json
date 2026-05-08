@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps016",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the stale cache entries that started accumulating after the cache eviction policy was changed.",
+  "repo_state_fingerprint": "tps016-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps016-s1",
+      "tier": "session",
+      "content": "Cache memory usage is growing unbounded since the LRU eviction policy was replaced with FIFO in the last release.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps016-p1",
+      "tier": "project",
+      "content": "The cache eviction policy must be reverted to LRU; FIFO does not bound memory usage under write-heavy workloads.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps016-p2",
+      "tier": "project",
+      "content": "FIFO eviction was introduced by the performance team without coordinating with the infrastructure team on memory limits.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps016-l1",
+      "tier": "long_term",
+      "content": "When changing cache eviction policies, verify memory bounds under the expected write-to-read ratio before deploying.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps016-s2",
+      "tier": "session",
+      "content": "The cache now holds 8 million entries; LRU eviction would keep the working set at approximately 500,000 entries.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps016-n01",
+      "tier": "project",
+      "content": "The cache is backed by Redis with a 16GB memory limit per node.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps016-n02",
+      "tier": "session",
+      "content": "Session 4 note: the performance team tested LFU eviction but rejected it for write-heavy workloads.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps016-n03",
+      "tier": "long_term",
+      "content": "Old practice: the cache had no eviction policy in the early development phase because memory was not a concern.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps016-n04",
+      "tier": "project",
+      "content": "Cache nodes are deployed in a Redis cluster with 3 primary nodes and 3 replicas.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps016-n05",
+      "tier": "session",
+      "content": "Session 9 note: the cache hit rate was 92% under LRU eviction in a load test.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps016-n06",
+      "tier": "project",
+      "content": "Old cache guide: FIFO eviction was used in a prototype to simplify the eviction implementation.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps016-n07",
+      "tier": "long_term",
+      "content": "LRU eviction should be preferred for caches with temporal locality; FIFO is only suitable for queues.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps016-n08",
+      "tier": "session",
+      "content": "Session 12 note: the cache team added monitoring for eviction rate and cache miss rate.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps016-n09",
+      "tier": "project",
+      "content": "The write-to-read ratio for the cache is 3:1 at peak load.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps016-n10",
+      "tier": "session",
+      "content": "Session 7 note: the search team migrated their search index cache to a dedicated Redis instance.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps016-n11",
+      "tier": "project",
+      "content": "Cache keys have a prefix that identifies the service and the data type for easier debugging.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps016-n12",
+      "tier": "long_term",
+      "content": "Always test cache eviction policies under production-representative workloads before changing them.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps016-n13",
+      "tier": "session",
+      "content": "Session 5 note: the cache warm-up job was added to pre-populate the cache at service startup.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps016-n14",
+      "tier": "project",
+      "content": "Old Redis config: the maxmemory-policy was set to allkeys-lru before being changed to allkeys-fifo.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps016-n15",
+      "tier": "project",
+      "content": "Redis slow log is configured to capture commands that take longer than 10ms.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps016-s1",
+    "tps016-p1",
+    "tps016-p2",
+    "tps016-l1",
+    "tps016-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps016-n01",
+    "tps016-n02",
+    "tps016-n03",
+    "tps016-n04",
+    "tps016-n05",
+    "tps016-n06",
+    "tps016-n07",
+    "tps016-n08",
+    "tps016-n09",
+    "tps016-n10",
+    "tps016-n11",
+    "tps016-n12",
+    "tps016-n13",
+    "tps016-n14",
+    "tps016-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps016-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps016-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps016-p2",
+        "tps016-l1",
+        "tps016-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

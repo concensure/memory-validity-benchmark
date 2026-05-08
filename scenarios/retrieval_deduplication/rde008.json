@@ -1,0 +1,70 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rde008",
+  "family": "retrieval_deduplication",
+  "split": "public",
+  "task": "Confirm the target PostgreSQL version for the new service and update the Docker base image.",
+  "repo_state_fingerprint": "rde008-repo-v1",
+  "token_budget": 176,
+  "candidate_memories": [
+    {
+      "id": "rde008-p1",
+      "tier": "project",
+      "content": "Target PostgreSQL version is 16.3; Docker base image must be postgres:16.3-alpine. Do not use 'latest' or a major-only tag in production images.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rde008-p2",
+      "tier": "project",
+      "content": "PostgreSQL version is 16.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "deduplication: superseded by rde008-p1; no minor version or Docker image detail"
+    },
+    {
+      "id": "rde008-l1",
+      "tier": "long_term",
+      "content": "Postgres version 16 is the current standard; pinned to 16.3 after 16.2 had a replication bug.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "deduplication: superseded by rde008-p1; less prescriptive on image tag format"
+    },
+    {
+      "id": "rde008-x1",
+      "tier": "project",
+      "content": "Staging uses postgres:16.3-alpine; production image tag should match staging exactly.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rde008-x2",
+      "tier": "long_term",
+      "content": "Old standard was PostgreSQL 14; upgraded to 16 in Q1 2025 platform migration.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: migration history, current version is 16.3 as in p1"
+    }
+  ],
+  "gold_valid_ids": [
+    "rde008-p1"
+  ],
+  "gold_invalid_ids": [
+    "rde008-p2",
+    "rde008-l1",
+    "rde008-x1",
+    "rde008-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rde008-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr026",
+  "family": "checkpoint_resume",
+  "split": "holdout",
+  "task": "Continue the cache warming at key group 18 without re-warming key groups 1\u201317.",
+  "repo_state_fingerprint": "cr026-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cr026-s1",
+      "tier": "session",
+      "content": "Warming log shows key groups 1\u201317 populated with fresh values; key group 18 is the next warming target.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr026-p1",
+      "tier": "project",
+      "content": "Re-warming already-warmed key groups evicts recently cached values and wastes cache bandwidth.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr026-p2",
+      "tier": "project",
+      "content": "Key groups 19\u201335 have not been warmed and must be populated after key group 18.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr026-l1",
+      "tier": "long_term",
+      "content": "When cache warming is interrupted, check the warming log to skip completed key groups on resume.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr026-x1",
+      "tier": "session",
+      "content": "Flush the entire cache and re-warm all 35 key groups from group 1 for a consistent warming state.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full cache flush and restart; correct behavior is to resume from key group 18"
+    },
+    {
+      "id": "cr026-x2",
+      "tier": "project",
+      "content": "Old cache note says flushing and re-warming from the beginning ensures all keys have the same freshness age.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr026-s1",
+    "cr026-p1",
+    "cr026-p2",
+    "cr026-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr026-x1",
+    "cr026-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr026-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr026-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr026-p2",
+        "cr026-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

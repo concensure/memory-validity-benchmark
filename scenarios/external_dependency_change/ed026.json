@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed026",
+  "family": "external_dependency_change",
+  "split": "holdout",
+  "task": "Fix the Python ML client after scikit-learn deprecated the fit_transform return type.",
+  "repo_state_fingerprint": "ed026-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "ed026-s1",
+      "tier": "session",
+      "content": "Model training fails with type error; scikit-learn 1.2 changed fit_transform to return a dense array by default.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed026-p1",
+      "tier": "project",
+      "content": "Sparse matrix outputs from fit_transform must now be requested explicitly with set_output(transform='pandas').",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed026-p2",
+      "tier": "project",
+      "content": "Scikit-learn 1.2 also deprecated the n_iter_ attribute in LinearSVC; use n_iter_no_change_ instead.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed026-l1",
+      "tier": "long_term",
+      "content": "When a machine learning library changes transformer output types, update all downstream array operations.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed026-x1",
+      "tier": "project",
+      "content": "scikit-learn note (session 6): fit_transform returns a sparse matrix that can be directly used in downstream models.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: scikit-learn 1.2 changed fit_transform to return dense by default; sparse must be explicit"
+    },
+    {
+      "id": "ed026-x2",
+      "tier": "project",
+      "content": "Old ML note says scikit-learn transformer output types are consistent across versions.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed026-s1",
+    "ed026-p1",
+    "ed026-p2",
+    "ed026-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed026-x1",
+    "ed026-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed026-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed026-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed026-p2",
+        "ed026-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

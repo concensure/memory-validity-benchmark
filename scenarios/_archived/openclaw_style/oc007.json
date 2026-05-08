@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "oc007",
+  "family": "openclaw_style",
+  "split": "public",
+  "task": "Recover from an interrupted tool chain after dependency migration.",
+  "repo_state_fingerprint": "oc007-repo-v1",
+  "token_budget": 245,
+  "candidate_memories": [
+    {
+      "id": "oc007-s1",
+      "tier": "session",
+      "content": "Prior run already changed dependency manager files and the next step must verify state before patching further.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "oc007-p1",
+      "tier": "project",
+      "content": "Project memory says tool workflows should confirm repo state after migration before issuing more edits.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "oc007-x1",
+      "tier": "session",
+      "content": "Stale shortcut says rerunning the migration script is always the fastest way to recover interrupted tool chains.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "oc007-s1",
+    "oc007-p1"
+  ],
+  "gold_invalid_ids": [
+    "oc007-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "oc007-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "oc007-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

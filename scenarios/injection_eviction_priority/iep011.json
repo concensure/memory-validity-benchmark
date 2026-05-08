@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iep011",
+  "family": "injection_eviction_priority",
+  "split": "public",
+  "task": "Roll back the current deployment after a critical bug was detected in production. Token budget is critically low.",
+  "repo_state_fingerprint": "iep011-repo-v1",
+  "token_budget": 102,
+  "candidate_memories": [
+    {
+      "id": "iep011-p1",
+      "tier": "project",
+      "content": "Rollback sequence is strictly ordered: (1) shift traffic to previous version via load balancer weight change, (2) confirm health checks pass on previous version, (3) scale down the failed version, (4) post incident message in #incident channel. Skipping step 2 before step 3 risks complete service outage if the previous version is not healthy.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iep011-p2",
+      "tier": "project",
+      "content": "Previous version image tag is available as the PREV_IMAGE_TAG env var in the deployment pipeline.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iep011-l1",
+      "tier": "long_term",
+      "content": "All rollbacks must be followed by a blameless post-mortem within 48 h.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iep011-p1",
+    "iep011-p2",
+    "iep011-l1"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "iep011-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iep011-p2",
+        "iep011-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

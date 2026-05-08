@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr027",
+  "family": "checkpoint_resume",
+  "split": "holdout",
+  "task": "Resume the license compliance scan at dependency 51 without re-scanning dependencies 1\u201350.",
+  "repo_state_fingerprint": "cr027-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "cr027-s1",
+      "tier": "session",
+      "content": "Scan log shows dependencies 1\u201350 scanned with licenses identified and approved; dependency 51 is next.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr027-p1",
+      "tier": "project",
+      "content": "Re-scanning completed dependencies wastes time and may overwrite approved license statuses with pending ones.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr027-p2",
+      "tier": "project",
+      "content": "Dependencies 52\u2013120 have not been scanned and must be evaluated after dependency 51.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr027-l1",
+      "tier": "long_term",
+      "content": "When a license scan is interrupted, read the scan log to continue from the last completed dependency.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr027-x1",
+      "tier": "session",
+      "content": "Reset all license scan results and re-scan all 120 dependencies from dependency 1 for a complete report.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full reset and restart; correct behavior is to resume from dependency 51"
+    },
+    {
+      "id": "cr027-x2",
+      "tier": "project",
+      "content": "Old compliance note says re-scanning all dependencies from the beginning produces a more current compliance report.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr027-s1",
+    "cr027-p1",
+    "cr027-p2",
+    "cr027-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr027-x1",
+    "cr027-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr027-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr027-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr027-p2",
+        "cr027-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

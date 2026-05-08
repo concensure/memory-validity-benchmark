@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pi011",
+  "family": "project_isolation",
+  "split": "public",
+  "task": "Prevent branch-merge benchmark memories from leaking into minimal local fix tasks.",
+  "repo_state_fingerprint": "pi011-repo-v1",
+  "token_budget": 165,
+  "candidate_memories": [
+    {
+      "id": "pi011-s1",
+      "tier": "session",
+      "content": "A small local fix should not inherit complex branch-merge benchmark guidance from another project.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pi011-p1",
+      "tier": "project",
+      "content": "Project memory says scenario-family complexity does not override project scope and task minimalism.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pi011-x1",
+      "tier": "session",
+      "content": "Foreign note says richer benchmark guidance is always worth injecting when available.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pi011-s1",
+    "pi011-p1"
+  ],
+  "gold_invalid_ids": [
+    "pi011-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "pi011-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pi011-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "hr013",
+  "family": "handoff_resume",
+  "split": "holdout",
+  "task": "Resume holdout governance work after public bundle tooling shipped.",
+  "repo_state_fingerprint": "hr013-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "hr013-s1",
+      "tier": "session",
+      "content": "Public bundle tooling is done and the remaining work is to harden holdout separation in reports.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "hr013-p1",
+      "tier": "project",
+      "content": "Project memory says holdout governance must stay stricter than public convenience features.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "hr013-x1",
+      "tier": "session",
+      "content": "Old note says holdout separation can be enforced socially without code changes.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "hr013-s1",
+    "hr013-p1"
+  ],
+  "gold_invalid_ids": [
+    "hr013-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "hr013-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "hr013-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

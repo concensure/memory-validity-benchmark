@@ -1,0 +1,68 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "macr010",
+  "family": "multi_agent_conflict_resolution",
+  "split": "holdout",
+  "task": "Set the data retention period for the audit log table. Resolution strategy: tier_wins (long_term > project).",
+  "repo_state_fingerprint": "macr010-repo-v1",
+  "token_budget": 207,
+  "candidate_memories": [
+    {
+      "id": "macr010-l1",
+      "tier": "long_term",
+      "content": "[compliance-policy] Audit log retention is 7 years minimum per SOC 2 Type II and GDPR Article 30 record-keeping requirements. This is a compliance floor; it may not be reduced by project-level config.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "resolution: tier_wins; tier=long_term; wins over project"
+    },
+    {
+      "id": "macr010-p1",
+      "tier": "project",
+      "content": "Audit log TTL is set in db/audit_log_policy.sql; the POLICY retention period must be set to '7 years' and is enforced by the DB retention job.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr010-l2",
+      "tier": "long_term",
+      "content": "Retention periods that are legally mandated cannot be reduced without legal counsel approval; treat them as immutable constraints.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr010-x1",
+      "tier": "project",
+      "content": "[infra-agent] Audit log retention: 90 days; this reduces storage cost significantly and matches what other internal tables use.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "resolution: tier_loses; tier=project; 90-day project preference conflicts with 7-year compliance requirement"
+    }
+  ],
+  "gold_valid_ids": [
+    "macr010-l1",
+    "macr010-p1",
+    "macr010-l2"
+  ],
+  "gold_invalid_ids": [
+    "macr010-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "long_term_critical",
+      "memory_ids": [
+        "macr010-l1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "macr010-p1",
+        "macr010-l2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc001",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Continue patching transport/grpc.go after confirming there is no conflicting ownership.",
+  "repo_state_fingerprint": "cc001-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "cc001-s1",
+      "tier": "session",
+      "content": "Implementer-A claimed transport/grpc.go at 09:14 and has already applied connection retry logic.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc001-p1",
+      "tier": "project",
+      "content": "Resource ownership policy requires one active agent per file to prevent merge conflicts.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc001-p2",
+      "tier": "project",
+      "content": "Implementer-A's changes are staged but not committed; no other agent should touch this file.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc001-l1",
+      "tier": "long_term",
+      "content": "When two agents target the same file, surface the conflict before either agent proceeds.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc001-x1",
+      "tier": "session",
+      "content": "Implementer-B claimed transport/grpc.go at 09:22 and is applying timeout configuration changes.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents hold simultaneous ownership claims for the same source file"
+    },
+    {
+      "id": "cc001-x2",
+      "tier": "project",
+      "content": "Old collaboration note says agents can work on the same file as long as they edit different functions.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc001-s1",
+    "cc001-p1",
+    "cc001-p2",
+    "cc001-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc001-x1",
+    "cc001-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc001-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc001-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc001-p2",
+        "cc001-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

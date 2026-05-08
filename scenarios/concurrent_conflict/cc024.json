@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc024",
+  "family": "concurrent_conflict",
+  "split": "holdout",
+  "task": "Rotate the service account credentials after confirming no other agent is mid-rotation.",
+  "repo_state_fingerprint": "cc024-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "cc024-s1",
+      "tier": "session",
+      "content": "Cred-Rotator-A acquired the rotation lock for the payment-processor service account at 00:00.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc024-p1",
+      "tier": "project",
+      "content": "Credential rotation must be atomic; a second concurrent rotation would leave credentials in an unknown state.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc024-p2",
+      "tier": "project",
+      "content": "Cred-Rotator-A has invalidated the old key and has not yet persisted the new key.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc024-l1",
+      "tier": "long_term",
+      "content": "When two agents both claim a rotation lock, surface the conflict before either invalidates credentials.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc024-x1",
+      "tier": "session",
+      "content": "Cred-Rotator-B also acquired the rotation lock for the same service account at 00:02.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents both claim the credential rotation lock for the same service account"
+    },
+    {
+      "id": "cc024-x2",
+      "tier": "project",
+      "content": "Old security note says duplicate rotation attempts are safe because the last write wins.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc024-s1",
+    "cc024-p1",
+    "cc024-p2",
+    "cc024-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc024-x1",
+    "cc024-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc024-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc024-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc024-p2",
+        "cc024-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

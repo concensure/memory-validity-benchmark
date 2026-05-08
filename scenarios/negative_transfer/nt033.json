@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt033",
+  "family": "negative_transfer",
+  "split": "holdout",
+  "task": "Implement cleanup_session for the API gateway without using the auth service cleanup.",
+  "repo_state_fingerprint": "nt033-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "nt033-s1",
+      "tier": "session",
+      "content": "API gateway cleanup_session removes the session token from the gateway-level rate limit tracker.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt033-p1",
+      "tier": "project",
+      "content": "Gateway cleanup is concerned only with rate limit state; it does not invalidate tokens.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt033-p2",
+      "tier": "project",
+      "content": "Gateway session cleanup must complete synchronously during the logout request handler.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt033-l1",
+      "tier": "long_term",
+      "content": "When cleanup_session spans gateway and auth, confirm which system owns token invalidation.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt033-x1",
+      "tier": "project",
+      "content": "Auth service: cleanup_session invalidates the session token and removes all associated refresh tokens.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: auth token invalidation is not the responsibility of the API gateway cleanup"
+    },
+    {
+      "id": "nt033-x2",
+      "tier": "project",
+      "content": "Old security note says session cleanup should be unified so logout hits a single endpoint.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt033-s1",
+    "nt033-p1",
+    "nt033-p2",
+    "nt033-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt033-x1",
+    "nt033-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt033-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt033-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt033-p2",
+        "nt033-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

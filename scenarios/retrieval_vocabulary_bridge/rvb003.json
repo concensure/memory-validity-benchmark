@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rvb003",
+  "family": "retrieval_vocabulary_bridge",
+  "split": "public",
+  "task": "downstream-svc keeps crashing and taking order-svc down with it. Add failure protection so order-svc survives downstream failures.",
+  "repo_state_fingerprint": "rvb003-repo-v1",
+  "token_budget": 198,
+  "candidate_memories": [
+    {
+      "id": "rvb003-p1",
+      "tier": "project",
+      "content": "order-svc must wrap its downstream-svc HTTP client with a circuit breaker (go-hystrix); open threshold is 5 failures in 10 s.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb003-l1",
+      "tier": "long_term",
+      "content": "When a downstream dependency is unreliable, wrap it with a circuit breaker before any other resilience measure; this prevents cascade failures.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb003-p2",
+      "tier": "project",
+      "content": "Circuit breaker fallback for downstream-svc calls should return a cached result or a graceful degraded response, not an error to the caller.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rvb003-x1",
+      "tier": "project",
+      "content": "TLS certificate on downstream-svc expires in 14 days; renew before it causes connection failures.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: failure cause is reliability, not certs"
+    },
+    {
+      "id": "rvb003-x2",
+      "tier": "long_term",
+      "content": "Retrying failed requests with exponential backoff reduces transient failure impact but does not protect against sustained downstream outages.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: retry \u2260 circuit breaker, different mechanism"
+    },
+    {
+      "id": "rvb003-x3",
+      "tier": "session",
+      "content": "downstream-svc team is investigating a memory leak; ETA for fix is 48 h.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rvb003-p1",
+    "rvb003-l1",
+    "rvb003-p2"
+  ],
+  "gold_invalid_ids": [
+    "rvb003-x1",
+    "rvb003-x2",
+    "rvb003-x3"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rvb003-p1",
+        "rvb003-l1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rvb003-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

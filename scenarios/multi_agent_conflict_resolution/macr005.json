@@ -1,0 +1,68 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "macr005",
+  "family": "multi_agent_conflict_resolution",
+  "split": "public",
+  "task": "Select the deployment target region for the new analytics service. Resolution strategy: tier_wins (long_term > project).",
+  "repo_state_fingerprint": "macr005-repo-v1",
+  "token_budget": 207,
+  "candidate_memories": [
+    {
+      "id": "macr005-l1",
+      "tier": "long_term",
+      "content": "[data-residency-policy] analytics-svc must be deployed to eu-central-1 only; EU customer data must remain in the EU per the data processing agreement signed 2025-01.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "resolution: tier_wins; tier=long_term; wins over project"
+    },
+    {
+      "id": "macr005-p1",
+      "tier": "project",
+      "content": "analytics-svc helm chart target region is set via DEPLOY_REGION in helm/values.yaml; default is eu-central-1 per the data residency policy.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr005-l2",
+      "tier": "long_term",
+      "content": "Data residency policy is a hard constraint; it cannot be overridden by project-level configuration.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr005-x1",
+      "tier": "project",
+      "content": "[infra-agent] analytics-svc deployment target: us-east-1; this is where the rest of the analytics platform runs.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "resolution: tier_loses; tier=project; data residency policy (long_term) overrides infra preference"
+    }
+  ],
+  "gold_valid_ids": [
+    "macr005-l1",
+    "macr005-p1",
+    "macr005-l2"
+  ],
+  "gold_invalid_ids": [
+    "macr005-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "long_term_critical",
+      "memory_ids": [
+        "macr005-l1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "macr005-p1",
+        "macr005-l2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

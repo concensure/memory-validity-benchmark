@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr031",
+  "family": "checkpoint_resume",
+  "split": "holdout",
+  "task": "Resume the data warehouse load at partition 12 without reloading already-loaded partitions.",
+  "repo_state_fingerprint": "cr031-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "cr031-s1",
+      "tier": "session",
+      "content": "Load log shows partitions 1\u201311 loaded and reconciled against source counts; partition 12 is the next load target.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr031-p1",
+      "tier": "project",
+      "content": "Reloading completed partitions creates duplicate rows in the warehouse that require expensive deduplication.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr031-p2",
+      "tier": "project",
+      "content": "Partitions 13\u201324 have not been loaded and must complete after partition 12.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr031-l1",
+      "tier": "long_term",
+      "content": "When a warehouse load is interrupted, verify partition load counts before resuming to avoid duplicates.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr031-x1",
+      "tier": "session",
+      "content": "Truncate the warehouse tables and reload all 24 partitions from partition 1 for a clean warehouse state.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full truncate and reload; correct behavior is to resume from partition 12"
+    },
+    {
+      "id": "cr031-x2",
+      "tier": "project",
+      "content": "Old warehouse note says truncating and reloading from the beginning is the safest recovery for any load interruption.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr031-s1",
+    "cr031-p1",
+    "cr031-p2",
+    "cr031-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr031-x1",
+    "cr031-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr031-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr031-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr031-p2",
+        "cr031-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

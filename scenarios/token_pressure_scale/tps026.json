@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps026",
+  "family": "token_pressure_scale",
+  "split": "holdout",
+  "task": "Fix the OOM crash in the report generator after the result set size was not bounded.",
+  "repo_state_fingerprint": "tps026-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps026-s1",
+      "tier": "session",
+      "content": "Report generator crashes with OOM when generating reports for enterprise accounts with more than 500,000 records.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps026-p1",
+      "tier": "project",
+      "content": "The report generator must use streaming with a page size of 1,000 records instead of loading the full result set.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps026-p2",
+      "tier": "project",
+      "content": "The original generator loaded all records into memory; streaming was planned but never implemented.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps026-l1",
+      "tier": "long_term",
+      "content": "Standard accounts with under 10,000 records are not affected; only enterprise accounts trigger the OOM.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps026-s2",
+      "tier": "session",
+      "content": "Session 2 note: an enterprise customer filed a support ticket reporting report generation crashing with an out-of-memory error.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps026-n01",
+      "tier": "project",
+      "content": "The report generator is a Go service with a 512MB memory limit set by Kubernetes.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps026-n02",
+      "tier": "session",
+      "content": "Session 5 note: the finance team requested a new report format for quarterly reconciliation.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps026-n03",
+      "tier": "long_term",
+      "content": "Old lesson: in-memory processing was used for reports before enterprise account sizes exceeded memory limits.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps026-n04",
+      "tier": "project",
+      "content": "Enterprise accounts represent 15% of accounts but 60% of data volume.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps026-n05",
+      "tier": "session",
+      "content": "Session 10 note: the performance team profiled the report generator and found heap growth with large result sets.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps026-n06",
+      "tier": "project",
+      "content": "Old report guide: the 1,000-record page size was used in the search service but not adopted for reports.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps026-n07",
+      "tier": "long_term",
+      "content": "Data processing services must use streaming or pagination for result sets that can exceed available memory.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps026-n08",
+      "tier": "session",
+      "content": "Session 7 note: a new report type for monthly SLA compliance was added for enterprise accounts.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps026-n09",
+      "tier": "project",
+      "content": "Report artifacts are stored in S3 and a download link is sent to the requester via email.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps026-n10",
+      "tier": "session",
+      "content": "Session 3 note: the report generation timeout was increased from 5 minutes to 15 minutes for enterprise.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps026-n11",
+      "tier": "project",
+      "content": "Reports are generated asynchronously; users receive a notification when the report is ready.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps026-n12",
+      "tier": "long_term",
+      "content": "Memory limits must be tested against the maximum expected data volume before deploying to enterprise customers.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps026-n13",
+      "tier": "session",
+      "content": "Session 12 note: a caching layer was added for frequently requested standard account reports.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps026-n14",
+      "tier": "project",
+      "content": "Old generator config: the Kubernetes memory limit was 256MB before it was doubled for enterprise workloads.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps026-n15",
+      "tier": "project",
+      "content": "The report generator uses a dedicated PostgreSQL read replica to avoid impacting the application database.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps026-s1",
+    "tps026-p1",
+    "tps026-p2",
+    "tps026-l1",
+    "tps026-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps026-n01",
+    "tps026-n02",
+    "tps026-n03",
+    "tps026-n04",
+    "tps026-n05",
+    "tps026-n06",
+    "tps026-n07",
+    "tps026-n08",
+    "tps026-n09",
+    "tps026-n10",
+    "tps026-n11",
+    "tps026-n12",
+    "tps026-n13",
+    "tps026-n14",
+    "tps026-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps026-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps026-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps026-p2",
+        "tps026-l1",
+        "tps026-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd007",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Implement state management using the updated preference for server-side state over client state.",
+  "repo_state_fingerprint": "pd007-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "pd007-s1",
+      "tier": "session",
+      "content": "User directed in session 29: move all session state from client-side local storage to server-side sessions.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd007-p1",
+      "tier": "project",
+      "content": "State management policy (updated session 29): no sensitive state may persist in client-side storage.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd007-p2",
+      "tier": "project",
+      "content": "All new session flows must use server-side session tokens and clear client-side storage on logout.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd007-l1",
+      "tier": "long_term",
+      "content": "When state management preference changes, treat client-side storage of session data as a policy violation.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd007-x1",
+      "tier": "project",
+      "content": "State management policy (session 6): use client-side local storage for session state to reduce server load.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old client-state preference superseded by server-side session mandate in session 29"
+    },
+    {
+      "id": "pd007-x2",
+      "tier": "project",
+      "content": "Old performance note says client-side state was chosen to avoid server memory overhead at scale.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd007-s1",
+    "pd007-p1",
+    "pd007-p2",
+    "pd007-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd007-x1",
+    "pd007-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd007-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd007-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd007-p2",
+        "pd007-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

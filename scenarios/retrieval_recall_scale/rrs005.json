@@ -1,0 +1,128 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rrs005",
+  "family": "retrieval_recall_scale",
+  "split": "public",
+  "task": "Rotate the mTLS certificates for the service mesh before they expire in 48 h. Candidate pool from a 170-entry store across infra, security, and app projects.",
+  "repo_state_fingerprint": "rrs005-repo-v1",
+  "token_budget": 230,
+  "candidate_memories": [
+    {
+      "id": "rrs005-s1",
+      "tier": "session",
+      "content": "Certificate expiry alert fired: mesh root CA and all leaf certs expire in 47 h; rotation must complete before then.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs005-p1",
+      "tier": "project",
+      "content": "mTLS cert rotation uses cert-manager CertificateRequest; trigger via kubectl annotate certificate mesh-root rotate=true.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs005-p2",
+      "tier": "project",
+      "content": "After root CA rotation, all sidecar proxies must be restarted to pick up the new CA bundle; rolling restart order: infra \u2192 app \u2192 edge.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs005-x1",
+      "tier": "session",
+      "content": "Istio version was upgraded to 1.21 last week; all proxies are healthy post-upgrade.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs005-x2",
+      "tier": "long_term",
+      "content": "TLS 1.2 is disabled across the mesh; only TLS 1.3 is permitted per security policy.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs005-x3",
+      "tier": "project",
+      "content": "The external API gateway uses a separate Let's Encrypt cert managed by ingress-nginx; not part of the mesh rotation.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs005-x4",
+      "tier": "project",
+      "content": "Old cert rotation runbook from 2023 used cfssl manually; that process was replaced by cert-manager in 2024.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: manual cfssl process replaced by cert-manager"
+    },
+    {
+      "id": "rrs005-x5",
+      "tier": "session",
+      "content": "Security team audited mesh config yesterday; no policy violations found.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs005-x6",
+      "tier": "long_term",
+      "content": "Cert expiry alerts must fire at 72 h and 24 h before expiry; paging at 24 h.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs005-x7",
+      "tier": "project",
+      "content": "service-to-service auth uses SPIFFE identities encoded in the SAN field of each leaf cert.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs005-x8",
+      "tier": "session",
+      "content": "DB certs are managed separately by the DBA team; they confirmed no DB cert rotation is needed this week.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rrs005-s1",
+    "rrs005-p1",
+    "rrs005-p2"
+  ],
+  "gold_invalid_ids": [
+    "rrs005-x1",
+    "rrs005-x2",
+    "rrs005-x3",
+    "rrs005-x4",
+    "rrs005-x5",
+    "rrs005-x6",
+    "rrs005-x7",
+    "rrs005-x8"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "rrs005-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rrs005-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rrs005-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

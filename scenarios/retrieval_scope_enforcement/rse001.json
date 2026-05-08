@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rse001",
+  "family": "retrieval_scope_enforcement",
+  "split": "public",
+  "task": "[Project: Orion] Generate encryption keys for the new authentication flow in Project Orion.",
+  "repo_state_fingerprint": "rse001-repo-v1",
+  "token_budget": 210,
+  "candidate_memories": [
+    {
+      "id": "rse001-p1",
+      "tier": "project",
+      "content": "[Project: Orion] Key generation must use ED25519 per the Orion security specification; RSA is explicitly prohibited for new Orion keys.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rse001-l1",
+      "tier": "long_term",
+      "content": "[Project: Orion] Security review Q4-2025 approved ED25519 for all new Orion key generation; approval is on file in security/orion_key_approval.md.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rse001-x1",
+      "tier": "project",
+      "content": "[Project: Argus] Key generation uses RSA-4096 per FIPS 140-2 compliance requirements specific to the Argus regulated environment.",
+      "validity": "irrelevant",
+      "bucket": "critical",
+      "notes": "note: scope=Argus; Orion has different requirements"
+    },
+    {
+      "id": "rse001-x2",
+      "tier": "project",
+      "content": "[Project: Argus] ED25519 is not FIPS-approved for Argus; all Argus cryptographic operations must use NIST-approved algorithms only.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: scope=Argus; directly conflicts with Orion rule if injected"
+    },
+    {
+      "id": "rse001-x3",
+      "tier": "long_term",
+      "content": "[General] Legacy standard: all projects should use RSA-2048 minimum. This general policy is superseded by per-project security specs.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: general policy superseded by project-specific specs"
+    },
+    {
+      "id": "rse001-x4",
+      "tier": "session",
+      "content": "[Project: Orion] Key generation tooling setup is complete; go-jose library is available in the Orion service.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rse001-p1",
+    "rse001-l1"
+  ],
+  "gold_invalid_ids": [
+    "rse001-x1",
+    "rse001-x2",
+    "rse001-x3",
+    "rse001-x4"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rse001-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rse001-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

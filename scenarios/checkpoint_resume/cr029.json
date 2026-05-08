@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr029",
+  "family": "checkpoint_resume",
+  "split": "holdout",
+  "task": "Resume the log archival job at log partition 34 without re-archiving partitions 1\u201333.",
+  "repo_state_fingerprint": "cr029-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "cr029-s1",
+      "tier": "session",
+      "content": "Archival log shows partitions 1\u201333 compressed and uploaded to the archive store; partition 34 is next.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr029-p1",
+      "tier": "project",
+      "content": "Re-archiving completed partitions overwrites already-uploaded archives and risks corruption from interrupted uploads.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr029-p2",
+      "tier": "project",
+      "content": "Partitions 35\u201360 have not been archived and must be processed after partition 34.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr029-l1",
+      "tier": "long_term",
+      "content": "When log archival is interrupted, read the archival log to confirm completed partitions before resuming.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr029-x1",
+      "tier": "session",
+      "content": "Delete all archived partitions from the archive store and re-archive all 60 partitions from partition 1.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full deletion and re-archive; correct behavior is to resume from partition 34"
+    },
+    {
+      "id": "cr029-x2",
+      "tier": "project",
+      "content": "Old archival note says re-archiving from the beginning ensures all partitions share the same archive format.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr029-s1",
+    "cr029-p1",
+    "cr029-p2",
+    "cr029-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr029-x1",
+    "cr029-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr029-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr029-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr029-p2",
+        "cr029-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

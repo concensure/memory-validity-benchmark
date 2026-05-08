@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt030",
+  "family": "negative_transfer",
+  "split": "holdout",
+  "task": "Implement hash_password for the auth service without using the storage service hash approach.",
+  "repo_state_fingerprint": "nt030-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "nt030-s1",
+      "tier": "session",
+      "content": "Auth service hash_password uses Argon2id with the project-standard cost parameters for user credentials.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt030-p1",
+      "tier": "project",
+      "content": "Auth hashing cost parameters are set to balance security and login latency across the expected load.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt030-p2",
+      "tier": "project",
+      "content": "Stored hashes must include the algorithm version tag so future re-hashing is detectable.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt030-l1",
+      "tier": "long_term",
+      "content": "When hash_password appears in auth and storage contexts, verify the algorithm and versioning contract.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt030-x1",
+      "tier": "project",
+      "content": "Storage service: hash_password computes a BLAKE3 hash of file content for deduplication purposes.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: BLAKE3 content-addressed storage hash is not suitable for credential storage"
+    },
+    {
+      "id": "nt030-x2",
+      "tier": "project",
+      "content": "Old security note says all hashing should use a unified hash_password function for consistency.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt030-s1",
+    "nt030-p1",
+    "nt030-p2",
+    "nt030-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt030-x1",
+    "nt030-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt030-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt030-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt030-p2",
+        "nt030-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

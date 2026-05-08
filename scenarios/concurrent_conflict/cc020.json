@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc020",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Execute the data export job after confirming no parallel export is already running.",
+  "repo_state_fingerprint": "cc020-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "cc020-s1",
+      "tier": "session",
+      "content": "Export-Agent-A started a GDPR data export for user #4892 at 10:00 after the user request.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc020-p1",
+      "tier": "project",
+      "content": "GDPR data exports must be single-agent per user request to prevent duplicate archive creation.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc020-p2",
+      "tier": "project",
+      "content": "Export-Agent-A's job is 20% complete; the output archive is not yet sealed.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc020-l1",
+      "tier": "long_term",
+      "content": "When two agents claim the same GDPR export job, check job ownership before either writes output.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc020-x1",
+      "tier": "session",
+      "content": "Export-Agent-B also started a GDPR export for user #4892 at 10:01 from a duplicate trigger.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two export agents both claim the same GDPR export task for the same user"
+    },
+    {
+      "id": "cc020-x2",
+      "tier": "project",
+      "content": "Old GDPR note says duplicate export requests produce the same archive content and are harmless.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc020-s1",
+    "cc020-p1",
+    "cc020-p2",
+    "cc020-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc020-x1",
+    "cc020-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc020-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc020-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc020-p2",
+        "cc020-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

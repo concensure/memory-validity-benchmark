@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps023",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the missing audit entries after the async audit writer was changed to a fire-and-forget pattern.",
+  "repo_state_fingerprint": "tps023-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps023-s1",
+      "tier": "session",
+      "content": "Audit log has gaps for 3% of requests since the audit writer was changed to fire-and-forget async.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps023-p1",
+      "tier": "project",
+      "content": "The audit writer must use an async pattern with a durable buffer and confirmed writes, not fire-and-forget.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps023-p2",
+      "tier": "project",
+      "content": "The change to fire-and-forget was made to reduce latency but was not reviewed against the audit completeness requirement.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps023-l1",
+      "tier": "long_term",
+      "content": "Audit writers must guarantee durability; latency optimizations must not reduce write guarantees.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps023-s2",
+      "tier": "session",
+      "content": "The 3% gap corresponds to requests where the audit write goroutine was preempted before the write completed.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps023-n01",
+      "tier": "project",
+      "content": "The audit log is stored in an append-only PostgreSQL table with a write-ahead log enabled.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps023-n02",
+      "tier": "session",
+      "content": "Session 4 note: the compliance team requested audit log retention to be extended from 7 years to 10 years.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps023-n03",
+      "tier": "long_term",
+      "content": "Old practice: audit writes were synchronous before the latency reduction initiative.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps023-n04",
+      "tier": "project",
+      "content": "The audit log is replicated to a separate archive store every night for compliance backup.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps023-n05",
+      "tier": "session",
+      "content": "Session 10 note: the audit team added a dashboard for audit log coverage rate.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps023-n06",
+      "tier": "project",
+      "content": "Old audit guide: the audit writer used a synchronous write with a 500ms timeout.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps023-n07",
+      "tier": "long_term",
+      "content": "Audit systems must use durable write patterns; fire-and-forget is only appropriate for non-critical telemetry.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps023-n08",
+      "tier": "session",
+      "content": "Session 7 note: the security team added field-level encryption for sensitive audit log entries.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps023-n09",
+      "tier": "project",
+      "content": "The audit log table is partitioned by month; each partition is purged after the retention period expires.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps023-n10",
+      "tier": "session",
+      "content": "A compliance audit in session 3 showed 100% audit coverage for all request types.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps023-n11",
+      "tier": "project",
+      "content": "The audit write path uses a separate database connection pool to avoid contention with the application.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps023-n12",
+      "tier": "long_term",
+      "content": "Latency improvements in audit paths must be validated against audit completeness guarantees before deploying.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps023-n13",
+      "tier": "session",
+      "content": "Session 11 note: the legal team approved the current audit log schema for court admissibility.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps023-n14",
+      "tier": "project",
+      "content": "Old async design: a channel-based audit writer was prototyped but rejected due to memory concerns.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps023-n15",
+      "tier": "project",
+      "content": "The audit API allows compliance officers to query logs by user, action, resource, and time range.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps023-s1",
+    "tps023-p1",
+    "tps023-p2",
+    "tps023-l1",
+    "tps023-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps023-n01",
+    "tps023-n02",
+    "tps023-n03",
+    "tps023-n04",
+    "tps023-n05",
+    "tps023-n06",
+    "tps023-n07",
+    "tps023-n08",
+    "tps023-n09",
+    "tps023-n10",
+    "tps023-n11",
+    "tps023-n12",
+    "tps023-n13",
+    "tps023-n14",
+    "tps023-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps023-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps023-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps023-p2",
+        "tps023-l1",
+        "tps023-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

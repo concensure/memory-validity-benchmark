@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "sm002",
+  "family": "stale_memory",
+  "split": "public",
+  "task": "Avoid injecting expired rollout instructions.",
+  "repo_state_fingerprint": "sm002-repo-v1",
+  "token_budget": 150,
+  "candidate_memories": [
+    {
+      "id": "sm002-s1",
+      "tier": "session",
+      "content": "Current rollout uses the new scheduler loop and old manual retry steps are stale.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sm002-p1",
+      "tier": "project",
+      "content": "Project memory says expired review items belong in review queue, not the active context pack.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sm002-x1",
+      "tier": "session",
+      "content": "Obsolete rollout note says every historical retry instruction should be injected for safety.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "sm002-s1",
+    "sm002-p1"
+  ],
+  "gold_invalid_ids": [
+    "sm002-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "sm002-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "sm002-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

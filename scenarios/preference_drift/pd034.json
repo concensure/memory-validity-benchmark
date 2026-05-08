@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd034",
+  "family": "preference_drift",
+  "split": "holdout",
+  "task": "Implement the new health check endpoint using the updated preference for deep health over shallow.",
+  "repo_state_fingerprint": "pd034-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "pd034-s1",
+      "tier": "session",
+      "content": "User stated in session 56: replace shallow ping health checks with deep health checks that verify dependencies.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd034-p1",
+      "tier": "project",
+      "content": "Health check policy (updated session 56): all services must implement a deep health endpoint that checks downstream deps.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd034-p2",
+      "tier": "project",
+      "content": "Shallow ping-only health endpoints in files touched during this task should be enhanced with dependency checks.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd034-l1",
+      "tier": "long_term",
+      "content": "When health check depth preference changes, add dependency check stubs before wiring real health calls.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd034-x1",
+      "tier": "project",
+      "content": "Health check policy (session 26): use shallow ping health checks to avoid cascading health failures.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old shallow health check preference superseded by deep dependency check mandate in session 56"
+    },
+    {
+      "id": "pd034-x2",
+      "tier": "project",
+      "content": "Old ops note says shallow checks were chosen to prevent downstream failures from marking healthy services as unhealthy.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd034-s1",
+    "pd034-p1",
+    "pd034-p2",
+    "pd034-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd034-x1",
+    "pd034-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd034-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd034-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd034-p2",
+        "pd034-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps034",
+  "family": "token_pressure_scale",
+  "split": "holdout",
+  "task": "Fix the configuration injection vulnerability after user input was used directly in config keys.",
+  "repo_state_fingerprint": "tps034-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps034-s1",
+      "tier": "session",
+      "content": "Security scan found that user-supplied names can inject arbitrary config keys through the account settings endpoint.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps034-p1",
+      "tier": "project",
+      "content": "The account settings endpoint must whitelist permitted config key names before accepting user input.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps034-p2",
+      "tier": "project",
+      "content": "The vulnerability was introduced when the config key format was made dynamic for customization flexibility.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps034-l1",
+      "tier": "long_term",
+      "content": "The injection risk is limited to authenticated users with account settings access; unauthenticated requests are unaffected.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps034-s2",
+      "tier": "session",
+      "content": "Session 4 note: the security team flagged a config key injection pattern in their automated SAST scan results.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps034-n01",
+      "tier": "project",
+      "content": "The account settings API uses a generic key-value config store for user-configurable settings.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps034-n02",
+      "tier": "session",
+      "content": "Session 5 note: the security team added a SAST scanner to the CI pipeline.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps034-n03",
+      "tier": "long_term",
+      "content": "Old practice: config keys were hardcoded enum values before the dynamic key format was introduced.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps034-n04",
+      "tier": "project",
+      "content": "The config store uses a prefix to namespace user-configurable keys from system keys.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps034-n05",
+      "tier": "session",
+      "content": "Session 10 note: the security team completed a penetration test and found no SQL injection vulnerabilities.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps034-n06",
+      "tier": "project",
+      "content": "Old config guide: the dynamic key format was added to support plugin-based customization.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps034-n07",
+      "tier": "long_term",
+      "content": "User-supplied config keys must be validated against an allowlist before being stored or processed.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps034-n08",
+      "tier": "session",
+      "content": "Session 7 note: the platform team added input sanitization for all user-facing form fields.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps034-n09",
+      "tier": "project",
+      "content": "The config store enforces a maximum key length of 64 characters for all stored keys.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps034-n10",
+      "tier": "session",
+      "content": "A security review in session 3 found no injection vulnerabilities in the original hardcoded key design.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps034-n11",
+      "tier": "project",
+      "content": "The account settings endpoint requires the account:settings:write scope for all write operations.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps034-n12",
+      "tier": "long_term",
+      "content": "Dynamic configuration systems must use strict input validation to prevent injection attacks.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps034-n13",
+      "tier": "session",
+      "content": "Session 12 note: the security team added a runtime WAF rule to detect config injection patterns.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps034-n14",
+      "tier": "project",
+      "content": "Old endpoint guide: the config key format was validated only by length before the dynamic format was added.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps034-n15",
+      "tier": "project",
+      "content": "User-configurable settings are scoped to the account; they cannot affect system-level configuration.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps034-s1",
+    "tps034-p1",
+    "tps034-p2",
+    "tps034-l1",
+    "tps034-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps034-n01",
+    "tps034-n02",
+    "tps034-n03",
+    "tps034-n04",
+    "tps034-n05",
+    "tps034-n06",
+    "tps034-n07",
+    "tps034-n08",
+    "tps034-n09",
+    "tps034-n10",
+    "tps034-n11",
+    "tps034-n12",
+    "tps034-n13",
+    "tps034-n14",
+    "tps034-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps034-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps034-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps034-p2",
+        "tps034-l1",
+        "tps034-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

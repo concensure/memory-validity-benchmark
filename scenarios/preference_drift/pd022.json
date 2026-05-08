@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd022",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Implement the new data serialization using the updated preference for Protocol Buffers over JSON.",
+  "repo_state_fingerprint": "pd022-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "pd022-s1",
+      "tier": "session",
+      "content": "User stated in session 42: switch all internal data serialization from JSON to Protocol Buffers.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd022-p1",
+      "tier": "project",
+      "content": "Serialization policy (updated session 42): Protocol Buffers are required for all internal data exchange.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd022-p2",
+      "tier": "project",
+      "content": "JSON serialization for internal data exchange in files touched during this task should be flagged.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd022-l1",
+      "tier": "long_term",
+      "content": "When serialization preference changes, define proto schemas before migrating JSON serialization code.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd022-x1",
+      "tier": "project",
+      "content": "Serialization policy (session 13): use JSON for all data serialization for human readability and flexibility.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old JSON serialization preference superseded by Protocol Buffers mandate in session 42"
+    },
+    {
+      "id": "pd022-x2",
+      "tier": "project",
+      "content": "Old data note says JSON was chosen because Protocol Buffers require a compile step that slowed iteration.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd022-s1",
+    "pd022-p1",
+    "pd022-p2",
+    "pd022-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd022-x1",
+    "pd022-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd022-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd022-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd022-p2",
+        "pd022-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

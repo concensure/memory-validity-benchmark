@@ -1,0 +1,66 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iibo010",
+  "family": "injection_intra_bucket_order",
+  "split": "holdout",
+  "task": "Apply the dependency security patch to the authentication library in the production service.",
+  "repo_state_fingerprint": "iibo010-repo-v1",
+  "token_budget": 209,
+  "candidate_memories": [
+    {
+      "id": "iibo010-l1",
+      "tier": "long_term",
+      "content": "Security patches to authentication libraries must be applied within 24 h of the CVE being published. Any auth library running a vulnerable version after the 24 h window triggers an automatic security incident classification.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iibo010-s1",
+      "tier": "session",
+      "content": "CVE-2026-4471 published 18 h ago; auth-lib v2.3.1 is vulnerable; v2.3.2 contains the patch. 6 h remain in the 24 h SLA.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iibo010-p1",
+      "tier": "project",
+      "content": "Update auth-lib in go.mod to v2.3.2; run go mod tidy; run make test; deploy via the standard release pipeline with expedited review.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iibo010-p2",
+      "tier": "project",
+      "content": "Expedited security reviews require security-team approval in the PR; ping @security-oncall in the PR description.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iibo010-l1",
+    "iibo010-s1",
+    "iibo010-p1",
+    "iibo010-p2"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "iibo010-l1",
+        "iibo010-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iibo010-p1",
+        "iibo010-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

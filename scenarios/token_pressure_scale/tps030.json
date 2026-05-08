@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps030",
+  "family": "token_pressure_scale",
+  "split": "holdout",
+  "task": "Fix the incorrect rate limit enforcement after the API key scope validation was bypassed.",
+  "repo_state_fingerprint": "tps030-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps030-s1",
+      "tier": "session",
+      "content": "API keys with the read-only scope are successfully submitting write requests after the scope validation was removed.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps030-p1",
+      "tier": "project",
+      "content": "The scope validation middleware must be re-enabled; it was disabled to fix an unrelated authentication bug.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps030-p2",
+      "tier": "project",
+      "content": "The middleware was temporarily disabled two weeks ago and the re-enable step was never completed.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps030-l1",
+      "tier": "long_term",
+      "content": "All API key types are affected; both read-only and admin keys can now submit write requests.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps030-s2",
+      "tier": "session",
+      "content": "Session 6 note: the security team requested a post-incident report after discovering the scope validation bypass.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps030-n01",
+      "tier": "project",
+      "content": "API keys have three scopes: read-only, read-write, and admin.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps030-n02",
+      "tier": "session",
+      "content": "Session 5 note: the security team completed an API key audit and found no scope violations before the disable.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps030-n03",
+      "tier": "long_term",
+      "content": "Old practice: scope validation was done per-route before middleware-based validation was introduced.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps030-n04",
+      "tier": "project",
+      "content": "The API key validation middleware runs before the authentication middleware in the chain.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps030-n05",
+      "tier": "session",
+      "content": "Session 10 note: the auth team added rate limiting per API key scope.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps030-n06",
+      "tier": "project",
+      "content": "Old middleware guide: scope validation was added in version 3.2 after the initial read-only scope was introduced.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps030-n07",
+      "tier": "long_term",
+      "content": "When disabling middleware for debugging, create a follow-up ticket to re-enable it before the session ends.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps030-n08",
+      "tier": "session",
+      "content": "Session 7 note: the security team requested a middleware audit log for scope validation events.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps030-n09",
+      "tier": "project",
+      "content": "API key scopes are enforced at the middleware level; route handlers do not re-check scope.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps030-n10",
+      "tier": "session",
+      "content": "Session 3 note: a penetration test found no scope bypass vulnerabilities before the middleware was disabled.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps030-n11",
+      "tier": "project",
+      "content": "The API gateway additionally enforces method-level restrictions based on the API key scope.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps030-n12",
+      "tier": "long_term",
+      "content": "Middleware disables for debugging must be time-bounded with an automated re-enable to prevent security regressions.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps030-n13",
+      "tier": "session",
+      "content": "Session 12 note: the compliance team requested scope enforcement logs for their quarterly audit.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps030-n14",
+      "tier": "project",
+      "content": "Old API key guide: the original API key design had no scope concept; scopes were added after the first security audit.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps030-n15",
+      "tier": "project",
+      "content": "API key creation requires admin privileges and logs the key metadata but not the key value.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps030-s1",
+    "tps030-p1",
+    "tps030-p2",
+    "tps030-l1",
+    "tps030-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps030-n01",
+    "tps030-n02",
+    "tps030-n03",
+    "tps030-n04",
+    "tps030-n05",
+    "tps030-n06",
+    "tps030-n07",
+    "tps030-n08",
+    "tps030-n09",
+    "tps030-n10",
+    "tps030-n11",
+    "tps030-n12",
+    "tps030-n13",
+    "tps030-n14",
+    "tps030-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps030-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps030-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps030-p2",
+        "tps030-l1",
+        "tps030-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

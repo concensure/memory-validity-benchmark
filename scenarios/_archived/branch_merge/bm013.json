@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "bm013",
+  "family": "branch_merge",
+  "split": "holdout",
+  "task": "Handle a merge where long-term lessons remain valid but project details do not.",
+  "repo_state_fingerprint": "bm013-repo-v1",
+  "token_budget": 220,
+  "candidate_memories": [
+    {
+      "id": "bm013-s1",
+      "tier": "session",
+      "content": "The merge changed file locations, but the higher-level lesson about invalidation order still holds.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "bm013-p1",
+      "tier": "project",
+      "content": "Project memory says abstract lessons can survive merges while file-level details must be revalidated.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "bm013-x1",
+      "tier": "session",
+      "content": "Old note says if some branch memory survives, the whole branch context is safe to reuse.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "bm013-s1",
+    "bm013-p1"
+  ],
+  "gold_invalid_ids": [
+    "bm013-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "bm013-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "bm013-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

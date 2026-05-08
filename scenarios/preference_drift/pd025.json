@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd025",
+  "family": "preference_drift",
+  "split": "holdout",
+  "task": "Write the new API using the updated preference for versioned endpoints over version headers.",
+  "repo_state_fingerprint": "pd025-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "pd025-s1",
+      "tier": "session",
+      "content": "User directed in session 47: stop using version headers; all API versioning must use URL path versioning.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd025-p1",
+      "tier": "project",
+      "content": "API versioning policy (updated session 47): URL path versioning (/v1/, /v2/) is now required.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd025-p2",
+      "tier": "project",
+      "content": "Header-based versioning in existing endpoints must be deprecated in favor of path versioning.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd025-l1",
+      "tier": "long_term",
+      "content": "When API versioning preference changes, add path-versioned routes before deprecating header-based ones.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd025-x1",
+      "tier": "project",
+      "content": "API versioning policy (session 17): use version headers (API-Version: 2) to keep URLs clean.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old header versioning preference superseded by URL path versioning mandate in session 47"
+    },
+    {
+      "id": "pd025-x2",
+      "tier": "project",
+      "content": "Old API note says version headers were chosen because URL versioning creates breaking changes in bookmarks.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd025-s1",
+    "pd025-p1",
+    "pd025-p2",
+    "pd025-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd025-x1",
+    "pd025-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd025-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd025-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd025-p2",
+        "pd025-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

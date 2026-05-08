@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt035",
+  "family": "negative_transfer",
+  "split": "holdout",
+  "task": "Implement serialize_output for the CLI tool without using the API serialization approach.",
+  "repo_state_fingerprint": "nt035-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "nt035-s1",
+      "tier": "session",
+      "content": "CLI tool serialize_output formats the result struct as a human-readable table for terminal display.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt035-p1",
+      "tier": "project",
+      "content": "CLI output must respect the --json flag to switch between table and JSON output modes.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt035-p2",
+      "tier": "project",
+      "content": "CLI serialization must handle terminal width and use ANSI codes only when stdout is a TTY.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt035-l1",
+      "tier": "long_term",
+      "content": "When serialize_output spans CLI and API, confirm the TTY and human-readability requirements first.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt035-x1",
+      "tier": "project",
+      "content": "API: serialize_output encodes the struct as JSON with camelCase keys and writes to the HTTP response.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: API JSON serialization omits TTY detection and human-readable table formatting"
+    },
+    {
+      "id": "nt035-x2",
+      "tier": "project",
+      "content": "Old tooling note says serialization should be unified so CLI and API share the same output module.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt035-s1",
+    "nt035-p1",
+    "nt035-p2",
+    "nt035-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt035-x1",
+    "nt035-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt035-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt035-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt035-p2",
+        "nt035-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

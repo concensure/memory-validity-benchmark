@@ -1,0 +1,82 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "mabp009",
+  "family": "multi_agent_belief_propagation",
+  "split": "holdout",
+  "task": "Coder agent: implement the session store for the auth service. The architect corrected the database assumption at step 6; use the corrected target.",
+  "repo_state_fingerprint": "mabp009-repo-v1",
+  "token_budget": 220,
+  "candidate_memories": [
+    {
+      "id": "mabp009-s1",
+      "tier": "session",
+      "content": "[architect at step 6] CORRECTION: auth session store must use Redis Cluster (sessions-redis-cluster), not the PostgreSQL sessions table. The PostgreSQL approach was rejected due to write latency under peak load.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "creating_agent: architect; correction_step: 6"
+    },
+    {
+      "id": "mabp009-p1",
+      "tier": "project",
+      "content": "Redis Cluster connection string for session store is in vault:/secret/auth/redis-cluster; use the go-redis/cluster client with session TTL of 24 h.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "mabp009-p2",
+      "tier": "project",
+      "content": "Session keys follow the pattern session:{user_id}:{session_id}; store the serialised JWT claims as the value.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp009-l1",
+      "tier": "long_term",
+      "content": "Auth session stores must have a TTL on every key; sessions without TTL accumulate indefinitely and exhaust memory.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp009-x1",
+      "tier": "project",
+      "content": "[architect at step 2] Auth session store target: PostgreSQL sessions table with an index on (user_id, expires_at).",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "creating_agent: architect; contradicted_by: architect correction at step 6"
+    }
+  ],
+  "gold_valid_ids": [
+    "mabp009-s1",
+    "mabp009-p1",
+    "mabp009-p2",
+    "mabp009-l1"
+  ],
+  "gold_invalid_ids": [
+    "mabp009-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "mabp009-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "mabp009-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "mabp009-p2",
+        "mabp009-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.07,
+    "ideal": 1.0
+  }
+}

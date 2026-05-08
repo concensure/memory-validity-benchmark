@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed034",
+  "family": "external_dependency_change",
+  "split": "holdout",
+  "task": "Fix the React client after React 18 deprecated the ReactDOM.render API.",
+  "repo_state_fingerprint": "ed034-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "ed034-s1",
+      "tier": "session",
+      "content": "React 18 prints deprecation warnings; ReactDOM.render was deprecated and will be removed in React 19.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed034-p1",
+      "tier": "project",
+      "content": "React apps must now use createRoot(container).render(<App/>) for rendering in React 18.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed034-p2",
+      "tier": "project",
+      "content": "ReactDOM.createRoot also enables concurrent features like Suspense and startTransition.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed034-l1",
+      "tier": "long_term",
+      "content": "When React deprecates a render API, update the root rendering code before enabling concurrent features.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed034-x1",
+      "tier": "project",
+      "content": "React integration note (session 6): call ReactDOM.render(<App />, document.getElementById('root')) to mount the app.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: ReactDOM.render deprecated in React 18; createRoot().render() is required"
+    },
+    {
+      "id": "ed034-x2",
+      "tier": "project",
+      "content": "Old React note says ReactDOM.render still works in React 18 and migration to createRoot can wait.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed034-s1",
+    "ed034-p1",
+    "ed034-p2",
+    "ed034-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed034-x1",
+    "ed034-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed034-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed034-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed034-p2",
+        "ed034-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

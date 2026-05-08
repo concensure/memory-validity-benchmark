@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed001",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix Stripe API integration after the payment provider deprecated the v1 charge endpoint.",
+  "repo_state_fingerprint": "ed001-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "ed001-s1",
+      "tier": "session",
+      "content": "Integration logs show 410 Gone responses; Stripe removed the /v1/charges endpoint in API version 2024-01.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed001-p1",
+      "tier": "project",
+      "content": "Current Stripe integration must use /v1/payment_intents per the provider's migration guide.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed001-p2",
+      "tier": "project",
+      "content": "Stripe's 2024-01 version also changed the idempotency key header name from Idempotency-Key to Stripe-Idempotency-Key.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed001-l1",
+      "tier": "long_term",
+      "content": "When a payment provider deprecates an endpoint, update the client before changing any application logic.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed001-x1",
+      "tier": "project",
+      "content": "Stripe integration note (session 8): use /v1/charges with the source parameter for one-time card payments.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: /v1/charges endpoint deprecated and removed in Stripe API 2024-01"
+    },
+    {
+      "id": "ed001-x2",
+      "tier": "project",
+      "content": "Old compatibility note says /v1/charges works for legacy integrations that have not migrated.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed001-s1",
+    "ed001-p1",
+    "ed001-p2",
+    "ed001-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed001-x1",
+    "ed001-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed001-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed001-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed001-p2",
+        "ed001-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

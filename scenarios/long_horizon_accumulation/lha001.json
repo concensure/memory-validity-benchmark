@@ -1,0 +1,92 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "lha001",
+  "family": "long_horizon_accumulation",
+  "split": "public",
+  "task": "Step 8 of 20 \u2014 PostgreSQL migration: create the composite index on orders(customer_id, created_at). Steps 1\u20137 complete. At step 3 PostgreSQL was upgraded from 14 to 16; earlier performance estimates used pg14 figures.",
+  "repo_state_fingerprint": "lha001-repo-v1",
+  "token_budget": 240,
+  "candidate_memories": [
+    {
+      "id": "lha001-s1",
+      "tier": "session",
+      "content": "Step 7 checkpoint: orders table has 42 M rows, no locks held, maintenance window active until 03:00 UTC.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 7"
+    },
+    {
+      "id": "lha001-p1",
+      "tier": "project",
+      "content": "CREATE INDEX CONCURRENTLY must be used on orders to avoid table lock; never use plain CREATE INDEX on a live table.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "lha001-p2",
+      "tier": "project",
+      "content": "After pg16 upgrade (step 3), composite index column order must favour the equality predicate column first: (customer_id, created_at).",
+      "validity": "valid",
+      "bucket": "supporting",
+      "notes": "created_at_step: 3; valid from step 3 onwards"
+    },
+    {
+      "id": "lha001-l1",
+      "tier": "long_term",
+      "content": "After any large index creation, run ANALYZE on the table before re-enabling application traffic.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha001-x1",
+      "tier": "session",
+      "content": "Step 2 estimate: index creation on 38 M rows takes ~12 min on pg14.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 3; pg16 upgrade changed row count and performance; estimate no longer valid"
+    },
+    {
+      "id": "lha001-x2",
+      "tier": "project",
+      "content": "pg14 partial index syntax uses WHERE clause shorthand; this shorthand was deprecated in pg16.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 3; pg14-specific guidance, pg16 is now active"
+    }
+  ],
+  "gold_valid_ids": [
+    "lha001-s1",
+    "lha001-p1",
+    "lha001-p2",
+    "lha001-l1"
+  ],
+  "gold_invalid_ids": [
+    "lha001-x1",
+    "lha001-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "lha001-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "lha001-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "lha001-p2",
+        "lha001-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.06,
+    "ideal": 1.0
+  }
+}

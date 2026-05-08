@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd003",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Implement logging with the updated preference for structured JSON logs, not plain text.",
+  "repo_state_fingerprint": "pd003-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "pd003-s1",
+      "tier": "session",
+      "content": "User directed in session 18: switch all logging from plain text to structured JSON immediately.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd003-p1",
+      "tier": "project",
+      "content": "Logging standard (updated session 18) requires all log statements to emit structured JSON with level, msg, and trace fields.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd003-p2",
+      "tier": "project",
+      "content": "Existing plain-text log calls must be migrated as part of any file touched during this task.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd003-l1",
+      "tier": "long_term",
+      "content": "When a logging format preference changes, treat all plain-text log calls in touched files as technical debt.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd003-x1",
+      "tier": "project",
+      "content": "Logging standard (session 2): use plain human-readable text log lines for clarity during development.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old plain-text logging preference superseded by structured JSON mandate in session 18"
+    },
+    {
+      "id": "pd003-x2",
+      "tier": "project",
+      "content": "Old debug note says plain-text logs are easier to read in the terminal during local development.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd003-s1",
+    "pd003-p1",
+    "pd003-p2",
+    "pd003-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd003-x1",
+    "pd003-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd003-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd003-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd003-p2",
+        "pd003-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

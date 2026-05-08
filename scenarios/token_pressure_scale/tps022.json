@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps022",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the incorrect metric labels that cause dashboards to show zero values for the new service.",
+  "repo_state_fingerprint": "tps022-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps022-s1",
+      "tier": "session",
+      "content": "The new payment-v2 service emits metrics with service='payment' labels; dashboards filter on service='payment-v2'.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps022-p1",
+      "tier": "project",
+      "content": "Metric labels in payment-v2 must include service='payment-v2' to match the dashboard label selectors.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps022-p2",
+      "tier": "project",
+      "content": "The metric label was copied from the payment-v1 service template without updating the service name.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps022-l1",
+      "tier": "long_term",
+      "content": "When deploying a new service version, verify all metric label values are updated in the service config.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps022-s2",
+      "tier": "session",
+      "content": "Alerting rules use the same service='payment-v2' label; incorrect labels also mean no alerts fire for payment-v2.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps022-n01",
+      "tier": "project",
+      "content": "Prometheus is used for metrics collection with a 15-day retention period.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps022-n02",
+      "tier": "session",
+      "content": "Session 5 note: the monitoring team updated the SLO dashboards to include the new payment-v2 service.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps022-n03",
+      "tier": "long_term",
+      "content": "Old practice: services used generic service labels before the label convention was standardized.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps022-n04",
+      "tier": "project",
+      "content": "Grafana dashboards use PromQL queries with label matchers to filter metrics by service.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps022-n05",
+      "tier": "session",
+      "content": "Session 9 note: a metric label convention document was published for all new services.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps022-n06",
+      "tier": "project",
+      "content": "Old metrics guide: the payment-v1 service used service='payment' as the canonical label.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps022-n07",
+      "tier": "long_term",
+      "content": "New service deployments must include a metric label audit step before enabling production traffic.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps022-n08",
+      "tier": "session",
+      "content": "Session 7 note: the SRE team added recording rules to pre-aggregate high-cardinality metrics.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps022-n09",
+      "tier": "project",
+      "content": "The label convention document specifies service names must use the full versioned name (e.g., payment-v2).",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps022-n10",
+      "tier": "session",
+      "content": "A Prometheus alert test in session 4 confirmed all alerts fire correctly for the payment-v1 service.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps022-n11",
+      "tier": "project",
+      "content": "Metric relabeling rules in the Prometheus scrape config normalize some labels at collection time.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps022-n12",
+      "tier": "long_term",
+      "content": "When templating new services from existing ones, create a service-name checklist to prevent label copying errors.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps022-n13",
+      "tier": "session",
+      "content": "Session 12 note: the alerting team migrated alerts from Prometheus Alertmanager to Grafana Alerting.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps022-n14",
+      "tier": "project",
+      "content": "Old Prometheus config: service labels were added as Kubernetes annotations before the label convention was set.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps022-n15",
+      "tier": "project",
+      "content": "The Prometheus federation endpoint aggregates metrics from all clusters for the global dashboard.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps022-s1",
+    "tps022-p1",
+    "tps022-p2",
+    "tps022-l1",
+    "tps022-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps022-n01",
+    "tps022-n02",
+    "tps022-n03",
+    "tps022-n04",
+    "tps022-n05",
+    "tps022-n06",
+    "tps022-n07",
+    "tps022-n08",
+    "tps022-n09",
+    "tps022-n10",
+    "tps022-n11",
+    "tps022-n12",
+    "tps022-n13",
+    "tps022-n14",
+    "tps022-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps022-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps022-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps022-p2",
+        "tps022-l1",
+        "tps022-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

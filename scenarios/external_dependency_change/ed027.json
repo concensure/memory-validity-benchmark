@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed027",
+  "family": "external_dependency_change",
+  "split": "holdout",
+  "task": "Fix the Terraform provider after HashiCorp deprecated the aws_iam_role inline policy attribute.",
+  "repo_state_fingerprint": "ed027-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "ed027-s1",
+      "tier": "session",
+      "content": "Terraform plan fails with deprecation error; AWS Terraform provider 5.0 removed the inline_policy attribute.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed027-p1",
+      "tier": "project",
+      "content": "IAM role policies must now be managed with separate aws_iam_role_policy resources instead of inline_policy.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed027-p2",
+      "tier": "project",
+      "content": "The aws_iam_role_policies_exclusive resource replaces the managed_policy_arns attribute for policy management.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed027-l1",
+      "tier": "long_term",
+      "content": "When a Terraform provider removes an inline attribute, create separate resources before removing the old attribute.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed027-x1",
+      "tier": "project",
+      "content": "Terraform AWS provider note (session 9): use the inline_policy block within aws_iam_role to attach IAM policies.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: AWS Terraform provider 5.0 removed inline_policy; aws_iam_role_policy resources required"
+    },
+    {
+      "id": "ed027-x2",
+      "tier": "project",
+      "content": "Old Terraform note says inline_policy is the simplest way to attach policies directly within the role resource.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed027-s1",
+    "ed027-p1",
+    "ed027-p2",
+    "ed027-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed027-x1",
+    "ed027-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed027-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed027-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed027-p2",
+        "ed027-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

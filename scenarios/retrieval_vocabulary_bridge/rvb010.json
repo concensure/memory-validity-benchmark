@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rvb010",
+  "family": "retrieval_vocabulary_bridge",
+  "split": "holdout",
+  "task": "Deploy a new version of checkout-svc without causing any downtime for users during the deployment.",
+  "repo_state_fingerprint": "rvb010-repo-v1",
+  "token_budget": 197,
+  "candidate_memories": [
+    {
+      "id": "rvb010-p1",
+      "tier": "project",
+      "content": "checkout-svc uses blue-green deployment: the new version is deployed to the green slot; traffic is shifted from blue to green only after green passes health checks.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb010-l1",
+      "tier": "long_term",
+      "content": "Blue-green deployment achieves zero-downtime by keeping the old version live until the new version is fully healthy; rollback is instant by shifting traffic back to blue.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb010-p2",
+      "tier": "project",
+      "content": "Traffic shift is controlled via the checkout-svc-weight annotation on the Istio VirtualService; set green weight to 100 after green is healthy for 5 min.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rvb010-x1",
+      "tier": "project",
+      "content": "Kubernetes rolling update strategy updates pods one by one and can cause brief errors if readiness probes are misconfigured.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: rolling update is a different deployment strategy"
+    },
+    {
+      "id": "rvb010-x2",
+      "tier": "long_term",
+      "content": "Canary deployment sends a small percentage of traffic to the new version first; this is a variant of blue-green but not what checkout-svc uses.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: canary is a related but distinct approach"
+    },
+    {
+      "id": "rvb010-x3",
+      "tier": "session",
+      "content": "checkout-svc v2.5 is staged in the green slot and has passed all smoke tests.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rvb010-p1",
+    "rvb010-l1",
+    "rvb010-p2"
+  ],
+  "gold_invalid_ids": [
+    "rvb010-x1",
+    "rvb010-x2",
+    "rvb010-x3"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rvb010-p1",
+        "rvb010-l1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rvb010-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

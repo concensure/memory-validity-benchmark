@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "oc005",
+  "family": "openclaw_style",
+  "split": "public",
+  "task": "Perform a bounded patch and validation run.",
+  "repo_state_fingerprint": "oc005-repo-v1",
+  "token_budget": 235,
+  "candidate_memories": [
+    {
+      "id": "oc005-s1",
+      "tier": "session",
+      "content": "Immediate order is inspect target module, patch only owned files, then run focused tests.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "oc005-p1",
+      "tier": "project",
+      "content": "Project memory says verification should stay scoped to touched behavior before full-suite runs.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "oc005-x1",
+      "tier": "session",
+      "content": "Contradicted note says broad cleanup commands are the fastest validation path.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "oc005-s1",
+    "oc005-p1"
+  ],
+  "gold_invalid_ids": [
+    "oc005-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "oc005-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "oc005-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

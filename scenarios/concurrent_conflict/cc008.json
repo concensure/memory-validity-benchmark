@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc008",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Continue writing to the shared audit log after confirming the write lock is held.",
+  "repo_state_fingerprint": "cc008-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "cc008-s1",
+      "tier": "session",
+      "content": "Audit-Writer-A holds the write lock for the audit log partition and is flushing 200 events.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc008-p1",
+      "tier": "project",
+      "content": "Audit log write locks prevent interleaved writes that would corrupt the sequential event record.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc008-p2",
+      "tier": "project",
+      "content": "Audit-Writer-A has flushed events 1 through 140; the partition lock is still held.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc008-l1",
+      "tier": "long_term",
+      "content": "When two agents claim an audit partition write lock, check lock timestamps before proceeding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc008-x1",
+      "tier": "session",
+      "content": "Audit-Writer-B claims it also holds the write lock for the same partition since 13:05.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents both claim write lock ownership for the same audit log partition"
+    },
+    {
+      "id": "cc008-x2",
+      "tier": "project",
+      "content": "Old logging note says audit log write collisions are resolved automatically by the append-only engine.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc008-s1",
+    "cc008-p1",
+    "cc008-p2",
+    "cc008-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc008-x1",
+    "cc008-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc008-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc008-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc008-p2",
+        "cc008-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

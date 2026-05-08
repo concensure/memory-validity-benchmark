@@ -1,0 +1,82 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "mabp002",
+  "family": "multi_agent_belief_propagation",
+  "split": "public",
+  "task": "Coder agent: implement the product schema update for checkout-svc. The reviewer issued a correction at step 8; use the corrected schema.",
+  "repo_state_fingerprint": "mabp002-repo-v1",
+  "token_budget": 222,
+  "candidate_memories": [
+    {
+      "id": "mabp002-s1",
+      "tier": "session",
+      "content": "[reviewer at step 8] CORRECTION: product schema field is unit_price_cents (integer), not unit_price (float). Float representation causes rounding errors in payment calculations.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "creating_agent: reviewer; correction_step: 8"
+    },
+    {
+      "id": "mabp002-p1",
+      "tier": "project",
+      "content": "All monetary values in checkout-svc must be stored as integer cents to prevent floating-point rounding; use unit_price_cents, not unit_price.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "mabp002-p2",
+      "tier": "project",
+      "content": "The Product struct is in checkout-svc/models/product.go; update the struct definition and all usages.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp002-l1",
+      "tier": "long_term",
+      "content": "Money handling: always use integer cents for storage and arithmetic; convert to decimal only for display.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp002-x1",
+      "tier": "session",
+      "content": "[architect at step 3] Product schema: unit_price field is type float64 for price precision.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "creating_agent: architect; contradicted_by: reviewer correction at step 8"
+    }
+  ],
+  "gold_valid_ids": [
+    "mabp002-s1",
+    "mabp002-p1",
+    "mabp002-p2",
+    "mabp002-l1"
+  ],
+  "gold_invalid_ids": [
+    "mabp002-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "mabp002-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "mabp002-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "mabp002-p2",
+        "mabp002-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.07,
+    "ideal": 1.0
+  }
+}

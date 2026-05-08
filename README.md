@@ -72,28 +72,38 @@ memory-validity-index/
 
 ## Current Draft Status
 
-Current local draft scenario pack:
+Current active local corpus:
 
-- `150` total scenarios
-- `100` public
-- `50` holdout
-- `10` families
-- `15` scenarios per family
+- `525` active scenarios
+- `360` public
+- `165` holdout
+- `24` active families
+- `75` archived scenarios retained outside the active corpus
 
-Current families:
+The current public and holdout splits are intentionally frozen by scenario metadata and manifest, not by assuming perfectly even family sizes.
 
-- `branch_merge`
-- `coding_bugfix`
-- `consensus_promotion`
-- `handoff_resume`
-- `multi_agent`
-- `neutral_minimal`
-- `openclaw_style`
-- `project_isolation`
-- `refactor`
-- `stale_memory`
+Historical MVP launch manifests remain in:
 
-The scenario pack is still under review and should remain unpublished until the final scenario release decision is made.
+- `governance/packs/public_alpha_manifest.json`
+- `governance/packs/holdout_alpha_manifest.json`
+
+Those alpha manifests are useful for regression continuity, but they do not represent the current active corpus breadth.
+
+## Public Demo Pack
+
+The repository now also includes a bounded public demonstration pack:
+
+- `governance/packs/public_demo_100_manifest.json`
+
+This pack is not a new scoring contract and not a special-case `omnymem` track. It is a neutral, broad public subset intended for:
+
+- credible public demonstrations
+- faster regression runs than the full `360`-scenario public set
+- coverage across retrieval, injection, long-horizon, and multi-agent families
+
+Selection policy and rationale are documented in:
+
+- `governance/public_demo_policy.md`
 
 ## Running The Benchmark
 
@@ -104,12 +114,28 @@ Example:
 ```powershell
 python harness/runner.py --scenario-root scenarios --system baseline:heuristic_tiered --out reports/generated/heuristic.json
 python harness/scorer.py --scenario-root scenarios --run reports/generated/heuristic.json
+python harness/scorer.py --scenario-root scenarios --run reports/generated/heuristic.json --out reports/generated/heuristic_report.json
+python tools/verify_benchmark_contracts.py --scenario-root scenarios
+python tools/estimate_pack_tokens.py --scenario-root scenarios --manifest governance/packs/public_demo_100_manifest.json
 ```
 
 The scorer accepts either:
 
-- a bundle file containing `{"runs":[...]}`
+- a bundle file conforming to `benchmark_spec/bundle_schema.json`
 - a single run artifact emitted by an external system
+
+Scenario and run contracts are versioned in:
+
+- `benchmark_spec/scenario_schema.json`
+- `benchmark_spec/run_schema.json`
+- `benchmark_spec/bundle_schema.json`
+- `benchmark_spec/report_schema.json`
+- `benchmark_spec/pack_schema.json`
+
+Frozen local launch pack manifests live in:
+
+- `governance/packs/public_alpha_manifest.json`
+- `governance/packs/holdout_alpha_manifest.json`
 
 ## Primary Evaluation Philosophy
 
@@ -137,6 +163,10 @@ Built-in baselines:
 - `baseline:session_only`
 - `baseline:heuristic_tiered`
 
+Reference disclosure metadata for these baselines lives in:
+
+- `baselines/baseline_manifest.json`
+
 ## Omnymem Integration
 
 `omnymem` can emit benchmark-compatible run artifacts through its benchmark export command. The benchmark consumes only the emitted run schema; it does not require direct knowledge of omnymem internals.
@@ -163,4 +193,6 @@ See also:
 
 - `benchmark_spec/long_horizon_multi_agent_shape.md`
 - `benchmark_spec/paragraph-review-and-gap-analysis.md`
+- `governance/public_demo_policy.md`
 - `governance/roadmap.md`
+- `governance/packs/`

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt026",
+  "family": "negative_transfer",
+  "split": "holdout",
+  "task": "Implement publish_message for the internal broker without using the external Kafka client.",
+  "repo_state_fingerprint": "nt026-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "nt026-s1",
+      "tier": "session",
+      "content": "Internal broker publish_message enqueues a message to an in-process channel with backpressure.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt026-p1",
+      "tier": "project",
+      "content": "Internal broker is synchronous within a single process; it does not serialize or network-transmit.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt026-p2",
+      "tier": "project",
+      "content": "Internal message delivery is guaranteed within the process; no at-least-once retry is needed.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt026-l1",
+      "tier": "long_term",
+      "content": "When publish_message spans internal channels and Kafka, verify the serialization requirement first.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt026-x1",
+      "tier": "project",
+      "content": "Kafka client: publish_message serializes the message to Avro and produces it to a named topic.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: Kafka's networked, serialized produce semantics are wrong for an in-process channel"
+    },
+    {
+      "id": "nt026-x2",
+      "tier": "project",
+      "content": "Old messaging note says publish_message should eventually be backed by Kafka for durability.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt026-s1",
+    "nt026-p1",
+    "nt026-p2",
+    "nt026-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt026-x1",
+    "nt026-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt026-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt026-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt026-p2",
+        "nt026-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

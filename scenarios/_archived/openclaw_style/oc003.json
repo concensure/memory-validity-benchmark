@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "oc003",
+  "family": "openclaw_style",
+  "split": "public",
+  "task": "Complete a repo edit with strict transport compatibility.",
+  "repo_state_fingerprint": "oc003-repo-v1",
+  "token_budget": 250,
+  "candidate_memories": [
+    {
+      "id": "oc003-s1",
+      "tier": "session",
+      "content": "Machine-facing clients depend on the exact JSON keys returned by the command protocol.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "oc003-p1",
+      "tier": "project",
+      "content": "Project memory says transport parity matters more than adding a shortcut endpoint.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "oc003-x1",
+      "tier": "session",
+      "content": "Old suggestion says editor mode can return plain text because humans read it anyway.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "oc003-s1",
+    "oc003-p1"
+  ],
+  "gold_invalid_ids": [
+    "oc003-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "oc003-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "oc003-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

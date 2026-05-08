@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "lha011",
+  "family": "long_horizon_accumulation",
+  "split": "public",
+  "task": "Step 3 of 30 \u2014 long-running platform refactor: define the service discovery strategy for the new microservices. Steps 1\u20132 complete. No decisions have been reversed yet; all memories are clean.",
+  "repo_state_fingerprint": "lha011-repo-v1",
+  "token_budget": 232,
+  "candidate_memories": [
+    {
+      "id": "lha011-s1",
+      "tier": "session",
+      "content": "Step 2 output: service mesh (Istio) chosen for service discovery; Consul considered and rejected due to operational overhead.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 2"
+    },
+    {
+      "id": "lha011-p1",
+      "tier": "project",
+      "content": "All new microservices must register with the Istio service registry via standard Kubernetes Service resources; no manual registration required.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 2"
+    },
+    {
+      "id": "lha011-p2",
+      "tier": "project",
+      "content": "Service naming convention: {service-name}.{namespace}.svc.cluster.local; use short names within the same namespace.",
+      "validity": "valid",
+      "bucket": "supporting",
+      "notes": "created_at_step: 1"
+    },
+    {
+      "id": "lha011-l1",
+      "tier": "long_term",
+      "content": "Service discovery strategy is a platform-wide decision; changes require an ADR and platform team approval.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha011-x1",
+      "tier": "session",
+      "content": "Step 1 shortlist: Consul, Istio, and etcd-based custom discovery were evaluated.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 2; evaluation complete; Istio selected"
+    }
+  ],
+  "gold_valid_ids": [
+    "lha011-s1",
+    "lha011-p1",
+    "lha011-p2",
+    "lha011-l1"
+  ],
+  "gold_invalid_ids": [
+    "lha011-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "lha011-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "lha011-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "lha011-p2",
+        "lha011-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.06,
+    "ideal": 1.0
+  }
+}

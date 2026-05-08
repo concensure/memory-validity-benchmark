@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cb005",
+  "family": "coding_bugfix",
+  "split": "public",
+  "task": "Fix websocket reconnect loop after auth refresh.",
+  "repo_state_fingerprint": "cb005-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "cb005-s1",
+      "tier": "session",
+      "content": "Session trace shows reconnect loop starts only after token refresh returns 401 once.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cb005-p1",
+      "tier": "project",
+      "content": "Project memory says reconnect backoff must reset only after successful authenticated subscribe.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cb005-x1",
+      "tier": "session",
+      "content": "Outdated comment says reconnect loop is caused by DNS cache expiry.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cb005-s1",
+    "cb005-p1"
+  ],
+  "gold_invalid_ids": [
+    "cb005-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cb005-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cb005-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

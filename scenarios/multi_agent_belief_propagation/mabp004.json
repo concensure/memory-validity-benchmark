@@ -1,0 +1,82 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "mabp004",
+  "family": "multi_agent_belief_propagation",
+  "split": "public",
+  "task": "Worker agent: configure the default CORS policy for the new public API. The security reviewer overrode the initial default at step 7.",
+  "repo_state_fingerprint": "mabp004-repo-v1",
+  "token_budget": 220,
+  "candidate_memories": [
+    {
+      "id": "mabp004-s1",
+      "tier": "session",
+      "content": "[security-reviewer at step 7] OVERRIDE: CORS must use an explicit allowlist of trusted origins; the wildcard (*) default proposed at step 3 is not permitted for authenticated endpoints.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "creating_agent: security-reviewer; override_step: 7"
+    },
+    {
+      "id": "mabp004-p1",
+      "tier": "project",
+      "content": "Approved CORS origins for the public API are: https://app.company.com, https://admin.company.com; configure in api-gateway/config/cors.yaml.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "mabp004-p2",
+      "tier": "project",
+      "content": "CORS preflight cache duration is set to 3600 s; do not reduce this for performance-sensitive endpoints.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp004-l1",
+      "tier": "long_term",
+      "content": "Wildcard CORS is never permitted for authenticated APIs; it allows any origin to make credentialed requests.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp004-x1",
+      "tier": "session",
+      "content": "[developer at step 3] Default CORS policy for new API: use wildcard (*) for simplicity during initial development.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "creating_agent: developer; contradicted_by: security-reviewer override at step 7"
+    }
+  ],
+  "gold_valid_ids": [
+    "mabp004-s1",
+    "mabp004-p1",
+    "mabp004-p2",
+    "mabp004-l1"
+  ],
+  "gold_invalid_ids": [
+    "mabp004-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "mabp004-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "mabp004-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "mabp004-p2",
+        "mabp004-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.07,
+    "ideal": 1.0
+  }
+}

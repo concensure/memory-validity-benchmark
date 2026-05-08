@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "hr004",
+  "family": "handoff_resume",
+  "split": "public",
+  "task": "Resume work after interrupted graph API implementation.",
+  "repo_state_fingerprint": "hr004-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "hr004-s1",
+      "tier": "session",
+      "content": "Existing graph model already covers supersedes, cites, validations, consensus, and promotions.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "hr004-p1",
+      "tier": "project",
+      "content": "Project memory says graph additions must be read-only and not alter persistence.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "hr004-x1",
+      "tier": "session",
+      "content": "Obsolete task note says graph edges should be denormalized into the memory table first.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "hr004-s1",
+    "hr004-p1"
+  ],
+  "gold_invalid_ids": [
+    "hr004-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "hr004-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "hr004-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

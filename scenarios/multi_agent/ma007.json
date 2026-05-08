@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ma007",
+  "family": "multi_agent",
+  "split": "public",
+  "task": "Coordinate architect and coder during long-term promotion review.",
+  "repo_state_fingerprint": "ma007-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "ma007-s1",
+      "tier": "session",
+      "content": "Architect supplies promotion approvals while coder must not treat pending promotions as trusted long-term memory.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ma007-p1",
+      "tier": "project",
+      "content": "Project memory says pending or disputed promotions stay out of authoritative context packs.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ma007-x1",
+      "tier": "session",
+      "content": "Stale note says any high-confidence project memory can be treated like long-term memory before approval.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ma007-s1",
+    "ma007-p1"
+  ],
+  "gold_invalid_ids": [
+    "ma007-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "ma007-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ma007-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

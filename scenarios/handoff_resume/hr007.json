@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "hr007",
+  "family": "handoff_resume",
+  "split": "public",
+  "task": "Resume a repo automation phase after watcher work paused.",
+  "repo_state_fingerprint": "hr007-repo-v1",
+  "token_budget": 165,
+  "candidate_memories": [
+    {
+      "id": "hr007-s1",
+      "tier": "session",
+      "content": "Current checkpoint says watcher integration is optional and should not change startup defaults.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "hr007-p1",
+      "tier": "project",
+      "content": "Project memory says resumed work should focus on optional triggers, not mandatory daemon hooks.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "hr007-x1",
+      "tier": "session",
+      "content": "Stale handoff note says watcher startup should now be required before orchestration can run.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "hr007-s1",
+    "hr007-p1"
+  ],
+  "gold_invalid_ids": [
+    "hr007-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "hr007-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "hr007-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

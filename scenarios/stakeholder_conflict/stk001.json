@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk001",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Implement the authentication change per the tech lead decision, not the PM scope request.",
+  "repo_state_fingerprint": "stk001-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "stk001-s1",
+      "tier": "session",
+      "content": "Tech lead issued a binding decision in session 18: disable password-based auth and require SSO for all users.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk001-p1",
+      "tier": "project",
+      "content": "Tech lead decisions on authentication architecture have priority over PM scope requests by team policy.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk001-p2",
+      "tier": "project",
+      "content": "The auth migration roadmap (approved by tech lead) requires SSO enforcement before the Q3 release.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk001-l1",
+      "tier": "long_term",
+      "content": "When a tech lead and PM conflict on technical architecture, apply the tech lead decision and document the PM scope note.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk001-x1",
+      "tier": "project",
+      "content": "PM instruction (session 19): keep password-based auth available alongside SSO to reduce churn from power users.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM scope instruction conflicts with binding tech lead authentication architecture decision"
+    },
+    {
+      "id": "stk001-x2",
+      "tier": "project",
+      "content": "Old compromise note says a hybrid auth approach was discussed but not formally approved by the tech lead.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk001-s1",
+    "stk001-p1",
+    "stk001-p2",
+    "stk001-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk001-x1",
+    "stk001-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk001-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk001-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk001-p2",
+        "stk001-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

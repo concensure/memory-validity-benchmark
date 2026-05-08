@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd027",
+  "family": "preference_drift",
+  "split": "holdout",
+  "task": "Implement event handling using the updated preference for event sourcing over direct DB writes.",
+  "repo_state_fingerprint": "pd027-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "pd027-s1",
+      "tier": "session",
+      "content": "User stated in session 49: move all state mutations to event sourcing; no direct DB writes for domain changes.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd027-p1",
+      "tier": "project",
+      "content": "State mutation policy (updated session 49): all domain state changes must be recorded as events first.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd027-p2",
+      "tier": "project",
+      "content": "Direct DB write patterns for domain changes in files touched during this task should be flagged for migration.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd027-l1",
+      "tier": "long_term",
+      "content": "When state mutation preference changes, implement the event store schema before migrating write code.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd027-x1",
+      "tier": "project",
+      "content": "State mutation policy (session 19): write domain changes directly to the database for simplicity.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old direct-write preference superseded by event sourcing mandate in session 49"
+    },
+    {
+      "id": "pd027-x2",
+      "tier": "project",
+      "content": "Old architecture note says direct DB writes were chosen because event sourcing adds implementation complexity.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd027-s1",
+    "pd027-p1",
+    "pd027-p2",
+    "pd027-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd027-x1",
+    "pd027-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd027-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd027-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd027-p2",
+        "pd027-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

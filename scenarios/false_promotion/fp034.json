@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp034",
+  "family": "false_promotion",
+  "split": "holdout",
+  "task": "Implement the alert routing fix using session evidence, not the promoted on-call rule.",
+  "repo_state_fingerprint": "fp034-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "fp034-s1",
+      "tier": "session",
+      "content": "Current incident review shows the promoted 'route all P1 alerts to the primary on-call engineer' rule causes overload.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp034-p1",
+      "tier": "project",
+      "content": "Project SRE analysis shows P1 alerts should be split by service domain to distribute incident load across teams.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp034-p2",
+      "tier": "project",
+      "content": "Correct routing is: API P1 alerts to API on-call, DB P1 alerts to DB on-call, Infra P1 alerts to infra on-call.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp034-l1",
+      "tier": "long_term",
+      "content": "When session incident reviews show on-call overload from a promoted rule, demote and implement domain routing.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp034-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 4): route all P1 alerts to the single primary on-call engineer.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted single-engineer routing was based on a small team; growth requires domain-specific on-call"
+    },
+    {
+      "id": "fp034-x2",
+      "tier": "project",
+      "content": "Old promotion note says single on-call routing was confirmed by the SRE team as the simplest incident response model.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp034-s1",
+    "fp034-p1",
+    "fp034-p2",
+    "fp034-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp034-x1",
+    "fp034-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp034-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp034-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp034-p2",
+        "fp034-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

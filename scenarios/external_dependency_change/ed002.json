@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed002",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the AWS S3 client after AWS deprecated the path-style URL addressing for new buckets.",
+  "repo_state_fingerprint": "ed002-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "ed002-s1",
+      "tier": "session",
+      "content": "S3 client is receiving 400 errors for new buckets created after December 2023; virtual-hosted addressing is required.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed002-p1",
+      "tier": "project",
+      "content": "AWS S3 buckets created after December 2023 must use virtual-hosted addressing (bucket.s3.amazonaws.com).",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed002-p2",
+      "tier": "project",
+      "content": "The S3 client config must set force_path_style to false for all new bucket operations.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed002-l1",
+      "tier": "long_term",
+      "content": "When AWS deprecates a URL style, audit all S3 client configurations before adding new bucket operations.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed002-x1",
+      "tier": "project",
+      "content": "S3 client note (session 5): always set force_path_style=true for compatibility with older S3-compatible endpoints.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: S3 path-style URL addressing deprecated for buckets created after December 2023"
+    },
+    {
+      "id": "ed002-x2",
+      "tier": "project",
+      "content": "Old S3 note says path-style addressing was required for compatibility with non-AWS S3 endpoints in the stack.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed002-s1",
+    "ed002-p1",
+    "ed002-p2",
+    "ed002-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed002-x1",
+    "ed002-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed002-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed002-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed002-p2",
+        "ed002-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

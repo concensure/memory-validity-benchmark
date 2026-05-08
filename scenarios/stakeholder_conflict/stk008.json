@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk008",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Use the data retention policy from legal, not the PM's analytics data extension request.",
+  "repo_state_fingerprint": "stk008-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "stk008-s1",
+      "tier": "session",
+      "content": "Legal issued a binding data retention limit in session 12: user behavioral data must be deleted after 90 days.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk008-p1",
+      "tier": "project",
+      "content": "Legal data retention policies override PM analytics retention requests in all jurisdictions we operate.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk008-p2",
+      "tier": "project",
+      "content": "The 90-day limit was set to comply with GDPR Article 5(1)(e) storage limitation principle.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk008-l1",
+      "tier": "long_term",
+      "content": "When legal retention policy conflicts with a PM's extended analytics request, enforce the legal limit.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk008-x1",
+      "tier": "project",
+      "content": "PM instruction (session 13): extend behavioral data retention to 18 months for better cohort analysis.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM retention extension conflicts with binding legal GDPR 90-day storage limitation"
+    },
+    {
+      "id": "stk008-x2",
+      "tier": "project",
+      "content": "Old analytics note says 18-month retention was approved for anonymized cohort data in a prior legal review.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk008-s1",
+    "stk008-p1",
+    "stk008-p2",
+    "stk008-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk008-x1",
+    "stk008-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk008-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk008-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk008-p2",
+        "stk008-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

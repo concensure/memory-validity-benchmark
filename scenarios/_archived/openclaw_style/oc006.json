@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "oc006",
+  "family": "openclaw_style",
+  "split": "holdout",
+  "task": "Run a multi-agent coding workflow with no revert policy.",
+  "repo_state_fingerprint": "oc006-repo-v1",
+  "token_budget": 255,
+  "candidate_memories": [
+    {
+      "id": "oc006-s1",
+      "tier": "session",
+      "content": "Existing workspace may be dirty and unrelated edits must not be reverted.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "oc006-p1",
+      "tier": "project",
+      "content": "Project memory says collaborators must adapt to concurrent edits instead of resetting the tree.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "oc006-x1",
+      "tier": "session",
+      "content": "Stale memory says hard reset is acceptable when the worktree becomes confusing.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "oc006-s1",
+    "oc006-p1"
+  ],
+  "gold_invalid_ids": [
+    "oc006-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "oc006-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "oc006-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

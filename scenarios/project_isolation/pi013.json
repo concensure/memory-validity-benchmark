@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pi013",
+  "family": "project_isolation",
+  "split": "holdout",
+  "task": "Avoid reusing one repo's replay log field names in another repo's audit format.",
+  "repo_state_fingerprint": "pi013-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "pi013-s1",
+      "tier": "session",
+      "content": "The current repo uses different audit field names and inherited assumptions would break validation.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pi013-p1",
+      "tier": "project",
+      "content": "Project memory says replay schemas are project contracts, not global conventions unless explicitly standardized.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pi013-x1",
+      "tier": "session",
+      "content": "Foreign note says audit field names are close enough across repos to treat as interchangeable.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pi013-s1",
+    "pi013-p1"
+  ],
+  "gold_invalid_ids": [
+    "pi013-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "pi013-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pi013-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

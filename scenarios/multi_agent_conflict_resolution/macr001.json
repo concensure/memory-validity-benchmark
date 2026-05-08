@@ -1,0 +1,68 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "macr001",
+  "family": "multi_agent_conflict_resolution",
+  "split": "public",
+  "task": "Configure the orders API inbound rate limit. Resolution strategy: recency_wins \u2014 the most recently written memory takes precedence when facts conflict.",
+  "repo_state_fingerprint": "macr001-repo-v1",
+  "token_budget": 210,
+  "candidate_memories": [
+    {
+      "id": "macr001-s1",
+      "tier": "session",
+      "content": "[ops-agent, written 14:32 UTC] orders API inbound rate limit updated to 200 req/s per IP following load test validation. Old limit of 100 req/s was causing unnecessary 429s during peak traffic.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "resolution: recency_wins; written 14:32 UTC; wins"
+    },
+    {
+      "id": "macr001-p1",
+      "tier": "project",
+      "content": "Rate limiter config: api-gateway/config/ratelimit.yaml, key per_ip_rps under orders_api; restart gateway pod after change.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr001-l1",
+      "tier": "long_term",
+      "content": "Rate limit changes must be documented in the API capacity register at docs/capacity.md before deployment.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr001-x1",
+      "tier": "project",
+      "content": "[architect-agent, written 09:10 UTC] orders API inbound rate limit is 100 req/s per IP per the 2025 capacity plan.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "resolution: recency_loses; written 09:10 UTC; superseded by macr001-s1 at 14:32 UTC"
+    }
+  ],
+  "gold_valid_ids": [
+    "macr001-s1",
+    "macr001-p1",
+    "macr001-l1"
+  ],
+  "gold_invalid_ids": [
+    "macr001-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "macr001-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "macr001-p1",
+        "macr001-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

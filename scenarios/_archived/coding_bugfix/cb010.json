@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cb010",
+  "family": "coding_bugfix",
+  "split": "holdout",
+  "task": "Fix review queue ordering after validation sweep updates stale items.",
+  "repo_state_fingerprint": "cb010-repo-v1",
+  "token_budget": 210,
+  "candidate_memories": [
+    {
+      "id": "cb010-s1",
+      "tier": "session",
+      "content": "Review queue now hides the most recent stale items after validation updates their timestamps.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cb010-p1",
+      "tier": "project",
+      "content": "Project memory says review ordering should follow latest validation activity, not original creation order.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cb010-x1",
+      "tier": "session",
+      "content": "Old memory says review queue must always sort by original creation time regardless of validation events.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cb010-s1",
+    "cb010-p1"
+  ],
+  "gold_invalid_ids": [
+    "cb010-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cb010-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cb010-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

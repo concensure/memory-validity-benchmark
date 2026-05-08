@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "bm015",
+  "family": "branch_merge",
+  "split": "holdout",
+  "task": "Handle merge-complete replay when renamed audit keys broke older automation memory.",
+  "repo_state_fingerprint": "bm015-repo-v1",
+  "token_budget": 235,
+  "candidate_memories": [
+    {
+      "id": "bm015-s1",
+      "tier": "session",
+      "content": "Merge completion renamed audit keys and older automation memories now point to fields that no longer exist.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "bm015-p1",
+      "tier": "project",
+      "content": "Project memory says merge-induced contract changes should invalidate stale automation assumptions immediately.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "bm015-x1",
+      "tier": "session",
+      "content": "Old note says replay tools can keep supporting old and new audit keys indefinitely without cleanup.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "bm015-s1",
+    "bm015-p1"
+  ],
+  "gold_invalid_ids": [
+    "bm015-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "bm015-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "bm015-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd020",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Implement new authentication using the updated preference for JWTs over session cookies.",
+  "repo_state_fingerprint": "pd020-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "pd020-s1",
+      "tier": "session",
+      "content": "User stated in session 25: switch all authentication from session cookies to signed JWTs immediately.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd020-p1",
+      "tier": "project",
+      "content": "Authentication policy (updated session 25): JWTs are required for all new authentication flows.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd020-p2",
+      "tier": "project",
+      "content": "Session cookie-based auth in files touched during this task should be migrated to JWT issuance.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd020-l1",
+      "tier": "long_term",
+      "content": "When auth mechanism preference changes, update the token verification middleware before changing issue logic.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd020-x1",
+      "tier": "project",
+      "content": "Authentication policy (session 7): use session cookies for authentication to leverage browser security defaults.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old session cookie preference superseded by JWT mandate in session 25"
+    },
+    {
+      "id": "pd020-x2",
+      "tier": "project",
+      "content": "Old security note says session cookies were chosen to avoid JWT key management complexity.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd020-s1",
+    "pd020-p1",
+    "pd020-p2",
+    "pd020-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd020-x1",
+    "pd020-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd020-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd020-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd020-p2",
+        "pd020-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

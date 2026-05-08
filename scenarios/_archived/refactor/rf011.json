@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rf011",
+  "family": "refactor",
+  "split": "public",
+  "task": "Extract replay event formatting from scorer aggregation.",
+  "repo_state_fingerprint": "rf011-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "rf011-s1",
+      "tier": "session",
+      "content": "Replay formatting should move out of scoring without changing metric semantics.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rf011-p1",
+      "tier": "project",
+      "content": "Project memory says scorer logic and report rendering must stay separate for deterministic benchmarking.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rf011-x1",
+      "tier": "session",
+      "content": "Old refactor note says it is simpler to let report formatters compute some scores inline.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rf011-s1",
+    "rf011-p1"
+  ],
+  "gold_invalid_ids": [
+    "rf011-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "rf011-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rf011-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed013",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the Docker registry client after DockerHub changed the image manifest schema.",
+  "repo_state_fingerprint": "ed013-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "ed013-s1",
+      "tier": "session",
+      "content": "Image pull operations fail with 404; DockerHub switched to the OCI image manifest format in November 2023.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed013-p1",
+      "tier": "project",
+      "content": "Docker registry client must send Accept: application/vnd.oci.image.manifest.v1+json headers.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed013-p2",
+      "tier": "project",
+      "content": "OCI manifests require a mediaType field in every layer descriptor; Docker manifest v2 did not require it.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed013-l1",
+      "tier": "long_term",
+      "content": "When a registry changes its manifest schema, update the Accept header and layer parsing before pulling images.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed013-x1",
+      "tier": "project",
+      "content": "Docker registry note (session 5): use the Docker manifest v2 schema with Accept: application/vnd.docker.distribution.manifest.v2+json.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: DockerHub migrated to OCI image manifest format; v2 manifest schema is deprecated"
+    },
+    {
+      "id": "ed013-x2",
+      "tier": "project",
+      "content": "Old container note says the Docker manifest v2 format is universally supported across all registries.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed013-s1",
+    "ed013-p1",
+    "ed013-p2",
+    "ed013-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed013-x1",
+    "ed013-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed013-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed013-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed013-p2",
+        "ed013-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

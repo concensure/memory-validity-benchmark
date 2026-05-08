@@ -1,0 +1,66 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iibo009",
+  "family": "injection_intra_bucket_order",
+  "split": "holdout",
+  "task": "Hand off the partially completed infrastructure audit to the next agent for continuation.",
+  "repo_state_fingerprint": "iibo009-repo-v1",
+  "token_budget": 208,
+  "candidate_memories": [
+    {
+      "id": "iibo009-p1",
+      "tier": "project",
+      "content": "Handoff records must include a blocking_issues field; if any blocker is unresolved, the next agent must not proceed past the blocked step without human review. Proceeding past a blocker without review has caused data loss in prior handoffs.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iibo009-s1",
+      "tier": "session",
+      "content": "Audit completed steps 1\u20139; step 10 (IAM role review) is blocked: 3 roles have overlapping permissions requiring human adjudication before continuation.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iibo009-p2",
+      "tier": "project",
+      "content": "Handoff record schema is in agent_protocol/handoff_schema.json; write to shared-state key audit/infra/handoff before session end.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iibo009-l1",
+      "tier": "long_term",
+      "content": "Infrastructure audits are high-risk; all handoffs in audit workflows require a human confirmation step before the receiving agent proceeds.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iibo009-p1",
+    "iibo009-s1",
+    "iibo009-p2",
+    "iibo009-l1"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "iibo009-p1",
+        "iibo009-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iibo009-p2",
+        "iibo009-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

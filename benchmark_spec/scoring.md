@@ -70,3 +70,18 @@ If a metric can be verified by:
 then that method should be used instead of an LLM judge.
 
 This formula and these rules are versioned and must remain public.
+
+## Machine-Readable Report Contract
+
+Scoring output must be published in a versioned machine-readable report shape:
+
+- `benchmark_spec/report_schema.json`
+
+At minimum, each report must include:
+
+- scoring version
+- scored run count
+- whether holdouts were included
+- average values for each public metric
+- per-family `mvi_composite` summary
+- per-scenario score rows

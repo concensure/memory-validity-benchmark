@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps035",
+  "family": "token_pressure_scale",
+  "split": "holdout",
+  "task": "Fix the broken pagination after the cursor was not URL-encoded in the response.",
+  "repo_state_fingerprint": "tps035-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps035-s1",
+      "tier": "session",
+      "content": "Pagination fails for records with special characters in the sort key because the cursor is not URL-encoded.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps035-p1",
+      "tier": "project",
+      "content": "The pagination cursor must be base64-encoded before inclusion in the response to handle all sort key values.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps035-p2",
+      "tier": "project",
+      "content": "The cursor was changed from opaque base64 to a plain-text format in the last sprint for easier debugging.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps035-l1",
+      "tier": "long_term",
+      "content": "Pagination works correctly for records with alphanumeric sort keys; only special characters cause failure.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps035-s2",
+      "tier": "session",
+      "content": "Session 2 note: the QA team documented pagination failures for product names containing ampersands and hash characters.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps035-n01",
+      "tier": "project",
+      "content": "The API uses cursor-based pagination for all list endpoints to support large result sets.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps035-n02",
+      "tier": "session",
+      "content": "Session 6 note: the API team added documentation for the cursor pagination contract.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps035-n03",
+      "tier": "long_term",
+      "content": "Old practice: the cursor was an opaque token from the beginning to allow the server to change its encoding.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps035-n04",
+      "tier": "project",
+      "content": "The cursor encodes the sort field value and the record ID to support stable pagination under concurrent writes.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps035-n05",
+      "tier": "session",
+      "content": "Session 11 note: a client reported pagination failures for product names with forward slashes.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps035-n06",
+      "tier": "project",
+      "content": "Old cursor guide: base64 encoding was chosen to prevent clients from parsing cursor internals.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps035-n07",
+      "tier": "long_term",
+      "content": "Pagination cursors must be opaque and encoded to prevent clients from depending on their internal format.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps035-n08",
+      "tier": "session",
+      "content": "Session 4 note: the API team ran a cursor stability test across 1,000 concurrent pagination requests.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps035-n09",
+      "tier": "project",
+      "content": "The cursor has a 24-hour validity window after which it is rejected and pagination must restart.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps035-n10",
+      "tier": "session",
+      "content": "A pagination regression test in session 8 confirmed all standard ASCII sort keys paginate correctly.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps035-n11",
+      "tier": "project",
+      "content": "The list endpoints support sorting by name, created_at, and updated_at.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps035-n12",
+      "tier": "long_term",
+      "content": "When changing cursor encoding formats, maintain backward compatibility for in-flight pagination sessions.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps035-n13",
+      "tier": "session",
+      "content": "Session 9 note: the debugging team used the plain-text cursor format to trace a pagination bug.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps035-n14",
+      "tier": "project",
+      "content": "Old pagination guide: the plain-text cursor was introduced as a temporary debugging aid.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps035-n15",
+      "tier": "project",
+      "content": "Mobile clients cache the cursor for offline pagination and send it in subsequent requests.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps035-s1",
+    "tps035-p1",
+    "tps035-p2",
+    "tps035-l1",
+    "tps035-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps035-n01",
+    "tps035-n02",
+    "tps035-n03",
+    "tps035-n04",
+    "tps035-n05",
+    "tps035-n06",
+    "tps035-n07",
+    "tps035-n08",
+    "tps035-n09",
+    "tps035-n10",
+    "tps035-n11",
+    "tps035-n12",
+    "tps035-n13",
+    "tps035-n14",
+    "tps035-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps035-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps035-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps035-p2",
+        "tps035-l1",
+        "tps035-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

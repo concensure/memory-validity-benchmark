@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp017",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Implement the webhook fix using session evidence, not the promoted retry count rule.",
+  "repo_state_fingerprint": "fp017-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "fp017-s1",
+      "tier": "session",
+      "content": "Current webhook monitoring shows the promoted '5 retries with 1-hour spacing' overwhelms slow partner endpoints.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp017-p1",
+      "tier": "project",
+      "content": "Project partner feedback shows partners prefer a maximum of 3 retries with 5-minute, 30-minute, 2-hour spacing.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp017-p2",
+      "tier": "project",
+      "content": "Correct retry schedule is 3 retries at 5m, 30m, 2h rather than 5 retries at uniform 1-hour intervals.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp017-l1",
+      "tier": "long_term",
+      "content": "When session partner feedback contradicts a promoted retry rule, demote and implement the correct schedule.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp017-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 5): retry webhook deliveries up to 5 times with 1-hour spacing between retries.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted uniform 1-hour spacing was based on internal service behavior; partners need variable spacing"
+    },
+    {
+      "id": "fp017-x2",
+      "tier": "project",
+      "content": "Old promotion note says the 5-retry 1-hour spacing was confirmed as reasonable by the integrations team.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp017-s1",
+    "fp017-p1",
+    "fp017-p2",
+    "fp017-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp017-x1",
+    "fp017-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp017-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp017-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp017-p2",
+        "fp017-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

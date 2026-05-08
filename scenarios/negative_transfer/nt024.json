@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt024",
+  "family": "negative_transfer",
+  "split": "holdout",
+  "task": "Implement compress_data for the backup service without importing the CDN compression approach.",
+  "repo_state_fingerprint": "nt024-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "nt024-s1",
+      "tier": "session",
+      "content": "Backup service compress_data applies ZSTD compression at maximum level to archive snapshots.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt024-p1",
+      "tier": "project",
+      "content": "Backup compression must be deterministic; the same input must always produce the same compressed bytes.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt024-p2",
+      "tier": "project",
+      "content": "Compression level is fixed at maximum for backups because storage cost outweighs compression time.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt024-l1",
+      "tier": "long_term",
+      "content": "When compress_data spans backup and CDN, verify the determinism and level requirements first.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt024-x1",
+      "tier": "project",
+      "content": "CDN: compress_data applies gzip at level 6 on-the-fly for HTTP responses to balance speed and ratio.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: CDN dynamic gzip semantics conflict with deterministic offline backup compression"
+    },
+    {
+      "id": "nt024-x2",
+      "tier": "project",
+      "content": "Old infra note says compression should be unified across backup and CDN delivery.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt024-s1",
+    "nt024-p1",
+    "nt024-p2",
+    "nt024-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt024-x1",
+    "nt024-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt024-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt024-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt024-p2",
+        "nt024-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

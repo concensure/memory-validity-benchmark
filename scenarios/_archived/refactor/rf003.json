@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rf003",
+  "family": "refactor",
+  "split": "public",
+  "task": "Extract shared retry policy without changing HTTP semantics.",
+  "repo_state_fingerprint": "rf003-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "rf003-s1",
+      "tier": "session",
+      "content": "Current handlers and workers both use the same retry policy shape for transient failures.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rf003-p1",
+      "tier": "project",
+      "content": "Architect decision says retry policy helpers must stay transport-agnostic.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rf003-x1",
+      "tier": "session",
+      "content": "Old branch note suggests embedding HTTP status mapping directly in retry helper.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rf003-s1",
+    "rf003-p1"
+  ],
+  "gold_invalid_ids": [
+    "rf003-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "rf003-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rf003-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

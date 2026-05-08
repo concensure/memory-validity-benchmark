@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc018",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Rebuild the search index after confirming no other agent has claimed the rebuild task.",
+  "repo_state_fingerprint": "cc018-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "cc018-s1",
+      "tier": "session",
+      "content": "Search-Agent-A claimed the full search index rebuild task at 02:00 during the maintenance window.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc018-p1",
+      "tier": "project",
+      "content": "Search index rebuilds must be single-agent; concurrent rebuilds corrupt the in-progress index.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc018-p2",
+      "tier": "project",
+      "content": "Search-Agent-A's rebuild is at 35% completion; the new index shard is not yet queryable.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc018-l1",
+      "tier": "long_term",
+      "content": "When two agents claim the same index rebuild task, check task ownership before proceeding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc018-x1",
+      "tier": "session",
+      "content": "Search-Agent-B also claimed the full search index rebuild at 02:05 after the same cron trigger.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents both claim ownership of the same search index rebuild task"
+    },
+    {
+      "id": "cc018-x2",
+      "tier": "project",
+      "content": "Old search note says concurrent rebuilds are safe because only the last completed index is promoted.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc018-s1",
+    "cc018-p1",
+    "cc018-p2",
+    "cc018-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc018-x1",
+    "cc018-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc018-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc018-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc018-p2",
+        "cc018-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp013",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Implement the notification fix using session evidence, not the promoted delivery window rule.",
+  "repo_state_fingerprint": "fp013-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "fp013-s1",
+      "tier": "session",
+      "content": "Current user analytics show the promoted '9am\u20136pm delivery window' causes 40% of notifications to go unread.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp013-p1",
+      "tier": "project",
+      "content": "Project user research shows B2B users prefer notifications at 7am\u20138am before meetings start.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp013-p2",
+      "tier": "project",
+      "content": "Correct delivery window is user-preference-driven with a default of 7am\u20138am for B2B accounts.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp013-l1",
+      "tier": "long_term",
+      "content": "When session analytics contradict a promoted delivery rule, demote and conduct user preference research.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp013-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 5): send all notifications between 9am and 6pm in the user's timezone.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted window was based on B2C engagement data; B2B users have different activity patterns"
+    },
+    {
+      "id": "fp013-x2",
+      "tier": "project",
+      "content": "Old promotion note says the 9am\u20136pm window was validated by the growth team using engagement metrics.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp013-s1",
+    "fp013-p1",
+    "fp013-p2",
+    "fp013-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp013-x1",
+    "fp013-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp013-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp013-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp013-p2",
+        "fp013-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

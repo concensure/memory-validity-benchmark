@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nm008",
+  "family": "neutral_minimal",
+  "split": "public",
+  "task": "Fix a local formatting regression caught by linter output.",
+  "repo_state_fingerprint": "nm008-repo-v1",
+  "token_budget": 100,
+  "candidate_memories": [
+    {
+      "id": "nm008-s1",
+      "tier": "session",
+      "content": "Linter output already points to the exact formatting issue in the current file.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nm008-p1",
+      "tier": "project",
+      "content": "Project memory says formatting-only fixes should strongly reward non-injection or minimal injection.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nm008-x1",
+      "tier": "session",
+      "content": "Old process note says any lint fix should preload recent reviewer guidance and historical style debates.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nm008-s1",
+    "nm008-p1"
+  ],
+  "gold_invalid_ids": [
+    "nm008-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "nm008-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nm008-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

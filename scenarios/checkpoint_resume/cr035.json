@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr035",
+  "family": "checkpoint_resume",
+  "split": "holdout",
+  "task": "Resume the tenant provisioning at tenant 8 without re-provisioning tenants 1\u20137.",
+  "repo_state_fingerprint": "cr035-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "cr035-s1",
+      "tier": "session",
+      "content": "Provisioning log shows tenants 1\u20137 provisioned with databases, config, and access control created.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr035-p1",
+      "tier": "project",
+      "content": "Re-provisioning completed tenants would attempt to create duplicate databases and fail with conflict errors.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr035-p2",
+      "tier": "project",
+      "content": "Tenants 9\u201320 have not been provisioned and must be set up after tenant 8.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr035-l1",
+      "tier": "long_term",
+      "content": "When tenant provisioning is interrupted, read the provisioning log to identify the next tenant before resuming.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr035-x1",
+      "tier": "session",
+      "content": "Destroy all provisioned tenants and re-provision all 20 tenants from tenant 1 for a clean multi-tenant setup.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full destruction and restart; correct behavior is to resume from tenant 8"
+    },
+    {
+      "id": "cr035-x2",
+      "tier": "project",
+      "content": "Old provisioning note says reprovisioning from scratch avoids partial tenant states that cause authorization issues.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr035-s1",
+    "cr035-p1",
+    "cr035-p2",
+    "cr035-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr035-x1",
+    "cr035-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr035-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr035-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr035-p2",
+        "cr035-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

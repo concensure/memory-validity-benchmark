@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp028",
+  "family": "false_promotion",
+  "split": "holdout",
+  "task": "Fix the event processing using session evidence, not the promoted ordering guarantee rule.",
+  "repo_state_fingerprint": "fp028-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "fp028-s1",
+      "tier": "session",
+      "content": "Current event replay shows the promoted 'events within a partition are strictly ordered' rule fails for concurrent producers.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp028-p1",
+      "tier": "project",
+      "content": "Project event analysis shows concurrent producers can write to the same partition out of sequence.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp028-p2",
+      "tier": "project",
+      "content": "Correct guarantee is per-producer ordering within a partition; global partition ordering requires a single writer.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp028-l1",
+      "tier": "long_term",
+      "content": "When session event replays show ordering violations from a promoted rule, demote and document the actual guarantee.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp028-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 7): events within a partition are strictly ordered in arrival order.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted strict ordering was based on single-producer testing; concurrent producers break partition order"
+    },
+    {
+      "id": "fp028-x2",
+      "tier": "project",
+      "content": "Old promotion note says partition ordering was confirmed by the platform team as a fundamental Kafka guarantee.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp028-s1",
+    "fp028-p1",
+    "fp028-p2",
+    "fp028-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp028-x1",
+    "fp028-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp028-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp028-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp028-p2",
+        "fp028-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

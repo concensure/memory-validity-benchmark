@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pi012",
+  "family": "project_isolation",
+  "split": "public",
+  "task": "Keep cloud billing memories out of open local benchmark harness work.",
+  "repo_state_fingerprint": "pi012-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "pi012-s1",
+      "tier": "session",
+      "content": "Billing and tenancy details from another repo are irrelevant to local harness execution.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pi012-p1",
+      "tier": "project",
+      "content": "Project memory says adjacent commercial systems should not pollute core benchmark workflows.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pi012-x1",
+      "tier": "session",
+      "content": "Foreign note says any repo touching reports likely benefits from cloud billing context.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pi012-s1",
+    "pi012-p1"
+  ],
+  "gold_invalid_ids": [
+    "pi012-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "pi012-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pi012-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

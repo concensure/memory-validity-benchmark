@@ -1,0 +1,120 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rrs008",
+  "family": "retrieval_recall_scale",
+  "split": "public",
+  "task": "Instrument checkout-svc with distributed tracing so spans appear in Jaeger for the checkout flow. Candidate pool from a 155-entry store across observability, checkout, and platform projects.",
+  "repo_state_fingerprint": "rrs008-repo-v1",
+  "token_budget": 225,
+  "candidate_memories": [
+    {
+      "id": "rrs008-s1",
+      "tier": "session",
+      "content": "checkout-svc traces are missing from Jaeger; the OpenTelemetry collector is running but checkout-svc is not sending spans.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs008-p1",
+      "tier": "project",
+      "content": "checkout-svc uses the opentelemetry-go SDK; enable tracing by setting OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317 and OTEL_SERVICE_NAME=checkout-svc.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs008-p2",
+      "tier": "project",
+      "content": "The checkout gRPC handler must propagate the trace context header (traceparent) to downstream calls to payment-svc and inventory-svc.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs008-x1",
+      "tier": "long_term",
+      "content": "Jaeger retention is 7 days; traces older than 7 days are not queryable.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs008-x2",
+      "tier": "project",
+      "content": "Metrics for checkout-svc are exported to Prometheus via /metrics endpoint; this is separate from tracing.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs008-x3",
+      "tier": "session",
+      "content": "otel-collector config was updated yesterday to add a new Kafka exporter; no changes to OTLP receiver.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs008-x4",
+      "tier": "project",
+      "content": "Old setup used Zipkin; all services were migrated to OpenTelemetry in 2024. Zipkin config is no longer valid.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: Zipkin replaced by OpenTelemetry"
+    },
+    {
+      "id": "rrs008-x5",
+      "tier": "long_term",
+      "content": "Trace sampling rate is set to 10% in production; set to 100% in staging for debugging.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs008-x6",
+      "tier": "session",
+      "content": "payment-svc and inventory-svc already appear in Jaeger with correct spans.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs008-x7",
+      "tier": "project",
+      "content": "Log correlation with traces uses the trace_id field injected by the SDK into structured log output.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rrs008-s1",
+    "rrs008-p1",
+    "rrs008-p2"
+  ],
+  "gold_invalid_ids": [
+    "rrs008-x1",
+    "rrs008-x2",
+    "rrs008-x3",
+    "rrs008-x4",
+    "rrs008-x5",
+    "rrs008-x6",
+    "rrs008-x7"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "rrs008-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rrs008-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rrs008-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

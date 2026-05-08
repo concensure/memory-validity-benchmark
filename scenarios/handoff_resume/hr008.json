@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "hr008",
+  "family": "handoff_resume",
+  "split": "public",
+  "task": "Resume benchmark contract hardening after schema changes.",
+  "repo_state_fingerprint": "hr008-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "hr008-s1",
+      "tier": "session",
+      "content": "Current task is to preserve benchmark schema compatibility while tightening validation.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "hr008-p1",
+      "tier": "project",
+      "content": "Project memory says benchmark contract changes need explicit schema versioning before release.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "hr008-x1",
+      "tier": "session",
+      "content": "Old handoff note says benchmark files can evolve freely as long as omnymem still reads them.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "hr008-s1",
+    "hr008-p1"
+  ],
+  "gold_invalid_ids": [
+    "hr008-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "hr008-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "hr008-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp009",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Implement the validation fix using session evidence, not the promoted validation order rule.",
+  "repo_state_fingerprint": "fp009-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "fp009-s1",
+      "tier": "session",
+      "content": "Current regression tests show the promoted 'validate schema before business rules' order misses cross-field violations.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp009-p1",
+      "tier": "project",
+      "content": "Project audit shows cross-field business rules (e.g., end_date > start_date) require both fields to be schema-valid first.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp009-p2",
+      "tier": "project",
+      "content": "Correct order is field-level schema validation, then cross-field business rules, then authorization checks.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp009-l1",
+      "tier": "long_term",
+      "content": "When session regressions expose sequencing failures from a promoted rule, trust the evidence and demote.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp009-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 5): always validate JSON schema before applying any business rule validation.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted two-step order was correct but incomplete; it missed the cross-field business rule layer"
+    },
+    {
+      "id": "fp009-x2",
+      "tier": "project",
+      "content": "Old promotion note says the two-step validation order was confirmed as sufficient after the API redesign.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp009-s1",
+    "fp009-p1",
+    "fp009-p2",
+    "fp009-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp009-x1",
+    "fp009-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp009-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp009-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp009-p2",
+        "fp009-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

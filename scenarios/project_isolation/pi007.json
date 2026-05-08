@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pi007",
+  "family": "project_isolation",
+  "split": "public",
+  "task": "Avoid reusing old branch naming conventions from another repo.",
+  "repo_state_fingerprint": "pi007-repo-v1",
+  "token_budget": 160,
+  "candidate_memories": [
+    {
+      "id": "pi007-s1",
+      "tier": "session",
+      "content": "This repo tracks feature branches differently and external branch naming memories would mislead automation.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pi007-p1",
+      "tier": "project",
+      "content": "Project memory says branch naming and release cadence are project-scoped operational facts.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pi007-x1",
+      "tier": "session",
+      "content": "Foreign note says branch naming guidance is interchangeable across all repos in the workspace.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pi007-s1",
+    "pi007-p1"
+  ],
+  "gold_invalid_ids": [
+    "pi007-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "pi007-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pi007-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

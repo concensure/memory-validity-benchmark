@@ -1,0 +1,69 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rde010",
+  "family": "retrieval_deduplication",
+  "split": "holdout",
+  "task": "Configure the circuit breaker for the downstream inventory-svc client.",
+  "repo_state_fingerprint": "rde010-repo-v1",
+  "token_budget": 177,
+  "candidate_memories": [
+    {
+      "id": "rde010-p1",
+      "tier": "project",
+      "content": "Circuit breaker for inventory-svc opens after 5 consecutive failures within a 10 s window; half-open probe fires every 30 s. Config lives in resilience/inventory_cb.yaml.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rde010-p2",
+      "tier": "project",
+      "content": "Circuit breaker threshold: 5 failures.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "deduplication: superseded by rde010-p1; no window, half-open interval, or config location"
+    },
+    {
+      "id": "rde010-l1",
+      "tier": "long_term",
+      "content": "Circuit breaker opens at 5 failures; probe after 30 s.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "deduplication: superseded by rde010-p1; missing time window and config file"
+    },
+    {
+      "id": "rde010-x1",
+      "tier": "project",
+      "content": "Retry policy for inventory-svc is 2 retries with 100 ms backoff; circuit breaker sits above the retry layer.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rde010-x2",
+      "tier": "session",
+      "content": "inventory-svc has been healthy for 72 h; circuit breaker is closed.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rde010-p1"
+  ],
+  "gold_invalid_ids": [
+    "rde010-p2",
+    "rde010-l1",
+    "rde010-x1",
+    "rde010-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rde010-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pi008",
+  "family": "project_isolation",
+  "split": "public",
+  "task": "Prevent pointer rendering conventions from another repo leaking into this repo.",
+  "repo_state_fingerprint": "pi008-repo-v1",
+  "token_budget": 165,
+  "candidate_memories": [
+    {
+      "id": "pi008-s1",
+      "tier": "session",
+      "content": "Another repo uses a different pointer style and that should not overwrite this repo's pointer rules.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pi008-p1",
+      "tier": "project",
+      "content": "Project memory says pointer rendering is project-scoped unless a benchmark scenario explicitly tests transfer.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pi008-x1",
+      "tier": "session",
+      "content": "Foreign note says pointer formats are harmless and can be mixed freely across repos.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pi008-s1",
+    "pi008-p1"
+  ],
+  "gold_invalid_ids": [
+    "pi008-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "pi008-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pi008-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

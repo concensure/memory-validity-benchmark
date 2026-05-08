@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr004",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Continue the test suite execution from test #156 without re-executing passing tests.",
+  "repo_state_fingerprint": "cr004-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cr004-s1",
+      "tier": "session",
+      "content": "Test execution log shows tests 1\u2013155 passed; test 156 caused the runner to crash.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr004-p1",
+      "tier": "project",
+      "content": "Re-executing passing tests wastes CI time and can mask new failures introduced by the interruption.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr004-p2",
+      "tier": "project",
+      "content": "Tests 157\u2013300 have not been run and must execute after test 156 is resolved.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr004-l1",
+      "tier": "long_term",
+      "content": "When a test runner crashes mid-suite, restore from the execution log and continue from the crash point.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr004-x1",
+      "tier": "session",
+      "content": "Re-run the full test suite from test 1 to ensure all results reflect the current code state.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full suite rerun; correct behavior is to resume from test 156"
+    },
+    {
+      "id": "cr004-x2",
+      "tier": "project",
+      "content": "Old CI note says re-running the full suite is required after any runner crash to ensure clean results.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr004-s1",
+    "cr004-p1",
+    "cr004-p2",
+    "cr004-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr004-x1",
+    "cr004-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr004-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr004-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr004-p2",
+        "cr004-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

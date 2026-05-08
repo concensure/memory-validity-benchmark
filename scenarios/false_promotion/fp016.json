@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp016",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Fix the queue processing using session evidence, not the promoted concurrency rule.",
+  "repo_state_fingerprint": "fp016-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "fp016-s1",
+      "tier": "session",
+      "content": "Current queue monitoring shows the promoted '10 concurrent workers' rule causes resource contention on the DB.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp016-p1",
+      "tier": "project",
+      "content": "Project DB analysis shows the database can safely support only 4 concurrent queue-reading connections.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp016-p2",
+      "tier": "project",
+      "content": "Correct concurrency limit is 4 workers, not 10, to stay within the DB connection pool budget.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp016-l1",
+      "tier": "long_term",
+      "content": "When session DB monitoring shows contention from a promoted concurrency rule, demote and reduce concurrency.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp016-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 6): run 10 concurrent queue workers for high-throughput message processing.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted 10-worker limit was based on an in-memory queue; DB-backed queue has connection pool limits"
+    },
+    {
+      "id": "fp016-x2",
+      "tier": "project",
+      "content": "Old promotion note says 10 workers was validated during load testing and found to be a safe concurrency level.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp016-s1",
+    "fp016-p1",
+    "fp016-p2",
+    "fp016-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp016-x1",
+    "fp016-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp016-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp016-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp016-p2",
+        "fp016-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "sm015",
+  "family": "stale_memory",
+  "split": "holdout",
+  "task": "Suppress obsolete abstention penalties after minimal-context scoring matured.",
+  "repo_state_fingerprint": "sm015-repo-v1",
+  "token_budget": 155,
+  "candidate_memories": [
+    {
+      "id": "sm015-s1",
+      "tier": "session",
+      "content": "Minimal-context scenarios now reward correct abstention, so older blanket retrieval expectations are stale.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sm015-p1",
+      "tier": "project",
+      "content": "Project memory says silence can be the correct retrieval result on deterministic local tasks.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sm015-x1",
+      "tier": "session",
+      "content": "Old note says failing to inject memory should always lower benchmark scores.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "sm015-s1",
+    "sm015-p1"
+  ],
+  "gold_invalid_ids": [
+    "sm015-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "sm015-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "sm015-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

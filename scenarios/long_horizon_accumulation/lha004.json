@@ -1,0 +1,93 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "lha004",
+  "family": "long_horizon_accumulation",
+  "split": "public",
+  "task": "Step 5 of 25 \u2014 auth system replacement: wire the new OIDC provider into the service mesh. Steps 1\u20134 complete. At step 4 the initial provider choice (Auth0) was changed to Keycloak after a procurement decision.",
+  "repo_state_fingerprint": "lha004-repo-v1",
+  "token_budget": 235,
+  "candidate_memories": [
+    {
+      "id": "lha004-s1",
+      "tier": "session",
+      "content": "Step 4 procurement decision: Keycloak self-hosted replaces Auth0 SaaS; Keycloak is deployed in auth namespace and is reachable.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 4"
+    },
+    {
+      "id": "lha004-p1",
+      "tier": "project",
+      "content": "Service mesh OIDC config must point to Keycloak discovery URL: https://keycloak.auth.svc/realms/platform/.well-known/openid-configuration.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 4; valid from step 4 onwards"
+    },
+    {
+      "id": "lha004-p2",
+      "tier": "project",
+      "content": "Keycloak client credentials for the service mesh are in vault:/secret/auth/keycloak/mesh-client; client_id is mesh-gateway.",
+      "validity": "valid",
+      "bucket": "supporting",
+      "notes": "created_at_step: 4"
+    },
+    {
+      "id": "lha004-l1",
+      "tier": "long_term",
+      "content": "OIDC provider configuration must be tested with a synthetic login before enabling for production traffic.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha004-x1",
+      "tier": "project",
+      "content": "Step 2 config: Auth0 tenant URL is https://platform.us.auth0.com; client credentials in vault:/secret/auth/auth0.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 4; Auth0 replaced by Keycloak at step 4"
+    },
+    {
+      "id": "lha004-x2",
+      "tier": "session",
+      "content": "Step 3 note: Auth0 annual contract renewal was under review; decision pending.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 4; decision made at step 4; Keycloak chosen"
+    }
+  ],
+  "gold_valid_ids": [
+    "lha004-s1",
+    "lha004-p1",
+    "lha004-p2",
+    "lha004-l1"
+  ],
+  "gold_invalid_ids": [
+    "lha004-x1",
+    "lha004-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "lha004-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "lha004-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "lha004-p2",
+        "lha004-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.06,
+    "ideal": 1.0
+  }
+}

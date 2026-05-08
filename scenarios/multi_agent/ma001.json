@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ma001",
+  "family": "multi_agent",
+  "split": "public",
+  "task": "Coordinate planner and implementer memories for a shared patch.",
+  "repo_state_fingerprint": "ma001-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "ma001-s1",
+      "tier": "session",
+      "content": "Planner has already fixed scope: implementer should edit only transport adapters this pass.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ma001-p1",
+      "tier": "project",
+      "content": "Project memory says ownership boundaries reduce merge conflict risk in concurrent work.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ma001-x1",
+      "tier": "session",
+      "content": "Old coordination note says both agents should rewrite the same orchestrator file together.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ma001-s1",
+    "ma001-p1"
+  ],
+  "gold_invalid_ids": [
+    "ma001-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "ma001-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ma001-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

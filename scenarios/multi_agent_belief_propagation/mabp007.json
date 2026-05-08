@@ -1,0 +1,82 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "mabp007",
+  "family": "multi_agent_belief_propagation",
+  "split": "public",
+  "task": "Worker agent: pin the runtime version for the new service. The tech lead issued a correction at step 4; use the corrected version.",
+  "repo_state_fingerprint": "mabp007-repo-v1",
+  "token_budget": 218,
+  "candidate_memories": [
+    {
+      "id": "mabp007-s1",
+      "tier": "session",
+      "content": "[tech-lead at step 4] CORRECTION: Go runtime version must be 1.23.4 (not 1.22.x). 1.23.4 is required for the new structured logging API used by the platform logging middleware.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "creating_agent: tech-lead; correction_step: 4"
+    },
+    {
+      "id": "mabp007-p1",
+      "tier": "project",
+      "content": "go.mod must specify go 1.23.4; Dockerfile base image must be golang:1.23.4-alpine. Do not use 1.22.x; the logging middleware will not compile.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "mabp007-p2",
+      "tier": "project",
+      "content": "Run go mod tidy after updating go.mod to resolve any version-specific dependency changes.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp007-l1",
+      "tier": "long_term",
+      "content": "Go version is platform-standardised; check platform-standards/go-version.md before pinning any new service.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp007-x1",
+      "tier": "session",
+      "content": "[developer at step 2] Go runtime version: 1.22.8 (latest stable at project start).",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "creating_agent: developer; contradicted_by: tech-lead correction at step 4"
+    }
+  ],
+  "gold_valid_ids": [
+    "mabp007-s1",
+    "mabp007-p1",
+    "mabp007-p2",
+    "mabp007-l1"
+  ],
+  "gold_invalid_ids": [
+    "mabp007-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "mabp007-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "mabp007-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "mabp007-p2",
+        "mabp007-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.07,
+    "ideal": 1.0
+  }
+}

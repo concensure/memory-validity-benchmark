@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp023",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Fix the API versioning using session evidence, not the promoted backward compatibility rule.",
+  "repo_state_fingerprint": "fp023-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "fp023-s1",
+      "tier": "session",
+      "content": "Current client integration tests show the promoted 'never remove fields from responses' rule causes schema bloat.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp023-p1",
+      "tier": "project",
+      "content": "Project API evolution review shows deprecated fields after 2 release cycles should be removed to prevent client confusion.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp023-p2",
+      "tier": "project",
+      "content": "Correct policy is deprecate in N, warn in N+1, remove in N+2 with a 6-month minimum deprecation window.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp023-l1",
+      "tier": "long_term",
+      "content": "When session integration tests show schema bloat from a promoted rule, demote and implement the deprecation cycle.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp023-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 7): never remove fields from API response schemas to maintain backward compatibility.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted never-remove rule was based on a high-stability API; evolving APIs need deprecation cycles"
+    },
+    {
+      "id": "fp023-x2",
+      "tier": "project",
+      "content": "Old promotion note says the never-remove rule was confirmed by the platform team to protect existing integrations.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp023-s1",
+    "fp023-p1",
+    "fp023-p2",
+    "fp023-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp023-x1",
+    "fp023-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp023-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp023-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp023-p2",
+        "fp023-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

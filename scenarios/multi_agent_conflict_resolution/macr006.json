@@ -1,0 +1,68 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "macr006",
+  "family": "multi_agent_conflict_resolution",
+  "split": "public",
+  "task": "Choose the encryption algorithm for the new secrets at rest. Resolution strategy: role_wins \u2014 security-agent role takes precedence over general-agent role.",
+  "repo_state_fingerprint": "macr006-repo-v1",
+  "token_budget": 208,
+  "candidate_memories": [
+    {
+      "id": "macr006-p1",
+      "tier": "project",
+      "content": "[security-agent] Secrets at rest must use AES-256-GCM encryption; AES-128 is not permitted for secrets classified as sensitive. AES-256-GCM is required per the 2025 security standards.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "resolution: role_wins; role=security-agent; wins over general-agent"
+    },
+    {
+      "id": "macr006-p2",
+      "tier": "project",
+      "content": "Encryption keys are managed by vault Transit engine; key name for secrets is transit/secrets-at-rest-key with AES-256-GCM algorithm.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr006-l1",
+      "tier": "long_term",
+      "content": "Cryptographic algorithm choices are governed by the security team; security-agent decisions on algorithm selection are authoritative.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr006-x1",
+      "tier": "session",
+      "content": "[general-agent] AES-128 is sufficient for secrets at rest; it provides adequate security and is faster to encrypt and decrypt.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "resolution: role_loses; role=general-agent; security-agent standard supersedes performance preference"
+    }
+  ],
+  "gold_valid_ids": [
+    "macr006-p1",
+    "macr006-p2",
+    "macr006-l1"
+  ],
+  "gold_invalid_ids": [
+    "macr006-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "macr006-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "macr006-p2",
+        "macr006-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

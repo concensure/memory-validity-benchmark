@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt022",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement validate_user for the login flow without importing registration validation logic.",
+  "repo_state_fingerprint": "nt022-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "nt022-s1",
+      "tier": "session",
+      "content": "Login validate_user checks credentials against the hashed password and returns an auth token.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt022-p1",
+      "tier": "project",
+      "content": "Login validation must reject locked accounts and log the attempt regardless of credential validity.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt022-p2",
+      "tier": "project",
+      "content": "Failed login attempts must increment the lockout counter before returning the error response.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt022-l1",
+      "tier": "long_term",
+      "content": "When validate_user spans login and registration, confirm the lockout and credential model first.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt022-x1",
+      "tier": "project",
+      "content": "Registration: validate_user checks email format, password strength, and uniqueness before saving.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: registration uniqueness checks and strength rules are irrelevant to login validation"
+    },
+    {
+      "id": "nt022-x2",
+      "tier": "project",
+      "content": "Old auth note says user validation should be unified across registration and login for consistency.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt022-s1",
+    "nt022-p1",
+    "nt022-p2",
+    "nt022-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt022-x1",
+    "nt022-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt022-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt022-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt022-p2",
+        "nt022-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc014",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Continue the graph traversal after confirming no other agent holds the traversal lock.",
+  "repo_state_fingerprint": "cc014-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cc014-s1",
+      "tier": "session",
+      "content": "Graph-Agent-A holds the traversal lock for the dependency graph and is computing the impact set.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc014-p1",
+      "tier": "project",
+      "content": "Graph traversal locks prevent concurrent traversals from producing inconsistent impact sets.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc014-p2",
+      "tier": "project",
+      "content": "Graph-Agent-A is at depth 4 of the traversal; the lock will be released after completion.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc014-l1",
+      "tier": "long_term",
+      "content": "When two agents claim the same graph traversal lock, verify lock timestamps before proceeding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc014-x1",
+      "tier": "session",
+      "content": "Graph-Agent-B also claims it holds the traversal lock since 14:30 and is at depth 2.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents both claim the traversal lock for the same dependency graph"
+    },
+    {
+      "id": "cc014-x2",
+      "tier": "project",
+      "content": "Old graph note says concurrent traversals on the same graph produce the same result and can be merged.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc014-s1",
+    "cc014-p1",
+    "cc014-p2",
+    "cc014-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc014-x1",
+    "cc014-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc014-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc014-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc014-p2",
+        "cc014-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

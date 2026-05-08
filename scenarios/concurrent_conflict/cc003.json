@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc003",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Patch the /api/v2/users endpoint handler after confirming single-agent ownership.",
+  "repo_state_fingerprint": "cc003-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "cc003-s1",
+      "tier": "session",
+      "content": "Backend-A claimed ownership of the users endpoint handler at 11:00 for the rate limit fix.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc003-p1",
+      "tier": "project",
+      "content": "Endpoint handler ownership is tracked per file in the agent coordination log.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc003-p2",
+      "tier": "project",
+      "content": "Backend-A has already applied the rate limit middleware and is running focused tests.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc003-l1",
+      "tier": "long_term",
+      "content": "When multiple agents claim an endpoint handler, check the coordination log before proceeding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc003-x1",
+      "tier": "session",
+      "content": "Frontend-B claimed the users endpoint handler at 11:03 to add a new response field.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents simultaneously own and are modifying the same endpoint handler"
+    },
+    {
+      "id": "cc003-x2",
+      "tier": "project",
+      "content": "Old dev note says multiple agents editing the same endpoint usually resolve during code review.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc003-s1",
+    "cc003-p1",
+    "cc003-p2",
+    "cc003-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc003-x1",
+    "cc003-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc003-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc003-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc003-p2",
+        "cc003-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

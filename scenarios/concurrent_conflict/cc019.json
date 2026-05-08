@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc019",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Send the notification batch after confirming no other agent has already dispatched it.",
+  "repo_state_fingerprint": "cc019-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cc019-s1",
+      "tier": "session",
+      "content": "Notify-Agent-A acquired the dispatch lock for the weekly digest batch at 07:00.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc019-p1",
+      "tier": "project",
+      "content": "Notification dispatch locks prevent subscribers from receiving the same digest twice.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc019-p2",
+      "tier": "project",
+      "content": "Notify-Agent-A has dispatched 3,000 of 12,000 digest emails; the lock is still held.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc019-l1",
+      "tier": "long_term",
+      "content": "When two agents both claim a dispatch lock, check delivery counts before allowing a second dispatch.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc019-x1",
+      "tier": "session",
+      "content": "Notify-Agent-B also acquired the dispatch lock at 07:04 and reports it has dispatched 500 emails.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two notification agents both claim to hold the same digest dispatch lock"
+    },
+    {
+      "id": "cc019-x2",
+      "tier": "project",
+      "content": "Old notification note says duplicate dispatches are filtered by the subscriber's email client.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc019-s1",
+    "cc019-p1",
+    "cc019-p2",
+    "cc019-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc019-x1",
+    "cc019-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc019-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc019-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc019-p2",
+        "cc019-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

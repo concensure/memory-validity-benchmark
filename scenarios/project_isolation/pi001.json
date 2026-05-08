@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pi001",
+  "family": "project_isolation",
+  "split": "public",
+  "task": "Prevent memory leakage between two repos with similar auth module names.",
+  "repo_state_fingerprint": "pi001-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "pi001-s1",
+      "tier": "session",
+      "content": "Current repo has an auth module with the same folder name as another project but different claim rules.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pi001-p1",
+      "tier": "project",
+      "content": "Project memory says repo-local auth rules outrank similarly named memories from other repos.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pi001-x1",
+      "tier": "session",
+      "content": "Foreign project note says auth team-scope parsing always follows the older shared convention.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pi001-s1",
+    "pi001-p1"
+  ],
+  "gold_invalid_ids": [
+    "pi001-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "pi001-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pi001-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

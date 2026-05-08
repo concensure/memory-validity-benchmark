@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed019",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the Java client after Spring Boot deprecated the spring.datasource.url format for cloud databases.",
+  "repo_state_fingerprint": "ed019-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "ed019-s1",
+      "tier": "session",
+      "content": "Database connection fails on startup; Spring Boot 3.1 deprecated the JDBC URL format for managed cloud databases.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed019-p1",
+      "tier": "project",
+      "content": "Spring Boot 3.1 with cloud databases requires spring.datasource.r2dbc.url for reactive connections.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed019-p2",
+      "tier": "project",
+      "content": "The legacy JDBC URL format still works for traditional blocking datasources but not reactive datasources.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed019-l1",
+      "tier": "long_term",
+      "content": "When a framework changes its datasource URL format, confirm the connection type before updating config.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed019-x1",
+      "tier": "project",
+      "content": "Spring Boot note (session 11): set spring.datasource.url with a JDBC connection string for database connectivity.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: Spring Boot 3.1 deprecated JDBC URL for reactive cloud database connections"
+    },
+    {
+      "id": "ed019-x2",
+      "tier": "project",
+      "content": "Old Spring note says spring.datasource.url works for all supported databases in Spring Boot.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed019-s1",
+    "ed019-p1",
+    "ed019-p2",
+    "ed019-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed019-x1",
+    "ed019-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed019-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed019-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed019-p2",
+        "ed019-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "hr006",
+  "family": "handoff_resume",
+  "split": "holdout",
+  "task": "Resume transport parity work for stdio and HTTP.",
+  "repo_state_fingerprint": "hr006-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "hr006-s1",
+      "tier": "session",
+      "content": "Shared machine-facing contract already exists and transports should call the same executor.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "hr006-p1",
+      "tier": "project",
+      "content": "Project memory says editor-specific surfaces must not fork core semantics.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "hr006-x1",
+      "tier": "session",
+      "content": "Old implementation note says stdio can expose a different payload shape than HTTP.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "hr006-s1",
+    "hr006-p1"
+  ],
+  "gold_invalid_ids": [
+    "hr006-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "hr006-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "hr006-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

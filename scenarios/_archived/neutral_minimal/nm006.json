@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nm006",
+  "family": "neutral_minimal",
+  "split": "public",
+  "task": "Remove an unused import surfaced by the compiler.",
+  "repo_state_fingerprint": "nm006-repo-v1",
+  "token_budget": 110,
+  "candidate_memories": [
+    {
+      "id": "nm006-s1",
+      "tier": "session",
+      "content": "Compiler output already identifies the unused import and the fix is local.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nm006-p1",
+      "tier": "project",
+      "content": "Project memory says low-complexity deterministic fixes should keep context minimal.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nm006-x1",
+      "tier": "session",
+      "content": "Old note says all import changes should load prior architecture and dependency memories.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nm006-s1",
+    "nm006-p1"
+  ],
+  "gold_invalid_ids": [
+    "nm006-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "nm006-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nm006-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iep002",
+  "family": "injection_eviction_priority",
+  "split": "public",
+  "task": "Add structured logging to the user-profile service. Context window is nearly full; very limited token budget remains.",
+  "repo_state_fingerprint": "iep002-repo-v1",
+  "token_budget": 98,
+  "candidate_memories": [
+    {
+      "id": "iep002-p1",
+      "tier": "project",
+      "content": "PII fields (email, phone, full_name, date_of_birth, ssn) must never appear in log output. Use pii.Redact() on all user objects before passing to the logger. Logging unredacted PII triggers an automatic compliance alert and constitutes a data breach.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iep002-p2",
+      "tier": "project",
+      "content": "Use structured JSON logging via zap; log at INFO level in production.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iep002-l1",
+      "tier": "long_term",
+      "content": "Include request_id in all log entries to allow distributed trace correlation.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iep002-p1",
+    "iep002-p2",
+    "iep002-l1"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "iep002-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iep002-p2",
+        "iep002-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

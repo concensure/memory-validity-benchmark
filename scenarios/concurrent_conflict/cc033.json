@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc033",
+  "family": "concurrent_conflict",
+  "split": "holdout",
+  "task": "Run the weekly snapshot after confirming no parallel snapshot job is already running.",
+  "repo_state_fingerprint": "cc033-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "cc033-s1",
+      "tier": "session",
+      "content": "Snapshot-Agent-A started the weekly database snapshot at 03:00 during the maintenance window.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc033-p1",
+      "tier": "project",
+      "content": "Database snapshots must be single-agent; concurrent snapshots corrupt the snapshot metadata table.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc033-p2",
+      "tier": "project",
+      "content": "Snapshot-Agent-A's snapshot is 55% complete; the metadata table is partially written.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc033-l1",
+      "tier": "long_term",
+      "content": "When two agents both claim a snapshot job, check metadata table ownership before proceeding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc033-x1",
+      "tier": "session",
+      "content": "Snapshot-Agent-B also started the weekly database snapshot at 03:05 from a parallel cron trigger.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two snapshot agents both claim they are running the same weekly snapshot job"
+    },
+    {
+      "id": "cc033-x2",
+      "tier": "project",
+      "content": "Old ops note says concurrent snapshots produce the same output because the DB state is the same.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc033-s1",
+    "cc033-p1",
+    "cc033-p2",
+    "cc033-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc033-x1",
+    "cc033-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc033-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc033-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc033-p2",
+        "cc033-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "lha007",
+  "family": "long_horizon_accumulation",
+  "split": "public",
+  "task": "Step 7 of 15 \u2014 feature flag rollout: increase express_checkout_v3 flag to 50% rollout. Steps 1\u20136 complete. At step 5 the orchestrator agent changed the target rollout schedule; earlier per-step percentages are now stale.",
+  "repo_state_fingerprint": "lha007-repo-v1",
+  "token_budget": 237,
+  "candidate_memories": [
+    {
+      "id": "lha007-s1",
+      "tier": "session",
+      "content": "Step 6 checkpoint: express_checkout_v3 at 25% rollout; error rate 0.08%, within SLO; conversion rate up 3.2% vs control.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 6"
+    },
+    {
+      "id": "lha007-p1",
+      "tier": "project",
+      "content": "Revised rollout schedule (from step 5): step 7=50%, step 10=75%, step 13=100%; original schedule was step 7=30%, step 10=50%, step 15=100%.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 5; revised schedule, supersedes original"
+    },
+    {
+      "id": "lha007-p2",
+      "tier": "project",
+      "content": "Flag percentage is updated via flagctl set --flag express_checkout_v3 --pct <value>; update takes effect within 60 s.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha007-l1",
+      "tier": "long_term",
+      "content": "After each rollout step, monitor error rate and conversion rate for 1 h before proceeding to the next step.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha007-x1",
+      "tier": "session",
+      "content": "Step 2 rollout plan: step 7 target is 30% based on original conservative schedule.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 5; original schedule revised; target for step 7 is now 50%"
+    },
+    {
+      "id": "lha007-x2",
+      "tier": "session",
+      "content": "Step 4 note: orchestrator agent will revise the rollout schedule at step 5 if metrics remain positive.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 5; revision has happened; note is now historical"
+    }
+  ],
+  "gold_valid_ids": [
+    "lha007-s1",
+    "lha007-p1",
+    "lha007-p2",
+    "lha007-l1"
+  ],
+  "gold_invalid_ids": [
+    "lha007-x1",
+    "lha007-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "lha007-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "lha007-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "lha007-p2",
+        "lha007-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.06,
+    "ideal": 1.0
+  }
+}

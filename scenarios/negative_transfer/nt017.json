@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt017",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement log_event for the audit logger without using metrics emitter semantics.",
+  "repo_state_fingerprint": "nt017-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "nt017-s1",
+      "tier": "session",
+      "content": "Audit logger log_event writes a structured JSON record to an append-only audit log with a UUID.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt017-p1",
+      "tier": "project",
+      "content": "Audit log entries must be immutable; they cannot be updated or deleted after writing.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt017-p2",
+      "tier": "project",
+      "content": "Audit events must include actor, action, resource, and timestamp for compliance requirements.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt017-l1",
+      "tier": "long_term",
+      "content": "When log_event spans audit and metrics systems, verify the immutability requirement before coding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt017-x1",
+      "tier": "project",
+      "content": "Metrics emitter: log_event increments a named counter with labels and optionally samples a histogram.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: mutable metric counter semantics conflict with immutable audit log requirements"
+    },
+    {
+      "id": "nt017-x2",
+      "tier": "project",
+      "content": "Old observability note says log_event should emit to both audit and metrics systems simultaneously.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt017-s1",
+    "nt017-p1",
+    "nt017-p2",
+    "nt017-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt017-x1",
+    "nt017-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt017-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt017-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt017-p2",
+        "nt017-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

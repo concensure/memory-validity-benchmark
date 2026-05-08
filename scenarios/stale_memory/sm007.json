@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "sm007",
+  "family": "stale_memory",
+  "split": "public",
+  "task": "Suppress old benchmark runner assumptions after holdout support lands.",
+  "repo_state_fingerprint": "sm007-repo-v1",
+  "token_budget": 160,
+  "candidate_memories": [
+    {
+      "id": "sm007-s1",
+      "tier": "session",
+      "content": "Default public runs should exclude holdouts unless explicitly requested.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sm007-p1",
+      "tier": "project",
+      "content": "Project memory says holdout participation must be opt-in and auditable.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sm007-x1",
+      "tier": "session",
+      "content": "Old assumption says benchmark bundles should include every scenario found on disk by default.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "sm007-s1",
+    "sm007-p1"
+  ],
+  "gold_invalid_ids": [
+    "sm007-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "sm007-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "sm007-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

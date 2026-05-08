@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps020",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the broken email notification delivery after the SMTP relay was changed.",
+  "repo_state_fingerprint": "tps020-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps020-s1",
+      "tier": "session",
+      "content": "Email delivery has failed completely since the SMTP relay was changed from internal SMTP to SendGrid.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps020-p1",
+      "tier": "project",
+      "content": "The email service must use the SendGrid SMTP credentials stored in secrets/sendgrid_smtp.yaml, not the internal relay.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps020-p2",
+      "tier": "project",
+      "content": "The internal SMTP relay was decommissioned on May 1; the SendGrid credentials were provisioned but never configured.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps020-l1",
+      "tier": "long_term",
+      "content": "When decommissioning a relay, verify the replacement credentials are fully configured before cutting over.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps020-s2",
+      "tier": "session",
+      "content": "Transactional emails are completely blocked; marketing emails are sent through a separate system and are unaffected.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps020-n01",
+      "tier": "project",
+      "content": "SendGrid is used for both SMTP relay and the transactional email API; the team chose SMTP relay for compatibility.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps020-n02",
+      "tier": "session",
+      "content": "Session 7 note: the marketing team migrated campaign emails to Mailchimp in session 7.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps020-n03",
+      "tier": "long_term",
+      "content": "Old practice: the internal SMTP relay was used for 5 years before the vendor consolidation initiative.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps020-n04",
+      "tier": "project",
+      "content": "Email delivery logs are stored in the email_delivery_log table with a 90-day retention.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps020-n05",
+      "tier": "session",
+      "content": "Session 12 note: the product team added a new email template for the onboarding welcome sequence.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps020-n06",
+      "tier": "project",
+      "content": "Old SMTP guide: the internal relay required no authentication for same-network senders.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps020-n07",
+      "tier": "long_term",
+      "content": "SMTP relay changes must include a validation step with a test email before production traffic is switched.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps020-n08",
+      "tier": "session",
+      "content": "Session 4 note: the team added email bounce handling to automatically unsubscribe invalid addresses.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps020-n09",
+      "tier": "project",
+      "content": "SendGrid account is configured with domain authentication for the company's sending domain.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps020-n10",
+      "tier": "session",
+      "content": "A delivery rate report in session 9 showed 98% delivery rate with the internal relay.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps020-n11",
+      "tier": "project",
+      "content": "The email service is a separate microservice that exposes a gRPC API for other services to use.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps020-n12",
+      "tier": "long_term",
+      "content": "Email infrastructure changes must be tested with real delivery before traffic is routed to the new relay.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps020-n13",
+      "tier": "session",
+      "content": "Session 10 note: the notification team added read-receipt tracking for enterprise plan users.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps020-n14",
+      "tier": "project",
+      "content": "Old email config: the internal relay was configured in environment variables that were overridden by the new config.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps020-n15",
+      "tier": "project",
+      "content": "Email templates are stored in the database and rendered server-side before sending.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps020-s1",
+    "tps020-p1",
+    "tps020-p2",
+    "tps020-l1",
+    "tps020-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps020-n01",
+    "tps020-n02",
+    "tps020-n03",
+    "tps020-n04",
+    "tps020-n05",
+    "tps020-n06",
+    "tps020-n07",
+    "tps020-n08",
+    "tps020-n09",
+    "tps020-n10",
+    "tps020-n11",
+    "tps020-n12",
+    "tps020-n13",
+    "tps020-n14",
+    "tps020-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps020-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps020-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps020-p2",
+        "tps020-l1",
+        "tps020-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

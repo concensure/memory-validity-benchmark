@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp012",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Fix the search query using session evidence, not the promoted index selection rule.",
+  "repo_state_fingerprint": "fp012-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "fp012-s1",
+      "tier": "session",
+      "content": "Current search performance tests show the promoted 'always use the primary index' rule causes slow aggregations.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp012-p1",
+      "tier": "project",
+      "content": "Project query analysis shows aggregation queries perform better with the secondary composite index.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp012-p2",
+      "tier": "project",
+      "content": "Correct rule is to use the primary index for point lookups and the composite index for aggregations.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp012-l1",
+      "tier": "long_term",
+      "content": "When session tests show a promoted rule is suboptimal for a query class, trust the evidence and demote.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp012-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 6): always use the primary index for all search queries for consistency.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted primary-index rule was based on point-lookup benchmarks; aggregations need composite index"
+    },
+    {
+      "id": "fp012-x2",
+      "tier": "project",
+      "content": "Old promotion note says the primary index rule was confirmed by the DBA team as the safe default for all queries.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp012-s1",
+    "fp012-p1",
+    "fp012-p2",
+    "fp012-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp012-x1",
+    "fp012-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp012-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp012-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp012-p2",
+        "fp012-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

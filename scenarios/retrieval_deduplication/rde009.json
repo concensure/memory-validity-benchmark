@@ -1,0 +1,69 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rde009",
+  "family": "retrieval_deduplication",
+  "split": "holdout",
+  "task": "Set the versioning scheme for the new public API library.",
+  "repo_state_fingerprint": "rde009-repo-v1",
+  "token_budget": 173,
+  "candidate_memories": [
+    {
+      "id": "rde009-p1",
+      "tier": "project",
+      "content": "Public API libraries use semantic versioning (SemVer 2.0): MAJOR.MINOR.PATCH; MAJOR for breaking changes, MINOR for backwards-compatible features, PATCH for bug fixes. Changelog entry is mandatory for every release.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rde009-p2",
+      "tier": "project",
+      "content": "Use semantic versioning for all releases.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "deduplication: superseded by rde009-p1; no SemVer definition or changelog requirement"
+    },
+    {
+      "id": "rde009-l1",
+      "tier": "long_term",
+      "content": "All public libraries follow SemVer; bump MAJOR on breaking API changes.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "deduplication: superseded by rde009-p1; incomplete"
+    },
+    {
+      "id": "rde009-x1",
+      "tier": "long_term",
+      "content": "Internal tools and CLIs may use date-based versioning (YYYY.MM.DD); public APIs must use SemVer.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rde009-x2",
+      "tier": "session",
+      "content": "v1.0.0 release is planned for end of quarter; this is the first stable release.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rde009-p1"
+  ],
+  "gold_invalid_ids": [
+    "rde009-p2",
+    "rde009-l1",
+    "rde009-x1",
+    "rde009-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rde009-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

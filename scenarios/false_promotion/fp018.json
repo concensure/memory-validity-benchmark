@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp018",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Fix the feature flag evaluation using session evidence, not the promoted evaluation order rule.",
+  "repo_state_fingerprint": "fp018-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "fp018-s1",
+      "tier": "session",
+      "content": "Current A/B test results show the promoted 'evaluate user flags before org flags' rule produces biased rollouts.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp018-p1",
+      "tier": "project",
+      "content": "Project A/B analysis shows org-level flags must be evaluated first to preserve test group integrity.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp018-p2",
+      "tier": "project",
+      "content": "Correct evaluation order is org flag \u2192 team flag \u2192 user flag, with later flags overriding earlier ones.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp018-l1",
+      "tier": "long_term",
+      "content": "When session A/B results show evaluation order bias from a promoted rule, demote and correct the order.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp018-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 7): evaluate user-level feature flags before org-level flags for personalization.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted user-first order was based on personalization use cases; A/B testing requires org-first"
+    },
+    {
+      "id": "fp018-x2",
+      "tier": "project",
+      "content": "Old promotion note says user-first evaluation was confirmed by the product team to support fine-grained personalization.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp018-s1",
+    "fp018-p1",
+    "fp018-p2",
+    "fp018-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp018-x1",
+    "fp018-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp018-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp018-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp018-p2",
+        "fp018-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

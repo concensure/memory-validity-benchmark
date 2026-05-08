@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cp001",
+  "family": "consensus_promotion",
+  "split": "public",
+  "task": "Block long-term promotion when one reviewer rejects a project fact.",
+  "repo_state_fingerprint": "cp001-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cp001-s1",
+      "tier": "session",
+      "content": "One reviewer rejects the fact because its citations no longer match the merged repo state.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cp001-p1",
+      "tier": "project",
+      "content": "Project memory says contradictory consensus blocks long-term promotion until corrected.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cp001-x1",
+      "tier": "session",
+      "content": "Old promotion note says two mentions of the same fact are enough even with disagreement.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cp001-s1",
+    "cp001-p1"
+  ],
+  "gold_invalid_ids": [
+    "cp001-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cp001-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cp001-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "oc015",
+  "family": "openclaw_style",
+  "split": "holdout",
+  "task": "Handle a workspace repair when another agent already modified adjacent files.",
+  "repo_state_fingerprint": "oc015-repo-v1",
+  "token_budget": 260,
+  "candidate_memories": [
+    {
+      "id": "oc015-s1",
+      "tier": "session",
+      "content": "The next safe step is to confine edits to the owned file and verify compatibility with neighboring changes.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "oc015-p1",
+      "tier": "project",
+      "content": "Project memory says collaborative workflows should adapt to concurrent local edits instead of broad rewrites.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "oc015-x1",
+      "tier": "session",
+      "content": "Stale note says the cleanest path is to rewrite the whole module to reassert consistency.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "oc015-s1",
+    "oc015-p1"
+  ],
+  "gold_invalid_ids": [
+    "oc015-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "oc015-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "oc015-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

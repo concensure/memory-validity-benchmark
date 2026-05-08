@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt021",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement process_event for the event bus without using webhook delivery behavior.",
+  "repo_state_fingerprint": "nt021-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "nt021-s1",
+      "tier": "session",
+      "content": "Event bus process_event dequeues a message, applies routing rules, and dispatches to subscribers.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt021-p1",
+      "tier": "project",
+      "content": "Event bus delivery is at-least-once; consumers must be idempotent against duplicate messages.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt021-p2",
+      "tier": "project",
+      "content": "Dead-letter handling kicks in after the configured retry limit, not on any first failure.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt021-l1",
+      "tier": "long_term",
+      "content": "When process_event spans bus and webhook systems, confirm the delivery model before implementing.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt021-x1",
+      "tier": "project",
+      "content": "Webhook handler: process_event validates the signature, parses the payload, and calls the handler function.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: webhook request-response semantics conflict with async event bus dispatch logic"
+    },
+    {
+      "id": "nt021-x2",
+      "tier": "project",
+      "content": "Old integration note says event processing should be unified under a single process_event interface.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt021-s1",
+    "nt021-p1",
+    "nt021-p2",
+    "nt021-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt021-x1",
+    "nt021-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt021-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt021-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt021-p2",
+        "nt021-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

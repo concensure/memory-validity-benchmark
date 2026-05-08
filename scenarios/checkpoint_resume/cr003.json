@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr003",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Resume the code generation pass at file 23 without regenerating already-output files.",
+  "repo_state_fingerprint": "cr003-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "cr003-s1",
+      "tier": "session",
+      "content": "Generator log shows files 1\u201322 written and verified; file 23 (payment_client.go) was interrupted mid-write.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr003-p1",
+      "tier": "project",
+      "content": "Already-generated files are verified against checksums; regenerating them wastes time and risks overwriting manual fixes.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr003-p2",
+      "tier": "project",
+      "content": "Files 24\u201340 have not been generated and must be produced after file 23 is completed.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr003-l1",
+      "tier": "long_term",
+      "content": "When resuming code generation, delete the interrupted partial file and regenerate from the checkpoint.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr003-x1",
+      "tier": "session",
+      "content": "Delete all generated files and run the full code generation pass from the beginning.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full regeneration; correct behavior is to resume from file 23 checkpoint"
+    },
+    {
+      "id": "cr003-x2",
+      "tier": "project",
+      "content": "Old generator note says full regeneration is safer than partial regeneration to avoid inconsistent output.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr003-s1",
+    "cr003-p1",
+    "cr003-p2",
+    "cr003-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr003-x1",
+    "cr003-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr003-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr003-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr003-p2",
+        "cr003-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

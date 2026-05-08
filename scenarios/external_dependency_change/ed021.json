@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed021",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the Ruby client after the Twilio gem removed the deprecated Account SID auth format.",
+  "repo_state_fingerprint": "ed021-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "ed021-s1",
+      "tier": "session",
+      "content": "Twilio API calls return 401; the Twilio Ruby gem v6 removed support for passing Account SID in the URL.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed021-p1",
+      "tier": "project",
+      "content": "Twilio authentication must now use HTTP Basic auth with Account SID as username and Auth Token as password.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed021-p2",
+      "tier": "project",
+      "content": "The Twilio Ruby gem v6 also removed the deprecated send_message method in favor of messages.create.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed021-l1",
+      "tier": "long_term",
+      "content": "When a client gem removes an auth format, update both authentication and API call patterns together.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed021-x1",
+      "tier": "project",
+      "content": "Twilio Ruby gem note (session 6): initialize the client with account_sid in the URL and auth_token as a parameter.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: Twilio Ruby gem v6 removed URL-based Account SID auth; HTTP Basic auth is required"
+    },
+    {
+      "id": "ed021-x2",
+      "tier": "project",
+      "content": "Old Ruby note says the Twilio gem's URL-based auth was the standard approach in gem versions 4 and 5.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed021-s1",
+    "ed021-p1",
+    "ed021-p2",
+    "ed021-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed021-x1",
+    "ed021-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed021-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed021-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed021-p2",
+        "ed021-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

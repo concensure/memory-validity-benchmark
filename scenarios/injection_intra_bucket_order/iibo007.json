@@ -1,0 +1,66 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iibo007",
+  "family": "injection_intra_bucket_order",
+  "split": "public",
+  "task": "Investigate elevated error rates on the checkout API observed over the last 30 minutes.",
+  "repo_state_fingerprint": "iibo007-repo-v1",
+  "token_budget": 210,
+  "candidate_memories": [
+    {
+      "id": "iibo007-p1",
+      "tier": "project",
+      "content": "checkout-api error budget is 0.1% over a 30-min window. When error rate exceeds 0.5%, automatically halt all non-critical deployments and notify the on-call engineer; do not attempt fixes without first establishing a clear root cause hypothesis.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iibo007-s1",
+      "tier": "session",
+      "content": "checkout-api error rate at 1.2% for the last 28 min; 4x the error budget. Most errors are 503 from inventory-svc downstream; started immediately after the 14:00 UTC deploy.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iibo007-p2",
+      "tier": "project",
+      "content": "inventory-svc circuit breaker status: kubectl get cm circuit-breaker-state -n inventory -o jsonpath='{.data.status}'.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iibo007-l1",
+      "tier": "long_term",
+      "content": "When error spikes correlate with a deploy, the first hypothesis should always be the deploy; have a rollback plan ready before investigating further.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iibo007-p1",
+    "iibo007-s1",
+    "iibo007-p2",
+    "iibo007-l1"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "iibo007-p1",
+        "iibo007-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iibo007-p2",
+        "iibo007-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr010",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Continue the data anonymization at user record 8,200 without re-anonymizing earlier records.",
+  "repo_state_fingerprint": "cr010-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "cr010-s1",
+      "tier": "session",
+      "content": "Anonymization log shows records 1\u20138,199 processed and verified; record 8,200 is the next target.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr010-p1",
+      "tier": "project",
+      "content": "Re-anonymizing records is destructive and idempotent, but wasted processing risks missing later records.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr010-p2",
+      "tier": "project",
+      "content": "Records 8,201\u201325,000 have not been anonymized and must be processed after record 8,200.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr010-l1",
+      "tier": "long_term",
+      "content": "When anonymization is interrupted, read the progress log to confirm the last verified record before resuming.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr010-x1",
+      "tier": "session",
+      "content": "Restart the anonymization job from record 1 to guarantee all records are processed consistently.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full restart; correct behavior is to continue from record 8,200"
+    },
+    {
+      "id": "cr010-x2",
+      "tier": "project",
+      "content": "Old GDPR note says re-running anonymization from the beginning is the safest approach after any failure.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr010-s1",
+    "cr010-p1",
+    "cr010-p2",
+    "cr010-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr010-x1",
+    "cr010-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr010-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr010-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr010-p2",
+        "cr010-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

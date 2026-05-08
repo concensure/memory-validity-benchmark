@@ -6,12 +6,14 @@ from pathlib import Path
 from typing import Callable
 
 from token_estimator import estimate_tokens
+from validation import RUN_SCHEMA_VERSION, BUNDLE_SCHEMA_VERSION, validate_scenario
 
 
 def load_scenarios(root: Path, include_holdout: bool = False) -> list[dict]:
     scenarios: list[dict] = []
     for path in sorted(root.rglob("*.json")):
         data = json.loads(path.read_text(encoding="utf-8"))
+        validate_scenario(data, path=path)
         if not include_holdout and data.get("split") == "holdout":
             continue
         scenarios.append(data)
@@ -69,6 +71,7 @@ def make_run(system_name: str, scenario: dict, selected: list[dict]) -> dict:
     passed = any(item["id"] in scenario["gold_valid_ids"] for item in selected)
     score = scenario["task_outcome_baselines"]["ideal"] if passed else scenario["task_outcome_baselines"]["no_memory"]
     return {
+        "schema_version": RUN_SCHEMA_VERSION,
         "system_name": system_name,
         "scenario_id": scenario["scenario_id"],
         "selected_memories": [
@@ -100,7 +103,15 @@ def main() -> None:
     runs = [BASELINES[system](scenario) for scenario in scenarios]
     out_path = Path(args.out)
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(json.dumps({"runs": runs}, indent=2) + "\n", encoding="utf-8")
+    bundle = {
+        "schema_version": BUNDLE_SCHEMA_VERSION,
+        "suite_name": "mvi-generated-baseline-pack",
+        "system_name": system,
+        "include_holdout": bool(args.include_holdout),
+        "run_count": len(runs),
+        "runs": runs,
+    }
+    out_path.write_text(json.dumps(bundle, indent=2) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt009",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement send_notification for the email service without importing in-app alert logic.",
+  "repo_state_fingerprint": "nt009-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "nt009-s1",
+      "tier": "session",
+      "content": "Email service send_notification formats and dispatches MIME messages via an SMTP relay.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt009-p1",
+      "tier": "project",
+      "content": "Email delivery requires a retry backoff because SMTP delivery can fail transiently.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt009-p2",
+      "tier": "project",
+      "content": "Email templates are rendered server-side before dispatch; the client never sees raw template strings.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt009-l1",
+      "tier": "long_term",
+      "content": "When send_notification spans email and in-app channels, confirm the transport model before coding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt009-x1",
+      "tier": "project",
+      "content": "In-app alerts: send_notification pushes a JSON payload to the user's active WebSocket connection.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: WebSocket push semantics are incompatible with SMTP-based email delivery"
+    },
+    {
+      "id": "nt009-x2",
+      "tier": "project",
+      "content": "Old comms note says notification channels should be unified under a single send_notification API.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt009-s1",
+    "nt009-p1",
+    "nt009-p2",
+    "nt009-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt009-x1",
+    "nt009-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt009-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt009-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt009-p2",
+        "nt009-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

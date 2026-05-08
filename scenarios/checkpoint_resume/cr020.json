@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr020",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Continue the data masking pass at column 12 without re-masking columns 1\u201311.",
+  "repo_state_fingerprint": "cr020-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cr020-s1",
+      "tier": "session",
+      "content": "Masking log shows columns 1\u201311 masked and verified; column 12 (ssn) is the next masking target.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr020-p1",
+      "tier": "project",
+      "content": "Re-masking completed columns could change already-masked values and invalidate upstream checksums.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr020-p2",
+      "tier": "project",
+      "content": "Columns 13\u201318 have not been masked and must be processed after column 12.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr020-l1",
+      "tier": "long_term",
+      "content": "When a masking pass is interrupted, read the column log to confirm completed columns before resuming.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr020-x1",
+      "tier": "session",
+      "content": "Drop the masked data and re-run the full masking pass from column 1 for a clean masking result.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full drop and restart; correct behavior is to resume masking at column 12"
+    },
+    {
+      "id": "cr020-x2",
+      "tier": "project",
+      "content": "Old privacy note says a full masking pass from the beginning ensures all columns are consistently masked.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr020-s1",
+    "cr020-p1",
+    "cr020-p2",
+    "cr020-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr020-x1",
+    "cr020-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr020-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr020-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr020-p2",
+        "cr020-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

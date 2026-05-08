@@ -1,0 +1,137 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rrs010",
+  "family": "retrieval_recall_scale",
+  "split": "holdout",
+  "task": "Rotate the service account secret for ci-runner after a leaked credential alert. Candidate pool from a 175-entry store across security, CI, and infra projects.",
+  "repo_state_fingerprint": "rrs010-repo-v1",
+  "token_budget": 235,
+  "candidate_memories": [
+    {
+      "id": "rrs010-s1",
+      "tier": "session",
+      "content": "SIEM alert fired at 08:42 UTC: ci-runner service account secret detected in a public GitHub commit; secret must be rotated immediately.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs010-p1",
+      "tier": "project",
+      "content": "ci-runner secret rotation: generate new secret via vault write auth/approle/role/ci-runner/secret-id, update CIRUNNER_SECRET in vault:/secret/ci/runner, and restart all runner pods.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs010-p2",
+      "tier": "project",
+      "content": "After rotating, revoke the leaked secret ID in vault using vault write -f auth/approle/role/ci-runner/secret-id-accessor/destroy accessor=<old-accessor>.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs010-l1",
+      "tier": "long_term",
+      "content": "Any confirmed credential leak requires an audit of all actions taken using the leaked credential before the rotation is declared complete.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs010-x1",
+      "tier": "session",
+      "content": "GitHub has been notified via the secret scanning alert; they will auto-revoke the exposed token on their end within 1 h.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs010-x2",
+      "tier": "project",
+      "content": "deploy-bot service account is separate from ci-runner; it uses a different AppRole and is not affected.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs010-x3",
+      "tier": "long_term",
+      "content": "Secret rotation policy requires rotation within 4 h of confirmed leak for CI/CD service accounts.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs010-x4",
+      "tier": "project",
+      "content": "Old rotation runbook used manual vault CLI commands without the destroy step; updated runbook requires the destroy step.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: old runbook missing destroy step, superseded by current p2"
+    },
+    {
+      "id": "rrs010-x5",
+      "tier": "session",
+      "content": "Security team has blocked the leaked credential at the API gateway level as an interim measure.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs010-x6",
+      "tier": "project",
+      "content": "CI pipeline uses GitHub Actions runners in addition to self-hosted runners; GitHub Actions use OIDC, not the AppRole secret.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs010-x7",
+      "tier": "session",
+      "content": "Incident severity is P1; incident commander is online in #incident-security.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs010-x8",
+      "tier": "long_term",
+      "content": "Secrets must never be committed to version control; pre-commit hook gitleaks is mandatory for all repos.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rrs010-s1",
+    "rrs010-p1",
+    "rrs010-p2",
+    "rrs010-l1"
+  ],
+  "gold_invalid_ids": [
+    "rrs010-x1",
+    "rrs010-x2",
+    "rrs010-x3",
+    "rrs010-x4",
+    "rrs010-x5",
+    "rrs010-x6",
+    "rrs010-x7",
+    "rrs010-x8"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "rrs010-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rrs010-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rrs010-p2",
+        "rrs010-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

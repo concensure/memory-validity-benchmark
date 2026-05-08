@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt011",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement sync_state for the local client without inheriting cloud sync service behavior.",
+  "repo_state_fingerprint": "nt011-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "nt011-s1",
+      "tier": "session",
+      "content": "Local client sync_state reconciles local SQLite state with the last-fetched remote snapshot.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt011-p1",
+      "tier": "project",
+      "content": "Local sync is offline-first; it must not block on network access during the sync pass.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt011-p2",
+      "tier": "project",
+      "content": "Conflict resolution in the local client prefers the remote snapshot unless local changes are newer.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt011-l1",
+      "tier": "long_term",
+      "content": "When sync_state spans local and cloud contexts, verify the offline-first contract before coding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt011-x1",
+      "tier": "project",
+      "content": "Cloud sync service: sync_state pushes local delta events to the event bus and waits for ACK.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: cloud push-and-wait sync model conflicts with the offline-first local sync"
+    },
+    {
+      "id": "nt011-x2",
+      "tier": "project",
+      "content": "Old sync note says cloud and local sync logic should share the same sync_state interface.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt011-s1",
+    "nt011-p1",
+    "nt011-p2",
+    "nt011-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt011-x1",
+    "nt011-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt011-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt011-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt011-p2",
+        "nt011-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

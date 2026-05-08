@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk035",
+  "family": "stakeholder_conflict",
+  "split": "holdout",
+  "task": "Apply the documentation requirement from the technical writing team, not the PM's doc deferral.",
+  "repo_state_fingerprint": "stk035-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "stk035-s1",
+      "tier": "session",
+      "content": "Technical writing team issued a binding requirement in session 66: API documentation must ship with the feature.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk035-p1",
+      "tier": "project",
+      "content": "Technical writing documentation requirements are binding for external API features; doc deferral blocks release.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk035-p2",
+      "tier": "project",
+      "content": "API docs must include endpoint description, request/response schema, authentication, and at least one code example.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk035-l1",
+      "tier": "long_term",
+      "content": "When a PM defers API documentation, hold the external release until documentation is complete.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk035-x1",
+      "tier": "project",
+      "content": "PM instruction (session 67): ship the API without documentation and add the docs in the following sprint.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM documentation deferral conflicts with technical writing team's binding ship-with-docs requirement"
+    },
+    {
+      "id": "stk035-x2",
+      "tier": "project",
+      "content": "Old release note says APIs were sometimes released without documentation when the PM accepted responsibility for partner support.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk035-s1",
+    "stk035-p1",
+    "stk035-p2",
+    "stk035-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk035-x1",
+    "stk035-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk035-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk035-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk035-p2",
+        "stk035-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc009",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Update the feature flag configuration after verifying no conflicting flag edit is active.",
+  "repo_state_fingerprint": "cc009-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "cc009-s1",
+      "tier": "session",
+      "content": "Product-A updated the dark_mode flag to enabled for 10% rollout at 09:30.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc009-p1",
+      "tier": "project",
+      "content": "Feature flag edits must be coordinated; overlapping edits to the same flag corrupt rollout state.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc009-p2",
+      "tier": "project",
+      "content": "Product-A's 10% rollout is live and producing metrics; no concurrent edit should proceed.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc009-l1",
+      "tier": "long_term",
+      "content": "When two agents both edit the same feature flag, surface the conflict before applying either change.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc009-x1",
+      "tier": "session",
+      "content": "Growth-B updated the dark_mode flag to enabled for 25% rollout at 09:33.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents made conflicting edits to the same feature flag rollout percentage"
+    },
+    {
+      "id": "cc009-x2",
+      "tier": "project",
+      "content": "Old product note says feature flag conflicts can be merged by taking the higher rollout percentage.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc009-s1",
+    "cc009-p1",
+    "cc009-p2",
+    "cc009-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc009-x1",
+    "cc009-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc009-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc009-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc009-p2",
+        "cc009-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps015",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the log flood caused by a debug logger that was accidentally left active in production.",
+  "repo_state_fingerprint": "tps015-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps015-s1",
+      "tier": "session",
+      "content": "Production log volume increased 40x after a debug logger was left active following an incident investigation.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps015-p1",
+      "tier": "project",
+      "content": "The debug logger in processor/worker.go must be disabled by setting the log level back to INFO.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps015-p2",
+      "tier": "project",
+      "content": "The debug logger was enabled manually via the admin API during the incident and was never reverted.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps015-l1",
+      "tier": "long_term",
+      "content": "After an incident, always revert manual runtime configuration changes before closing the incident ticket.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps015-s2",
+      "tier": "session",
+      "content": "The log flood is consuming 90% of the log aggregation quota; non-debug logs are being dropped as a result.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps015-n01",
+      "tier": "project",
+      "content": "The logging infrastructure uses Fluentd to aggregate logs and forward them to Elasticsearch.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps015-n02",
+      "tier": "session",
+      "content": "Session 6 note: the monitoring team added a log volume alert at 50% of the daily quota.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps015-n03",
+      "tier": "long_term",
+      "content": "Old practice: debug logging was always on in early development; log levels were added in version 2.0.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps015-n04",
+      "tier": "project",
+      "content": "The log aggregation quota is 500GB per day across all services.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps015-n05",
+      "tier": "session",
+      "content": "Session 14 note: the SRE team documented the procedure for adjusting log levels via the admin API.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps015-n06",
+      "tier": "project",
+      "content": "Old logging guide: the processor/worker debug logs were added during the race condition investigation in 2023.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps015-n07",
+      "tier": "long_term",
+      "content": "All runtime configuration changes made during an incident must be added to the incident ticket as a remediation step.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps015-n08",
+      "tier": "session",
+      "content": "Session 3 note: the logging format was changed from text to structured JSON.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps015-n09",
+      "tier": "project",
+      "content": "The admin API for log level changes requires an ops role token and logs the change to the audit trail.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps015-n10",
+      "tier": "session",
+      "content": "Session 10 note: the log search team added index retention policies to reduce storage costs.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps015-n11",
+      "tier": "project",
+      "content": "Fluentd is configured with a buffer that can hold 30 minutes of logs before dropping.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps015-n12",
+      "tier": "long_term",
+      "content": "Debug-level logging should never be enabled in production for more than 5 minutes without explicit monitoring.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps015-n13",
+      "tier": "session",
+      "content": "Session 8 note: the security team added log masking for PII fields.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps015-n14",
+      "tier": "project",
+      "content": "Old log guide: the worker log level was DEBUG during the initial deployment because log volumes were low.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps015-n15",
+      "tier": "project",
+      "content": "Log archival to cold storage runs nightly; logs older than 30 days are compressed and moved to S3 Glacier.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps015-s1",
+    "tps015-p1",
+    "tps015-p2",
+    "tps015-l1",
+    "tps015-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps015-n01",
+    "tps015-n02",
+    "tps015-n03",
+    "tps015-n04",
+    "tps015-n05",
+    "tps015-n06",
+    "tps015-n07",
+    "tps015-n08",
+    "tps015-n09",
+    "tps015-n10",
+    "tps015-n11",
+    "tps015-n12",
+    "tps015-n13",
+    "tps015-n14",
+    "tps015-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps015-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps015-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps015-p2",
+        "tps015-l1",
+        "tps015-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

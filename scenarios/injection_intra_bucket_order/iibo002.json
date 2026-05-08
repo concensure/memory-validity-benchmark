@@ -1,0 +1,66 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iibo002",
+  "family": "injection_intra_bucket_order",
+  "split": "public",
+  "task": "Fix the data export pipeline that is writing financial records to an unencrypted S3 path.",
+  "repo_state_fingerprint": "iibo002-repo-v1",
+  "token_budget": 210,
+  "candidate_memories": [
+    {
+      "id": "iibo002-l1",
+      "tier": "long_term",
+      "content": "Financial records must be encrypted at rest using SSE-KMS before any write to S3. Writing unencrypted financial data to S3 is a SOC 2 control failure that must be reported to the compliance team within 1 h of discovery.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iibo002-s1",
+      "tier": "session",
+      "content": "Export pipeline found writing to s3://exports-prod/financial/ without SSE-KMS; 14 files written since 08:00 UTC are unencrypted.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iibo002-p1",
+      "tier": "project",
+      "content": "KMS key ARN for financial exports is arn:aws:kms:us-east-1:123456789012:key/financial-export-key; set ServerSideEncryption=aws:kms in the S3 PutObject call.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iibo002-p2",
+      "tier": "project",
+      "content": "The 14 unencrypted files must be re-encrypted in place using aws s3 cp --sse aws:kms before the compliance report is filed.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iibo002-l1",
+    "iibo002-s1",
+    "iibo002-p1",
+    "iibo002-p2"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "iibo002-l1",
+        "iibo002-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iibo002-p1",
+        "iibo002-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

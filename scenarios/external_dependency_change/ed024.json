@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed024",
+  "family": "external_dependency_change",
+  "split": "holdout",
+  "task": "Fix the Node.js server after the express library deprecated the res.json() null body behavior.",
+  "repo_state_fingerprint": "ed024-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "ed024-s1",
+      "tier": "session",
+      "content": "API clients receive unexpected 200 with null body; express 5 changed res.json(null) to return a 204 response.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed024-p1",
+      "tier": "project",
+      "content": "Explicit empty responses must use res.status(204).end() instead of res.json(null) in express 5.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed024-p2",
+      "tier": "project",
+      "content": "Express 5 also removed the res.send(body) shorthand for objects; res.json(body) must be used explicitly.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed024-l1",
+      "tier": "long_term",
+      "content": "When an HTTP framework changes response defaults, audit all empty response handlers before upgrading.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed024-x1",
+      "tier": "project",
+      "content": "Express note (session 8): return null as the JSON response body for endpoints that succeed with no payload.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: express 5 changed res.json(null) behavior to emit 204; explicit end() is required"
+    },
+    {
+      "id": "ed024-x2",
+      "tier": "project",
+      "content": "Old HTTP note says res.json(null) is a safe way to send an empty successful response in express.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed024-s1",
+    "ed024-p1",
+    "ed024-p2",
+    "ed024-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed024-x1",
+    "ed024-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed024-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed024-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed024-p2",
+        "ed024-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

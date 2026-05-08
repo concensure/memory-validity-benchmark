@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk028",
+  "family": "stakeholder_conflict",
+  "split": "holdout",
+  "task": "Apply the API deprecation timeline from the platform team, not the PM's early removal request.",
+  "repo_state_fingerprint": "stk028-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "stk028-s1",
+      "tier": "session",
+      "content": "Platform team issued a binding deprecation policy in session 52: deprecated APIs must remain available for 12 months.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk028-p1",
+      "tier": "project",
+      "content": "Platform team deprecation timelines are binding contractual commitments to API consumers.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk028-p2",
+      "tier": "project",
+      "content": "The 12-month notice was communicated to all registered API consumers in the deprecation announcement.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk028-l1",
+      "tier": "long_term",
+      "content": "When a PM requests early removal of a deprecated API, enforce the 12-month timeline and document the request.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk028-x1",
+      "tier": "project",
+      "content": "PM instruction (session 53): remove the deprecated /v1/users endpoint this sprint to reduce maintenance burden.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM early removal request conflicts with platform team's binding 12-month deprecation timeline"
+    },
+    {
+      "id": "stk028-x2",
+      "tier": "project",
+      "content": "Old API note says deprecated endpoints have been removed early when usage dropped to near-zero.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk028-s1",
+    "stk028-p1",
+    "stk028-p2",
+    "stk028-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk028-x1",
+    "stk028-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk028-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk028-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk028-p2",
+        "stk028-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

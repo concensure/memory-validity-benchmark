@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt023",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement export_data for the analytics system without using data warehouse export behavior.",
+  "repo_state_fingerprint": "nt023-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "nt023-s1",
+      "tier": "session",
+      "content": "Analytics export_data queries the event aggregation store and streams results as NDJSON.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt023-p1",
+      "tier": "project",
+      "content": "Analytics exports are streaming; they must not load the full result set into memory before writing.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt023-p2",
+      "tier": "project",
+      "content": "Export format is NDJSON per contract with downstream pipeline consumers.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt023-l1",
+      "tier": "long_term",
+      "content": "When export_data spans analytics and data warehouse, verify the streaming vs batch model first.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt023-x1",
+      "tier": "project",
+      "content": "Data warehouse: export_data runs a full table scan, serializes to Parquet, and uploads to S3.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: batch Parquet export model conflicts with the streaming NDJSON analytics requirement"
+    },
+    {
+      "id": "nt023-x2",
+      "tier": "project",
+      "content": "Old data note says export_data should be unified so one function handles both streaming and batch.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt023-s1",
+    "nt023-p1",
+    "nt023-p2",
+    "nt023-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt023-x1",
+    "nt023-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt023-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt023-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt023-p2",
+        "nt023-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

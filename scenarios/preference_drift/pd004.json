@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd004",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Implement the new async/await version of the task runner per the updated coding preference.",
+  "repo_state_fingerprint": "pd004-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "pd004-s1",
+      "tier": "session",
+      "content": "User stated in session 40: stop using callback-style async; all new async code must use async/await.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd004-p1",
+      "tier": "project",
+      "content": "Code style guide (updated session 40): async/await is the mandatory pattern for all asynchronous operations.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd004-p2",
+      "tier": "project",
+      "content": "Callback-based code in files touched during this task should be migrated to async/await.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd004-l1",
+      "tier": "long_term",
+      "content": "When async style preference changes explicitly, apply it to all new code and refactor touched files.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd004-x1",
+      "tier": "project",
+      "content": "Code style guide (session 12): use callback-style async for all async operations to avoid Promise chain issues.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old callback preference superseded by explicit async/await mandate in session 40"
+    },
+    {
+      "id": "pd004-x2",
+      "tier": "project",
+      "content": "Old compatibility note says callback style was chosen to support older Node.js runtimes in the project.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd004-s1",
+    "pd004-p1",
+    "pd004-p2",
+    "pd004-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd004-x1",
+    "pd004-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd004-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd004-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd004-p2",
+        "pd004-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cp012",
+  "family": "consensus_promotion",
+  "split": "public",
+  "task": "Require replay-backed evidence before promoting a branch-aware retrieval heuristic.",
+  "repo_state_fingerprint": "cp012-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "cp012-s1",
+      "tier": "session",
+      "content": "The heuristic looks promising but has not yet passed deterministic replay under branch drift.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cp012-p1",
+      "tier": "project",
+      "content": "Project memory says replay-backed evidence is required before long-term trust for branch-sensitive rules.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cp012-x1",
+      "tier": "session",
+      "content": "Old note says heuristics that feel correct after one manual run are ready for promotion.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cp012-s1",
+    "cp012-p1"
+  ],
+  "gold_invalid_ids": [
+    "cp012-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cp012-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cp012-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

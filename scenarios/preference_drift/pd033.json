@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd033",
+  "family": "preference_drift",
+  "split": "holdout",
+  "task": "Apply the updated code review preference: required architectural review for all data model changes.",
+  "repo_state_fingerprint": "pd033-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "pd033-s1",
+      "tier": "session",
+      "content": "User directed in session 55: all data model changes must get architect sign-off before merging.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd033-p1",
+      "tier": "project",
+      "content": "Review policy (updated session 55): architect review is mandatory for any change to data models or schemas.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd033-p2",
+      "tier": "project",
+      "content": "Data model changes without architect review in the current branch should be flagged before proceeding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd033-l1",
+      "tier": "long_term",
+      "content": "When review policy changes, add the architectural review step to the PR template before submitting.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd033-x1",
+      "tier": "project",
+      "content": "Review policy (session 25): peer code review by any senior engineer is sufficient for data model changes.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old peer-review-only preference superseded by architect sign-off mandate in session 55"
+    },
+    {
+      "id": "pd033-x2",
+      "tier": "project",
+      "content": "Old process note says peer review was chosen to avoid bottlenecks on architect availability.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd033-s1",
+    "pd033-p1",
+    "pd033-p2",
+    "pd033-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd033-x1",
+    "pd033-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd033-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd033-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd033-p2",
+        "pd033-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

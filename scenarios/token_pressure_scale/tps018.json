@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps018",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the object serialization failure after the library version was upgraded without updating the schema.",
+  "repo_state_fingerprint": "tps018-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps018-s1",
+      "tier": "session",
+      "content": "Serialization fails with schema mismatch errors after upgrading protobuf from 3.20 to 4.0.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps018-p1",
+      "tier": "project",
+      "content": "Protobuf 4.0 removed support for the optional keyword at the message level; fields must use explicit optional types.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps018-p2",
+      "tier": "project",
+      "content": "The proto files use the old optional message syntax that was deprecated in protobuf 3 and removed in 4.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps018-l1",
+      "tier": "long_term",
+      "content": "When upgrading protobuf major versions, migrate all proto files before upgrading the runtime library.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps018-s2",
+      "tier": "session",
+      "content": "Only proto files that use the deprecated optional keyword are affected; required and repeated fields serialize correctly.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps018-n01",
+      "tier": "project",
+      "content": "The project uses protobuf for inter-service communication and for storage serialization.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps018-n02",
+      "tier": "session",
+      "content": "Session 5 note: the platform team added proto file linting to the CI pipeline.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps018-n03",
+      "tier": "long_term",
+      "content": "Old lesson: the optional keyword was added for backward compatibility with proto2 files.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps018-n04",
+      "tier": "project",
+      "content": "Proto files are compiled during the build and the generated code is committed to the repository.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps018-n05",
+      "tier": "session",
+      "content": "Session 10 note: the data team migrated 12 proto files from proto2 to proto3 syntax.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps018-n06",
+      "tier": "project",
+      "content": "Old proto guide: optional was the recommended field modifier for nullable fields in proto3.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps018-n07",
+      "tier": "long_term",
+      "content": "Major version upgrades to serialization libraries must be preceded by a full proto file audit.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps018-n08",
+      "tier": "session",
+      "content": "Session 7 note: the API team added a proto file for the new notification service.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps018-n09",
+      "tier": "project",
+      "content": "The gRPC framework is used for all inter-service calls; REST is only used for external client-facing APIs.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps018-n10",
+      "tier": "session",
+      "content": "A compatibility test in session 3 verified that old clients can read messages from new services.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps018-n11",
+      "tier": "project",
+      "content": "Proto file changes require a backward compatibility review before they can be merged.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps018-n12",
+      "tier": "long_term",
+      "content": "Serialization format changes must be dual-written during migration to prevent data loss.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps018-n13",
+      "tier": "session",
+      "content": "Session 12 note: the monitoring team added a serialization error rate metric to the dashboard.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps018-n14",
+      "tier": "project",
+      "content": "Old gRPC guide: proto3 was adopted to simplify service contracts and remove required field constraints.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps018-n15",
+      "tier": "project",
+      "content": "The schema registry stores the canonical proto file versions for all services.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps018-s1",
+    "tps018-p1",
+    "tps018-p2",
+    "tps018-l1",
+    "tps018-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps018-n01",
+    "tps018-n02",
+    "tps018-n03",
+    "tps018-n04",
+    "tps018-n05",
+    "tps018-n06",
+    "tps018-n07",
+    "tps018-n08",
+    "tps018-n09",
+    "tps018-n10",
+    "tps018-n11",
+    "tps018-n12",
+    "tps018-n13",
+    "tps018-n14",
+    "tps018-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps018-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps018-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps018-p2",
+        "tps018-l1",
+        "tps018-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

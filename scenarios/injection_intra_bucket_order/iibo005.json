@@ -1,0 +1,66 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iibo005",
+  "family": "injection_intra_bucket_order",
+  "split": "public",
+  "task": "Merge the long-running feature branch back into main after 6 weeks of parallel development.",
+  "repo_state_fingerprint": "iibo005-repo-v1",
+  "token_budget": 212,
+  "candidate_memories": [
+    {
+      "id": "iibo005-l1",
+      "tier": "long_term",
+      "content": "Feature branches diverged more than 2 weeks from main must be rebased onto main and have all integration tests pass before merge to prevent buried conflict resolution breaking shared tests.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iibo005-s1",
+      "tier": "session",
+      "content": "Feature branch is 6 weeks behind main; 47 commits have landed on main since the branch diverged; 3 test files conflict.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iibo005-p1",
+      "tier": "project",
+      "content": "Rebase procedure: git fetch origin; git rebase origin/main; resolve conflicts; run make test-integration; create PR only after tests pass.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iibo005-p2",
+      "tier": "project",
+      "content": "After merge, delete the feature branch and close the associated Jira ticket; do not leave stale branches.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iibo005-l1",
+    "iibo005-s1",
+    "iibo005-p1",
+    "iibo005-p2"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "iibo005-l1",
+        "iibo005-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iibo005-p1",
+        "iibo005-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

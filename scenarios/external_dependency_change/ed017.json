@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed017",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the npm package after the lodash library removed the _.pluck method in v4.",
+  "repo_state_fingerprint": "ed017-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "ed017-s1",
+      "tier": "session",
+      "content": "Code fails at runtime with TypeError; lodash v4 removed the _.pluck method from the library.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed017-p1",
+      "tier": "project",
+      "content": "Array projection must now use _.map with a property name string instead of _.pluck.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed017-p2",
+      "tier": "project",
+      "content": "Lodash v4 also changed _.flatten to shallow-flatten only; deep flatten requires _.flattenDeep.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed017-l1",
+      "tier": "long_term",
+      "content": "When a utility library removes methods in a major version, audit all usages before upgrading.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed017-x1",
+      "tier": "project",
+      "content": "Lodash integration note (session 4): use _.pluck(array, 'propertyName') to extract a named property from each object.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: _.pluck removed in lodash v4; use _.map(array, 'propertyName') instead"
+    },
+    {
+      "id": "ed017-x2",
+      "tier": "project",
+      "content": "Old utility note says _.pluck is the clearest way to project a property from an array of objects.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed017-s1",
+    "ed017-p1",
+    "ed017-p2",
+    "ed017-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed017-x1",
+    "ed017-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed017-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed017-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed017-p2",
+        "ed017-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk026",
+  "family": "stakeholder_conflict",
+  "split": "holdout",
+  "task": "Implement the SLA from the customer success team, not the PM's deferred response timeline.",
+  "repo_state_fingerprint": "stk026-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "stk026-s1",
+      "tier": "session",
+      "content": "Customer success team issued a binding SLA commitment in session 48: enterprise support tickets must be acknowledged within 1 hour.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk026-p1",
+      "tier": "project",
+      "content": "Customer success SLA commitments are binding contractual obligations; PM deferred timelines violate customer contracts.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk026-p2",
+      "tier": "project",
+      "content": "The 1-hour acknowledgment SLA applies 24/7 and requires an on-call rotation to be staffed.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk026-l1",
+      "tier": "long_term",
+      "content": "When a PM defers SLA response timelines for feature work, enforce the SLA and escalate staffing gaps.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk026-x1",
+      "tier": "project",
+      "content": "PM instruction (session 49): defer enterprise support acknowledgment to next-business-day to focus the team on features.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM deferred response conflicts with customer success team's binding 1-hour enterprise SLA"
+    },
+    {
+      "id": "stk026-x2",
+      "tier": "project",
+      "content": "Old support note says next-business-day response was used for enterprise tickets before the SLA was formalized.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk026-s1",
+    "stk026-p1",
+    "stk026-p2",
+    "stk026-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk026-x1",
+    "stk026-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk026-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk026-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk026-p2",
+        "stk026-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

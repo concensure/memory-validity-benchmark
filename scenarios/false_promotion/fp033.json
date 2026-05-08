@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp033",
+  "family": "false_promotion",
+  "split": "holdout",
+  "task": "Apply the session storage fix using session evidence, not the promoted cookie size rule.",
+  "repo_state_fingerprint": "fp033-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "fp033-s1",
+      "tier": "session",
+      "content": "Current browser testing shows the promoted '4KB session cookie limit' causes silent session truncation on Safari.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp033-p1",
+      "tier": "project",
+      "content": "Project web audit shows Safari enforces a stricter 4093-byte limit, and the JWT alone often exceeds 3.5KB.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp033-p2",
+      "tier": "project",
+      "content": "Correct approach is to store only the session ID in the cookie and keep session data server-side.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp033-l1",
+      "tier": "long_term",
+      "content": "When session browser tests show truncation from a promoted limit, demote and move to server-side session storage.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp033-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 6): store up to 4KB of session data in the signed session cookie.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted 4KB limit was based on Chrome behavior; Safari's stricter limit causes truncation"
+    },
+    {
+      "id": "fp033-x2",
+      "tier": "project",
+      "content": "Old promotion note says the 4KB cookie limit was confirmed by the frontend team across the tested browsers.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp033-s1",
+    "fp033-p1",
+    "fp033-p2",
+    "fp033-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp033-x1",
+    "fp033-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp033-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp033-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp033-p2",
+        "fp033-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "sec030",
+  "family": "security_constraint",
+  "split": "holdout",
+  "task": "Implement the two-factor authentication feature without storing TOTP seeds in plaintext.",
+  "repo_state_fingerprint": "sec030-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "sec030-s1",
+      "tier": "session",
+      "content": "Current task is to add TOTP-based two-factor authentication to the user account security settings.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sec030-p1",
+      "tier": "project",
+      "content": "SECURITY CONSTRAINT: TOTP seeds must be stored encrypted at rest using an approved encryption key from the key management service.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sec030-p2",
+      "tier": "project",
+      "content": "Seed encryption must use AES-256-GCM with a key reference stored in the KMS, not the key itself.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sec030-l1",
+      "tier": "long_term",
+      "content": "Seed encryption constraints must propagate to all agents working on authentication and account security.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sec030-x1",
+      "tier": "project",
+      "content": "Store the TOTP seed as a base32 string in the users table for easy retrieval during verification.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "security_constraint: x1 creates a false exception to seed encryption by storing in plaintext for retrieval simplicity"
+    },
+    {
+      "id": "sec030-x2",
+      "tier": "project",
+      "content": "Old auth note says TOTP seeds were stored in plaintext in early development to simplify the prototype.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "sec030-s1",
+    "sec030-p1",
+    "sec030-p2",
+    "sec030-l1"
+  ],
+  "gold_invalid_ids": [
+    "sec030-x1",
+    "sec030-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "sec030-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "sec030-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "sec030-p2",
+        "sec030-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

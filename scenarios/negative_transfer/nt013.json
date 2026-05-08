@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt013",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement archive_record for the GDPR module without using backup system archive behavior.",
+  "repo_state_fingerprint": "nt013-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "nt013-s1",
+      "tier": "session",
+      "content": "GDPR module archive_record anonymizes user-identifying fields and marks the record as archived.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt013-p1",
+      "tier": "project",
+      "content": "GDPR archiving must update the record in place; it must not create a copy in a backup bucket.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt013-p2",
+      "tier": "project",
+      "content": "Archived records must remain queryable with anonymized content to satisfy regulatory read requirements.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt013-l1",
+      "tier": "long_term",
+      "content": "When archive_record appears in GDPR and backup modules, verify the mutation model before coding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt013-x1",
+      "tier": "project",
+      "content": "Backup system: archive_record copies the record to a versioned S3 path and deletes the original.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: copy-and-delete backup behavior violates the GDPR in-place anonymization requirement"
+    },
+    {
+      "id": "nt013-x2",
+      "tier": "project",
+      "content": "Old infra note says archiving behavior should be standardized across GDPR and backup modules.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt013-s1",
+    "nt013-p1",
+    "nt013-p2",
+    "nt013-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt013-x1",
+    "nt013-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt013-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt013-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt013-p2",
+        "nt013-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

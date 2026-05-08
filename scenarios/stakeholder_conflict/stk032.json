@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk032",
+  "family": "stakeholder_conflict",
+  "split": "holdout",
+  "task": "Apply the change management process from the ops team, not the PM's emergency change request.",
+  "repo_state_fingerprint": "stk032-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "stk032-s1",
+      "tier": "session",
+      "content": "Ops team issued a binding change management policy in session 60: production changes require 48-hour advance notice.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk032-p1",
+      "tier": "project",
+      "content": "Ops change management policies are binding; emergency exceptions require approval from the ops manager.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk032-p2",
+      "tier": "project",
+      "content": "The 48-hour window allows stakeholder notification, rollback planning, and off-hours scheduling.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk032-l1",
+      "tier": "long_term",
+      "content": "When a PM requests an unplanned production change, initiate the emergency exception process rather than bypassing.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk032-x1",
+      "tier": "project",
+      "content": "PM instruction (session 61): make the config change in production today without going through change management.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM unplanned change conflicts with ops team's binding 48-hour advance notice policy"
+    },
+    {
+      "id": "stk032-x2",
+      "tier": "project",
+      "content": "Old ops note says urgent config changes were sometimes made without 48-hour notice during customer incidents.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk032-s1",
+    "stk032-p1",
+    "stk032-p2",
+    "stk032-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk032-x1",
+    "stk032-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk032-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk032-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk032-p2",
+        "stk032-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

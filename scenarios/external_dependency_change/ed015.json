@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed015",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the Datadog metrics client after Datadog deprecated the v1 metrics submission endpoint.",
+  "repo_state_fingerprint": "ed015-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "ed015-s1",
+      "tier": "session",
+      "content": "Metric submission failures show 410 Gone; Datadog sunset the v1 /api/v1/series endpoint for custom metrics.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed015-p1",
+      "tier": "project",
+      "content": "Custom metrics must now be submitted to the /api/v2/series endpoint with the updated payload schema.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed015-p2",
+      "tier": "project",
+      "content": "The v2 payload uses a resources array instead of the host field for metric tagging.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed015-l1",
+      "tier": "long_term",
+      "content": "When a monitoring provider removes a metric submission endpoint, update both the URL and payload schema.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed015-x1",
+      "tier": "project",
+      "content": "Datadog integration note (session 6): submit custom metrics to /api/v1/series with a host field and tags array.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: Datadog v1 /api/v1/series endpoint sunsetted; v2 /api/v2/series is required"
+    },
+    {
+      "id": "ed015-x2",
+      "tier": "project",
+      "content": "Old monitoring note says the Datadog v1 API is reliable and used by most legacy integrations.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed015-s1",
+    "ed015-p1",
+    "ed015-p2",
+    "ed015-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed015-x1",
+    "ed015-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed015-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed015-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed015-p2",
+        "ed015-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

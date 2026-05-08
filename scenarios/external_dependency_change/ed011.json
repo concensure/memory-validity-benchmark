@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed011",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the Firebase integration after Google deprecated the legacy FCM send API.",
+  "repo_state_fingerprint": "ed011-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "ed011-s1",
+      "tier": "session",
+      "content": "Push notification delivery fails; Google deprecated the FCM legacy send endpoint at /fcm/send in January 2024.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed011-p1",
+      "tier": "project",
+      "content": "Firebase push notifications must now use the FCM HTTP v1 API at /v1/projects/{project_id}/messages:send.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed011-p2",
+      "tier": "project",
+      "content": "The FCM v1 API uses OAuth 2.0 tokens instead of the legacy server key for authentication.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed011-l1",
+      "tier": "long_term",
+      "content": "When a push notification provider deprecates a send endpoint, update both the URL and the auth mechanism.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed011-x1",
+      "tier": "project",
+      "content": "Firebase integration note (session 9): send push notifications via the legacy FCM endpoint /fcm/send using a server key.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: FCM legacy /fcm/send endpoint deprecated; FCM HTTP v1 API is required"
+    },
+    {
+      "id": "ed011-x2",
+      "tier": "project",
+      "content": "Old notification note says the legacy FCM endpoint is still functional and easier to use than v1.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed011-s1",
+    "ed011-p1",
+    "ed011-p2",
+    "ed011-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed011-x1",
+    "ed011-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed011-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed011-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed011-p2",
+        "ed011-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

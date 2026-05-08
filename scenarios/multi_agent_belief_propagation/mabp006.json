@@ -1,0 +1,82 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "mabp006",
+  "family": "multi_agent_belief_propagation",
+  "split": "public",
+  "task": "Service agent: write the DB query for the daily revenue report. The DBA corrected the query pattern at step 5; use the corrected approach.",
+  "repo_state_fingerprint": "mabp006-repo-v1",
+  "token_budget": 221,
+  "candidate_memories": [
+    {
+      "id": "mabp006-s1",
+      "tier": "session",
+      "content": "[DBA at step 5] CORRECTION: revenue aggregation must query the orders_archive table for records older than 90 days, not the orders table. Querying orders for the full date range causes full-table scans that lock writes.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "creating_agent: DBA; correction_step: 5"
+    },
+    {
+      "id": "mabp006-p1",
+      "tier": "project",
+      "content": "Revenue report query: SELECT SUM(total_cents) FROM orders WHERE created_at > NOW()-90d UNION ALL SELECT SUM(total_cents) FROM orders_archive WHERE created_at <= NOW()-90d.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "mabp006-p2",
+      "tier": "project",
+      "content": "orders_archive is a partitioned table on created_at; queries with a created_at range filter will use partition pruning automatically.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp006-l1",
+      "tier": "long_term",
+      "content": "All reporting queries spanning more than 90 days must use the archive table; the live orders table is optimised for current-day operations only.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp006-x1",
+      "tier": "session",
+      "content": "[analyst at step 2] Revenue report query: SELECT SUM(total_cents) FROM orders WHERE created_at BETWEEN start_date AND end_date.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "creating_agent: analyst; contradicted_by: DBA correction at step 5"
+    }
+  ],
+  "gold_valid_ids": [
+    "mabp006-s1",
+    "mabp006-p1",
+    "mabp006-p2",
+    "mabp006-l1"
+  ],
+  "gold_invalid_ids": [
+    "mabp006-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "mabp006-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "mabp006-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "mabp006-p2",
+        "mabp006-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.07,
+    "ideal": 1.0
+  }
+}

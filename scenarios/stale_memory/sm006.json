@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "sm006",
+  "family": "stale_memory",
+  "split": "holdout",
+  "task": "Keep old benchmark assumptions out of the active context.",
+  "repo_state_fingerprint": "sm006-repo-v1",
+  "token_budget": 165,
+  "candidate_memories": [
+    {
+      "id": "sm006-s1",
+      "tier": "session",
+      "content": "Benchmark scoring now uses precision, recall, order quality, invalid suppression, and budget adherence.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sm006-p1",
+      "tier": "project",
+      "content": "Project memory says benchmark holdouts should not leak into default public runs.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sm006-x1",
+      "tier": "session",
+      "content": "Stale assumption says selecting any one valid memory is enough for a passing score.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "sm006-s1",
+    "sm006-p1"
+  ],
+  "gold_invalid_ids": [
+    "sm006-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "sm006-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "sm006-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

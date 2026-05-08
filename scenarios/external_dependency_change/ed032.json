@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed032",
+  "family": "external_dependency_change",
+  "split": "holdout",
+  "task": "Fix the Swift client after Apple deprecated the completion handler pattern in URLSession.",
+  "repo_state_fingerprint": "ed032-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "ed032-s1",
+      "tier": "session",
+      "content": "Xcode shows deprecation warnings; Apple deprecated URLSession completion handler methods in iOS 15.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed032-p1",
+      "tier": "project",
+      "content": "Network requests must now use Swift async/await with URLSession.data(from:) for new code.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed032-p2",
+      "tier": "project",
+      "content": "The async URLSession APIs also improve cancellation handling through structured concurrency task groups.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed032-l1",
+      "tier": "long_term",
+      "content": "When Apple deprecates completion handler APIs, migrate to async/await before targeting iOS 16 minimum.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed032-x1",
+      "tier": "project",
+      "content": "Swift networking note (session 8): use URLSession.dataTask(with:completionHandler:) for asynchronous network requests.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: Apple deprecated URLSession completion handlers in iOS 15; async/await is required"
+    },
+    {
+      "id": "ed032-x2",
+      "tier": "project",
+      "content": "Old Swift note says completion handler pattern is still supported and well-understood across the codebase.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed032-s1",
+    "ed032-p1",
+    "ed032-p2",
+    "ed032-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed032-x1",
+    "ed032-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed032-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed032-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed032-p2",
+        "ed032-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

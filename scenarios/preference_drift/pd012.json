@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd012",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Write the new API endpoints using the updated preference for REST over GraphQL.",
+  "repo_state_fingerprint": "pd012-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "pd012-s1",
+      "tier": "session",
+      "content": "User stated in session 44: stop adding new GraphQL resolvers; all new API surfaces must be RESTful.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd012-p1",
+      "tier": "project",
+      "content": "API design policy (updated session 44): REST is the required approach for all new endpoints.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd012-p2",
+      "tier": "project",
+      "content": "GraphQL resolver additions to existing schemas are no longer permitted for new features.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd012-l1",
+      "tier": "long_term",
+      "content": "When API design preference changes, document REST endpoint design before implementing any resolver.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd012-x1",
+      "tier": "project",
+      "content": "API design policy (session 14): all new API surfaces must be implemented as GraphQL resolvers for flexibility.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old GraphQL preference superseded by REST-only mandate in session 44"
+    },
+    {
+      "id": "pd012-x2",
+      "tier": "project",
+      "content": "Old API note says GraphQL was chosen to allow frontend teams to fetch exactly the data they need.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd012-s1",
+    "pd012-p1",
+    "pd012-p2",
+    "pd012-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd012-x1",
+    "pd012-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd012-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd012-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd012-p2",
+        "pd012-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

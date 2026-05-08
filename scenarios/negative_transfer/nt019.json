@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt019",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement refresh_token for the OAuth client without using API key service behavior.",
+  "repo_state_fingerprint": "nt019-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "nt019-s1",
+      "tier": "session",
+      "content": "OAuth client refresh_token exchanges a refresh token for a new access token via the token endpoint.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt019-p1",
+      "tier": "project",
+      "content": "Refresh token rotation must update the stored refresh token on each successful exchange.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt019-p2",
+      "tier": "project",
+      "content": "Expired refresh tokens must trigger re-authentication rather than silent retry.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt019-l1",
+      "tier": "long_term",
+      "content": "When refresh_token spans OAuth and API key systems, confirm the token lifecycle model first.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt019-x1",
+      "tier": "project",
+      "content": "API key service: refresh_token generates a new API key and invalidates the previous key version.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: API key invalidation semantics conflict with OAuth refresh token rotation"
+    },
+    {
+      "id": "nt019-x2",
+      "tier": "project",
+      "content": "Old auth note says token refresh behavior should be unified across OAuth and API key services.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt019-s1",
+    "nt019-p1",
+    "nt019-p2",
+    "nt019-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt019-x1",
+    "nt019-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt019-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt019-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt019-p2",
+        "nt019-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

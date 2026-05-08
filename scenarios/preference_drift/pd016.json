@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd016",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Implement the new service communication using the updated preference for gRPC over REST.",
+  "repo_state_fingerprint": "pd016-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "pd016-s1",
+      "tier": "session",
+      "content": "User stated in session 41: switch all new internal service calls from REST to gRPC for typed contracts.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd016-p1",
+      "tier": "project",
+      "content": "Internal service communication policy (updated session 41): gRPC is required for all new internal calls.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd016-p2",
+      "tier": "project",
+      "content": "REST-based internal service clients in files touched during this task should be marked for migration.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd016-l1",
+      "tier": "long_term",
+      "content": "When internal communication preference changes, generate proto files before implementing gRPC clients.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd016-x1",
+      "tier": "project",
+      "content": "Internal communication policy (session 13): use REST for all internal service communication for simplicity.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old internal REST preference superseded by gRPC mandate in session 41"
+    },
+    {
+      "id": "pd016-x2",
+      "tier": "project",
+      "content": "Old service note says REST was chosen for internal calls to allow easy testing with curl.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd016-s1",
+    "pd016-p1",
+    "pd016-p2",
+    "pd016-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd016-x1",
+    "pd016-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd016-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd016-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd016-p2",
+        "pd016-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

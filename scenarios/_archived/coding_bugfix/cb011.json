@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cb011",
+  "family": "coding_bugfix",
+  "split": "public",
+  "task": "Fix stale pointer entries after a supersession write succeeds.",
+  "repo_state_fingerprint": "cb011-repo-v1",
+  "token_budget": 215,
+  "candidate_memories": [
+    {
+      "id": "cb011-s1",
+      "tier": "session",
+      "content": "Pointer output still shows the superseded memory after the replacement write commits.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cb011-p1",
+      "tier": "project",
+      "content": "Project memory says pointer generation must exclude superseded memories using the latest chain state.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cb011-x1",
+      "tier": "session",
+      "content": "Old note says pointer cleanup can wait for the next scheduled sweep.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cb011-s1",
+    "cb011-p1"
+  ],
+  "gold_invalid_ids": [
+    "cb011-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cb011-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cb011-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

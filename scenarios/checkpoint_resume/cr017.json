@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr017",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Resume the permission backfill at user batch 22 without re-running batches 1\u201321.",
+  "repo_state_fingerprint": "cr017-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "cr017-s1",
+      "tier": "session",
+      "content": "Backfill log shows batches 1\u201321 (10,500 users) processed and permission records written.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr017-p1",
+      "tier": "project",
+      "content": "Re-running completed batches would create duplicate permission entries that the RBAC system does not deduplicate.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr017-p2",
+      "tier": "project",
+      "content": "Batches 22\u201340 (9,500 users) have not been processed and must complete after batch 22.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr017-l1",
+      "tier": "long_term",
+      "content": "When a backfill is interrupted, check batch completion logs before resuming to avoid permission duplication.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr017-x1",
+      "tier": "session",
+      "content": "Drop all backfilled permissions and re-run the full permission backfill from batch 1.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full drop and restart; correct behavior is to resume from batch 22"
+    },
+    {
+      "id": "cr017-x2",
+      "tier": "project",
+      "content": "Old RBAC note says dropping and re-running ensures no permission gaps across the full user population.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr017-s1",
+    "cr017-p1",
+    "cr017-p2",
+    "cr017-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr017-x1",
+    "cr017-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr017-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr017-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr017-p2",
+        "cr017-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

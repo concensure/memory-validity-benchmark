@@ -1,0 +1,128 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rrs006",
+  "family": "retrieval_recall_scale",
+  "split": "public",
+  "task": "Resolve stale-data reads in the product catalog after a Redis primary failover 2 h ago. Candidate pool from a 165-entry store across cache, catalog, and infra projects.",
+  "repo_state_fingerprint": "rrs006-repo-v1",
+  "token_budget": 230,
+  "candidate_memories": [
+    {
+      "id": "rrs006-s1",
+      "tier": "session",
+      "content": "Redis primary failed over to replica at 11:14 UTC; 18% of catalog reads are returning stale prices from the old primary's write buffer.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs006-p1",
+      "tier": "project",
+      "content": "catalog-svc cache keys follow pattern catalog:product:{id}:v{version}; flush stale keys via redis-cli --scan --pattern 'catalog:product:*' | xargs redis-cli DEL.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs006-p2",
+      "tier": "project",
+      "content": "After Redis failover, catalog-svc must re-seed prices from the source-of-truth DB before re-enabling cache reads; seeding takes ~4 min.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs006-x1",
+      "tier": "session",
+      "content": "Redis Sentinel is healthy post-failover; no further failover risk in the next 6 h.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs006-x2",
+      "tier": "project",
+      "content": "search-svc uses its own Elasticsearch index for product search; not affected by Redis failover.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs006-x3",
+      "tier": "long_term",
+      "content": "Redis eviction policy is allkeys-lru with maxmemory set to 8 GB; catalog data is high-priority and rarely evicted.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs006-x4",
+      "tier": "project",
+      "content": "Old note: catalog cache TTL was 10 min before the 2024 config change; current TTL is 5 min.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: old TTL value, current TTL is 5 min as per latest config"
+    },
+    {
+      "id": "rrs006-x5",
+      "tier": "session",
+      "content": "Payment service is unaffected; prices are re-validated at checkout via DB read regardless of cache.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs006-x6",
+      "tier": "long_term",
+      "content": "Cache stampede protection uses a distributed lock with 500 ms TTL on cache miss; do not disable during re-seeding.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs006-x7",
+      "tier": "session",
+      "content": "SLO breach alert fired at 11:20 UTC; incident channel #incident-catalog is active.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs006-x8",
+      "tier": "project",
+      "content": "User session cache lives in a separate Redis cluster; not affected by this failover.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rrs006-s1",
+    "rrs006-p1",
+    "rrs006-p2"
+  ],
+  "gold_invalid_ids": [
+    "rrs006-x1",
+    "rrs006-x2",
+    "rrs006-x3",
+    "rrs006-x4",
+    "rrs006-x5",
+    "rrs006-x6",
+    "rrs006-x7",
+    "rrs006-x8"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "rrs006-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rrs006-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rrs006-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

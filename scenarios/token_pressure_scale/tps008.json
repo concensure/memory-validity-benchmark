@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps008",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the query timeout that started after the composite index was dropped during migration.",
+  "repo_state_fingerprint": "tps008-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps008-s1",
+      "tier": "session",
+      "content": "90% of product listing queries now exceed the 5-second timeout since migration M-42 dropped the composite index.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps008-p1",
+      "tier": "project",
+      "content": "The composite index on (category_id, status, created_at DESC) must be recreated on the products table.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps008-p2",
+      "tier": "project",
+      "content": "Migration M-42 dropped the index as part of a planned index rebuild that was never completed.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps008-l1",
+      "tier": "long_term",
+      "content": "When a migration drops an index, include the recreate step in the same migration to prevent query degradation.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps008-s2",
+      "tier": "session",
+      "content": "The composite index supports 3 of the 5 most frequent query patterns; recreating it will fix the timeout for all three.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps008-n01",
+      "tier": "project",
+      "content": "The products table has 12 million rows; index creation will take approximately 8 minutes.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps008-n02",
+      "tier": "session",
+      "content": "Session 6 note: the product search feature was launched with elastic search integration.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps008-n03",
+      "tier": "long_term",
+      "content": "Old practice: indexes were created manually by the DBA team before migration tooling was adopted.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps008-n04",
+      "tier": "project",
+      "content": "The database autovacuum is configured to run nightly for the products table.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps008-n05",
+      "tier": "session",
+      "content": "A performance test in session 3 showed product listing at 200ms p99 with the old index.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps008-n06",
+      "tier": "project",
+      "content": "Old migration guide: the index rebuild for M-42 was planned for the following sprint but was deprioritized.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps008-n07",
+      "tier": "long_term",
+      "content": "After any index drop, monitor query plans before closing the migration to ensure performance is preserved.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps008-n08",
+      "tier": "session",
+      "content": "Session 13 note: the search team added a new faceted filter for product attributes.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps008-n09",
+      "tier": "project",
+      "content": "The read replica used for product listings is updated with a 100ms replication lag.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps008-n10",
+      "tier": "session",
+      "content": "Session 8 note: the product image CDN was updated to use WebP format.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps008-n11",
+      "tier": "project",
+      "content": "Category hierarchies are managed in a separate category service and joined at query time.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps008-n12",
+      "tier": "long_term",
+      "content": "Index rebuilds on large tables should be done with CONCURRENTLY to avoid table locks.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps008-n13",
+      "tier": "session",
+      "content": "The SEO team reported slow product page loads in session 15; they identified the query timeout.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps008-n14",
+      "tier": "project",
+      "content": "Old query optimization note: a covering index was considered but rejected for the products table.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps008-n15",
+      "tier": "project",
+      "content": "The product catalog is exported to the warehouse for analytics every hour.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps008-s1",
+    "tps008-p1",
+    "tps008-p2",
+    "tps008-l1",
+    "tps008-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps008-n01",
+    "tps008-n02",
+    "tps008-n03",
+    "tps008-n04",
+    "tps008-n05",
+    "tps008-n06",
+    "tps008-n07",
+    "tps008-n08",
+    "tps008-n09",
+    "tps008-n10",
+    "tps008-n11",
+    "tps008-n12",
+    "tps008-n13",
+    "tps008-n14",
+    "tps008-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps008-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps008-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps008-p2",
+        "tps008-l1",
+        "tps008-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

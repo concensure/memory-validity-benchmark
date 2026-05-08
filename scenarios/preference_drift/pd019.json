@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd019",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Apply the updated deployment preference: containers only, no bare-metal VM deployments.",
+  "repo_state_fingerprint": "pd019-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "pd019-s1",
+      "tier": "session",
+      "content": "User directed in session 39: stop deploying to VMs; all new deployments must use container images.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd019-p1",
+      "tier": "project",
+      "content": "Deployment policy (updated session 39): container-based deployments are required for all new services.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd019-p2",
+      "tier": "project",
+      "content": "VM-based deployment scripts in files touched during this task should be flagged as deprecated.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd019-l1",
+      "tier": "long_term",
+      "content": "When deployment infrastructure preference changes, write Dockerfiles before modifying deployment scripts.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd019-x1",
+      "tier": "project",
+      "content": "Deployment policy (session 11): deploy to bare-metal VMs for lowest latency and simplest runtime.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old bare-metal VM preference superseded by containers-only mandate in session 39"
+    },
+    {
+      "id": "pd019-x2",
+      "tier": "project",
+      "content": "Old infra note says VM deployments were chosen to avoid the overhead of container orchestration.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd019-s1",
+    "pd019-p1",
+    "pd019-p2",
+    "pd019-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd019-x1",
+    "pd019-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd019-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd019-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd019-p2",
+        "pd019-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

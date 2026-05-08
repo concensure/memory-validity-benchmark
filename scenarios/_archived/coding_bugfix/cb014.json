@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cb014",
+  "family": "coding_bugfix",
+  "split": "holdout",
+  "task": "Fix benchmark runner budget accounting after abstention scoring was added.",
+  "repo_state_fingerprint": "cb014-repo-v1",
+  "token_budget": 210,
+  "candidate_memories": [
+    {
+      "id": "cb014-s1",
+      "tier": "session",
+      "content": "Budget accounting now double-charges abstained retrieval attempts in the final report.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cb014-p1",
+      "tier": "project",
+      "content": "Project memory says abstention scoring should not count as injected token usage.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cb014-x1",
+      "tier": "session",
+      "content": "Old benchmark note says every candidate considered should count against the token budget equally.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cb014-s1",
+    "cb014-p1"
+  ],
+  "gold_invalid_ids": [
+    "cb014-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cb014-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cb014-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

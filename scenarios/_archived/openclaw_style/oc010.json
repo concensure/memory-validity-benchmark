@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "oc010",
+  "family": "openclaw_style",
+  "split": "holdout",
+  "task": "Finish a long-horizon file inspection and patch sequence after repo drift.",
+  "repo_state_fingerprint": "oc010-repo-v1",
+  "token_budget": 255,
+  "candidate_memories": [
+    {
+      "id": "oc010-s1",
+      "tier": "session",
+      "content": "Repo drift changed file names after initial inspection, so the next step must refresh file targets before editing.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "oc010-p1",
+      "tier": "project",
+      "content": "Project memory says tool workflows must invalidate stale file-location assumptions after refactors.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "oc010-x1",
+      "tier": "session",
+      "content": "Old note says file target assumptions remain safe as long as the feature name stayed the same.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "oc010-s1",
+    "oc010-p1"
+  ],
+  "gold_invalid_ids": [
+    "oc010-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "oc010-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "oc010-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

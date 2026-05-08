@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rf005",
+  "family": "refactor",
+  "split": "public",
+  "task": "Extract path normalization utility used by watcher and importer.",
+  "repo_state_fingerprint": "rf005-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "rf005-s1",
+      "tier": "session",
+      "content": "Watcher and importer both depend on normalized slash handling for deterministic hashes.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rf005-p1",
+      "tier": "project",
+      "content": "Project memory says normalization must preserve case on display even when hashing lowercases.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rf005-x1",
+      "tier": "session",
+      "content": "Obsolete shortcut says converting all paths to lowercase is safe on every platform.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rf005-s1",
+    "rf005-p1"
+  ],
+  "gold_invalid_ids": [
+    "rf005-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "rf005-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rf005-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

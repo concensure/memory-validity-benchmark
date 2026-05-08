@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed005",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the Twilio SMS client after the provider changed the message status webhook payload.",
+  "repo_state_fingerprint": "ed005-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "ed005-s1",
+      "tier": "session",
+      "content": "Webhook handler is throwing null pointer errors; Twilio changed the status field from MessageStatus to SmsStatus.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed005-p1",
+      "tier": "project",
+      "content": "Current Twilio webhook handler must read the SmsStatus field instead of the removed MessageStatus field.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed005-p2",
+      "tier": "project",
+      "content": "Twilio also renamed the SmsSid field to MessageSid in the same webhook payload change.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed005-l1",
+      "tier": "long_term",
+      "content": "When a messaging provider changes webhook payload field names, update all field references atomically.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed005-x1",
+      "tier": "project",
+      "content": "Twilio webhook note (session 7): parse the MessageStatus and SmsSid fields from the Twilio status webhook payload.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: Twilio renamed MessageStatus to SmsStatus and SmsSid to MessageSid in webhooks"
+    },
+    {
+      "id": "ed005-x2",
+      "tier": "project",
+      "content": "Old SMS note says Twilio webhook fields are stable and do not change between API versions.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed005-s1",
+    "ed005-p1",
+    "ed005-p2",
+    "ed005-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed005-x1",
+    "ed005-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed005-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed005-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed005-p2",
+        "ed005-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

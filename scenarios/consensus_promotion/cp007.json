@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cp007",
+  "family": "consensus_promotion",
+  "split": "public",
+  "task": "Delay promotion until contradiction chain is resolved.",
+  "repo_state_fingerprint": "cp007-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "cp007-s1",
+      "tier": "session",
+      "content": "Two related memories disagree and the supersession chain is not yet explicit.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cp007-p1",
+      "tier": "project",
+      "content": "Project memory says unresolved contradiction chains must be settled before promotion.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cp007-x1",
+      "tier": "session",
+      "content": "Old heuristic says the newer of two contradictory memories can be promoted automatically.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cp007-s1",
+    "cp007-p1"
+  ],
+  "gold_invalid_ids": [
+    "cp007-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cp007-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cp007-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

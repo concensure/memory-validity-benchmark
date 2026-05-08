@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "sm004",
+  "family": "stale_memory",
+  "split": "public",
+  "task": "Suppress obsolete pointer rendering heuristics.",
+  "repo_state_fingerprint": "sm004-repo-v1",
+  "token_budget": 150,
+  "candidate_memories": [
+    {
+      "id": "sm004-s1",
+      "tier": "session",
+      "content": "Pointer rendering already excludes stale and superseded items in deterministic order.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sm004-p1",
+      "tier": "project",
+      "content": "Project memory says stale memories should not appear in POINTERS even if recently touched.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sm004-x1",
+      "tier": "session",
+      "content": "Outdated note says recently updated stale items should still be shown to users.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "sm004-s1",
+    "sm004-p1"
+  ],
+  "gold_invalid_ids": [
+    "sm004-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "sm004-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "sm004-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

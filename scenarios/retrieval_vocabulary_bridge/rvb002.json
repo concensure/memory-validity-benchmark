@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rvb002",
+  "family": "retrieval_vocabulary_bridge",
+  "split": "public",
+  "task": "The charge-card operation is being retried on network errors but is sometimes double-charging customers. Make retries safe.",
+  "repo_state_fingerprint": "rvb002-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "rvb002-p1",
+      "tier": "project",
+      "content": "charge-card must be idempotent: the Stripe API call must include an idempotency_key derived from order_id+attempt_number so duplicate requests return the original result.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb002-l1",
+      "tier": "long_term",
+      "content": "Any payment mutation that may be retried must pass an idempotency key to the payment provider; this prevents double charges on network retry.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb002-p2",
+      "tier": "project",
+      "content": "Idempotency keys expire after 24 h on Stripe; do not reuse keys beyond one business day for the same order.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rvb002-x1",
+      "tier": "project",
+      "content": "The retry policy for charge-card uses exponential backoff with jitter, max 3 attempts, starting at 200 ms.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: describes retry mechanics but not the safe-retry fix"
+    },
+    {
+      "id": "rvb002-x2",
+      "tier": "long_term",
+      "content": "HTTP 5xx responses are generally safe to retry; HTTP 4xx responses should not be retried without user action.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: general retry guidance, not the idempotency fix"
+    },
+    {
+      "id": "rvb002-x3",
+      "tier": "session",
+      "content": "Duplicate charge incident occurred on 3 orders; customers have been refunded; root cause is missing idempotency key.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rvb002-p1",
+    "rvb002-l1",
+    "rvb002-p2"
+  ],
+  "gold_invalid_ids": [
+    "rvb002-x1",
+    "rvb002-x2",
+    "rvb002-x3"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rvb002-p1",
+        "rvb002-l1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rvb002-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

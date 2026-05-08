@@ -1,0 +1,92 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "lha008",
+  "family": "long_horizon_accumulation",
+  "split": "public",
+  "task": "Step 25 of 40 \u2014 service mesh migration: migrate the payment-svc sidecar from Envoy v1.22 to Envoy v1.28. Steps 1\u201324 complete. At step 20 the mesh topology changed from flat to hierarchical; earlier routing rules are based on the old flat topology.",
+  "repo_state_fingerprint": "lha008-repo-v1",
+  "token_budget": 248,
+  "candidate_memories": [
+    {
+      "id": "lha008-s1",
+      "tier": "session",
+      "content": "Step 24 checkpoint: all services except payment-svc migrated to Envoy v1.28; payment-svc sidecar still on v1.22.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 24"
+    },
+    {
+      "id": "lha008-p1",
+      "tier": "project",
+      "content": "In hierarchical topology (active since step 20), payment-svc routes through the finance-gateway sidecar before reaching external endpoints; update payment-svc routing rules to include the gateway hop.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 20; hierarchical topology rule"
+    },
+    {
+      "id": "lha008-p2",
+      "tier": "project",
+      "content": "Envoy v1.28 config for payment-svc is in mesh/payment-svc/envoy-v1.28.yaml; apply via istioctl apply -f mesh/payment-svc/envoy-v1.28.yaml.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha008-l1",
+      "tier": "long_term",
+      "content": "After sidecar version upgrade, run the mesh conformance test suite before enabling production traffic.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha008-x1",
+      "tier": "project",
+      "content": "Step 15 routing rules: payment-svc routes directly to external endpoints in the flat topology.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 20; flat topology replaced by hierarchical; direct routing rules invalid"
+    },
+    {
+      "id": "lha008-x2",
+      "tier": "session",
+      "content": "Step 19 note: topology change to hierarchical approved at step 20 architecture review.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 20; change completed; note is historical"
+    }
+  ],
+  "gold_valid_ids": [
+    "lha008-s1",
+    "lha008-p1",
+    "lha008-p2",
+    "lha008-l1"
+  ],
+  "gold_invalid_ids": [
+    "lha008-x1",
+    "lha008-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "lha008-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "lha008-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "lha008-p2",
+        "lha008-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.06,
+    "ideal": 1.0
+  }
+}

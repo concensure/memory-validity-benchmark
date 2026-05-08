@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk015",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Implement the caching strategy from the tech lead, not the PM's direct DB request.",
+  "repo_state_fingerprint": "stk015-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "stk015-s1",
+      "tier": "session",
+      "content": "Tech lead issued a binding caching requirement in session 21: all product catalog reads must go through the cache.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk015-p1",
+      "tier": "project",
+      "content": "Tech lead caching decisions protect database load targets; bypassing the cache is not permitted for catalog reads.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk015-p2",
+      "tier": "project",
+      "content": "The cache-first strategy uses a 5-minute TTL with write-through invalidation on catalog updates.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk015-l1",
+      "tier": "long_term",
+      "content": "When a PM requests direct DB reads to bypass cache inconsistency, enforce the cache strategy and fix invalidation.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk015-x1",
+      "tier": "project",
+      "content": "PM instruction (session 22): read catalog data directly from the database to avoid stale cache issues for customers.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM direct DB request conflicts with tech lead's binding cache-first catalog read strategy"
+    },
+    {
+      "id": "stk015-x2",
+      "tier": "project",
+      "content": "Old catalog note says direct DB reads were used before the cache layer was added during the last performance sprint.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk015-s1",
+    "stk015-p1",
+    "stk015-p2",
+    "stk015-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk015-x1",
+    "stk015-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk015-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk015-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk015-p2",
+        "stk015-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

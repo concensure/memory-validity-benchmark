@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "sm011",
+  "family": "stale_memory",
+  "split": "public",
+  "task": "Suppress pre-normalization schema assumptions after scenario metadata was standardized.",
+  "repo_state_fingerprint": "sm011-repo-v1",
+  "token_budget": 160,
+  "candidate_memories": [
+    {
+      "id": "sm011-s1",
+      "tier": "session",
+      "content": "All scenarios now carry explicit schema and split metadata, so older implicit-discovery assumptions are stale.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sm011-p1",
+      "tier": "project",
+      "content": "Project memory says loaders should rely on explicit fields rather than legacy folder heuristics.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sm011-x1",
+      "tier": "session",
+      "content": "Old note says family folder names alone are enough to infer scenario metadata forever.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "sm011-s1",
+    "sm011-p1"
+  ],
+  "gold_invalid_ids": [
+    "sm011-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "sm011-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "sm011-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

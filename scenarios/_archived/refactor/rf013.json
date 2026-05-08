@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rf013",
+  "family": "refactor",
+  "split": "holdout",
+  "task": "Extract cross-project leakage checks into a retrieval policy package.",
+  "repo_state_fingerprint": "rf013-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "rf013-s1",
+      "tier": "session",
+      "content": "Leakage checks are now duplicated across selection and audit code paths.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rf013-p1",
+      "tier": "project",
+      "content": "Project memory says retrieval policy should centralize scope barriers without coupling to storage.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rf013-x1",
+      "tier": "session",
+      "content": "Old note says scope barriers can stay scattered because they rarely change.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rf013-s1",
+    "rf013-p1"
+  ],
+  "gold_invalid_ids": [
+    "rf013-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "rf013-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rf013-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps021",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the corrupted file uploads caused by the multipart form parser buffer size limit.",
+  "repo_state_fingerprint": "tps021-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps021-s1",
+      "tier": "session",
+      "content": "File uploads larger than 10MB are being silently truncated by the new multipart parser's default buffer size.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps021-p1",
+      "tier": "project",
+      "content": "The multipart parser must be configured with a 100MB buffer limit to match the published upload size limit.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps021-p2",
+      "tier": "project",
+      "content": "The parser was replaced in the last sprint without preserving the custom buffer configuration.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps021-l1",
+      "tier": "long_term",
+      "content": "When replacing form parsers, document all custom configuration before the replacement and verify after.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps021-s2",
+      "tier": "session",
+      "content": "Files under 10MB upload correctly; the truncation only affects the new parser's default 10MB buffer.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps021-n01",
+      "tier": "project",
+      "content": "The file upload feature supports JPEG, PNG, PDF, and DOCX formats with a maximum size of 100MB.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps021-n02",
+      "tier": "session",
+      "content": "Session 8 note: the storage team added virus scanning for all uploaded files.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps021-n03",
+      "tier": "long_term",
+      "content": "Old practice: the form parser buffer was set globally in middleware before per-handler configuration was supported.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps021-n04",
+      "tier": "project",
+      "content": "Uploaded files are stored in S3 with an MD5 checksum stored in the file_uploads table.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps021-n05",
+      "tier": "session",
+      "content": "Session 3 note: the upload progress indicator was added to the frontend.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps021-n06",
+      "tier": "project",
+      "content": "Old parser guide: the original multipart parser used streaming mode for large files.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps021-n07",
+      "tier": "long_term",
+      "content": "Parser buffer limits must be explicitly set to match the application's documented upload size limits.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps021-n08",
+      "tier": "session",
+      "content": "Session 14 note: the CDN was configured to proxy file uploads to reduce server load.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps021-n09",
+      "tier": "project",
+      "content": "The file upload endpoint uses a dedicated worker pool with 8 goroutines to handle concurrent uploads.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps021-n10",
+      "tier": "session",
+      "content": "A file upload load test in session 6 confirmed the previous parser handled 100MB files correctly.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps021-n11",
+      "tier": "project",
+      "content": "File metadata is indexed in Elasticsearch to support filename and content-based search.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps021-n12",
+      "tier": "long_term",
+      "content": "When replacing server-side parsers, write a regression test that uploads a file at the maximum allowed size.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps021-n13",
+      "tier": "session",
+      "content": "Session 11 note: the storage team added automatic compression for uploaded PDF files.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps021-n14",
+      "tier": "project",
+      "content": "Old upload guide: the 100MB limit was originally 50MB before it was doubled for enterprise customers.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps021-n15",
+      "tier": "project",
+      "content": "File uploads are restricted to authenticated users with the file:upload permission.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps021-s1",
+    "tps021-p1",
+    "tps021-p2",
+    "tps021-l1",
+    "tps021-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps021-n01",
+    "tps021-n02",
+    "tps021-n03",
+    "tps021-n04",
+    "tps021-n05",
+    "tps021-n06",
+    "tps021-n07",
+    "tps021-n08",
+    "tps021-n09",
+    "tps021-n10",
+    "tps021-n11",
+    "tps021-n12",
+    "tps021-n13",
+    "tps021-n14",
+    "tps021-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps021-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps021-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps021-p2",
+        "tps021-l1",
+        "tps021-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

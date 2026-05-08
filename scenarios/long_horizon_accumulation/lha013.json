@@ -1,0 +1,93 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "lha013",
+  "family": "long_horizon_accumulation",
+  "split": "public",
+  "task": "Step 17 of 30 \u2014 multi-service security hardening: apply network policies to the data plane services. Steps 1\u201316 complete. Memories from multiple agent roles are present in the pool; some cross-agent context is stale.",
+  "repo_state_fingerprint": "lha013-repo-v1",
+  "token_budget": 243,
+  "candidate_memories": [
+    {
+      "id": "lha013-s1",
+      "tier": "session",
+      "content": "[security-agent at step 16] Network policy templates validated in staging; 4 data plane services confirmed ready for policy application in production.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 16; from security-agent"
+    },
+    {
+      "id": "lha013-p1",
+      "tier": "project",
+      "content": "[architect at step 14] Network policies use a default-deny ingress posture; each service must explicitly allowlist its required ingress sources in its NetworkPolicy spec.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 14; from architect-agent"
+    },
+    {
+      "id": "lha013-p2",
+      "tier": "project",
+      "content": "[platform-agent at step 12] Network policy manifests are in k8s/network-policies/; apply via kubectl apply -f k8s/network-policies/<service>/.",
+      "validity": "valid",
+      "bucket": "supporting",
+      "notes": "created_at_step: 12"
+    },
+    {
+      "id": "lha013-l1",
+      "tier": "long_term",
+      "content": "After applying network policies, run the network policy conformance tests in tests/network/; any blocked legitimate traffic is a policy misconfiguration.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha013-x1",
+      "tier": "session",
+      "content": "[security-agent at step 10] Network policies will be applied to control plane services first; data plane services deferred to step 17.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 16; step 16 confirmed data plane is now ready; deferral resolved"
+    },
+    {
+      "id": "lha013-x2",
+      "tier": "project",
+      "content": "[architect at step 6] Initial network policy design used namespace-level policies; revised to pod-level policies at step 14 for finer granularity.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 14; namespace-level design abandoned"
+    }
+  ],
+  "gold_valid_ids": [
+    "lha013-s1",
+    "lha013-p1",
+    "lha013-p2",
+    "lha013-l1"
+  ],
+  "gold_invalid_ids": [
+    "lha013-x1",
+    "lha013-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "lha013-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "lha013-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "lha013-p2",
+        "lha013-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.06,
+    "ideal": 1.0
+  }
+}

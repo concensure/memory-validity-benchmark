@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pi015",
+  "family": "project_isolation",
+  "split": "holdout",
+  "task": "Keep benchmark governance memory from contaminating product deployment work.",
+  "repo_state_fingerprint": "pi015-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "pi015-s1",
+      "tier": "session",
+      "content": "Governance rules about public versus holdout bundles do not help a product deployment fix in another repo.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pi015-p1",
+      "tier": "project",
+      "content": "Project memory says governance context is only relevant inside benchmark maintenance tasks.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pi015-x1",
+      "tier": "session",
+      "content": "Foreign note says governance memories are safe to include broadly because they are not code-specific.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pi015-s1",
+    "pi015-p1"
+  ],
+  "gold_invalid_ids": [
+    "pi015-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "pi015-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pi015-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

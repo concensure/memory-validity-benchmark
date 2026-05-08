@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed006",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the Elasticsearch client after the provider removed the deprecated _type field support.",
+  "repo_state_fingerprint": "ed006-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "ed006-s1",
+      "tier": "session",
+      "content": "Index operations are returning 400 errors; Elasticsearch 8.x removed support for the _type field in all APIs.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed006-p1",
+      "tier": "project",
+      "content": "All Elasticsearch document operations must omit the _type field; it is no longer accepted.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed006-p2",
+      "tier": "project",
+      "content": "Index mappings must be recreated without _type to use Elasticsearch 8.x without compatibility mode.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed006-l1",
+      "tier": "long_term",
+      "content": "When Elasticsearch removes a major legacy feature, audit all document and index operations for _type usage.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed006-x1",
+      "tier": "project",
+      "content": "Elasticsearch note (session 10): include _type in document index calls for compatibility with multi-type indices.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: _type field removed from all Elasticsearch 8.x APIs; indices must omit it"
+    },
+    {
+      "id": "ed006-x2",
+      "tier": "project",
+      "content": "Old search note says _type was useful for organizing multiple document kinds in a single index.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed006-s1",
+    "ed006-p1",
+    "ed006-p2",
+    "ed006-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed006-x1",
+    "ed006-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed006-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed006-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed006-p2",
+        "ed006-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

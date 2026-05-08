@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps032",
+  "family": "token_pressure_scale",
+  "split": "holdout",
+  "task": "Fix the permission check failure after the LDAP group membership cache TTL was too long.",
+  "repo_state_fingerprint": "tps032-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps032-s1",
+      "tier": "session",
+      "content": "Users added to the admin LDAP group cannot access admin features for up to 4 hours after group assignment.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps032-p1",
+      "tier": "project",
+      "content": "The LDAP group membership cache TTL must be reduced from 4 hours to 5 minutes for security-sensitive groups.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps032-p2",
+      "tier": "project",
+      "content": "The 4-hour TTL was set for read performance; group changes for admin groups are infrequent but must be immediate.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps032-l1",
+      "tier": "long_term",
+      "content": "Only admin and security-sensitive group membership changes are delayed; standard group changes are not affected.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps032-s2",
+      "tier": "session",
+      "content": "Session 5 note: the IT team submitted a ticket requesting immediate group membership propagation for admin users.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps032-n01",
+      "tier": "project",
+      "content": "LDAP integration uses Active Directory with LDAPS for secure directory queries.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps032-n02",
+      "tier": "session",
+      "content": "Session 8 note: the IT team migrated the LDAP directory to a new server in session 8.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps032-n03",
+      "tier": "long_term",
+      "content": "Old practice: LDAP queries were made on every request before caching was introduced for performance.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps032-n04",
+      "tier": "project",
+      "content": "The LDAP cache is implemented in Redis with per-group TTL configuration.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps032-n05",
+      "tier": "session",
+      "content": "Session 3 note: the security team required that LDAP cache entries are encrypted at rest.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps032-n06",
+      "tier": "project",
+      "content": "Old LDAP guide: the 4-hour TTL was set based on the LDAP directory's replication latency.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps032-n07",
+      "tier": "long_term",
+      "content": "Security-sensitive group memberships must use short cache TTLs to prevent unauthorized access windows.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps032-n08",
+      "tier": "session",
+      "content": "Session 12 note: the IT team added a change notification hook to the LDAP directory for real-time updates.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps032-n09",
+      "tier": "project",
+      "content": "LDAP group membership changes are propagated to all LDAP replicas within 60 seconds.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps032-n10",
+      "tier": "session",
+      "content": "A permission audit in session 6 confirmed no unauthorized access occurred with the current 4-hour TTL.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps032-n11",
+      "tier": "project",
+      "content": "Non-admin LDAP groups have a 2-hour cache TTL; only admin groups use the 4-hour TTL.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps032-n12",
+      "tier": "long_term",
+      "content": "Cache TTLs for permission data must be tunable per group class to balance performance and security.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps032-n13",
+      "tier": "session",
+      "content": "Session 9 note: the security team added a LDAP group change audit log.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps032-n14",
+      "tier": "project",
+      "content": "Old cache config: the uniform 4-hour TTL was set before per-group TTL configuration was supported.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps032-n15",
+      "tier": "project",
+      "content": "The LDAP integration supports both on-premise Active Directory and Azure AD.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps032-s1",
+    "tps032-p1",
+    "tps032-p2",
+    "tps032-l1",
+    "tps032-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps032-n01",
+    "tps032-n02",
+    "tps032-n03",
+    "tps032-n04",
+    "tps032-n05",
+    "tps032-n06",
+    "tps032-n07",
+    "tps032-n08",
+    "tps032-n09",
+    "tps032-n10",
+    "tps032-n11",
+    "tps032-n12",
+    "tps032-n13",
+    "tps032-n14",
+    "tps032-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps032-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps032-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps032-p2",
+        "tps032-l1",
+        "tps032-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

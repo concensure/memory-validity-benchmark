@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp024",
+  "family": "false_promotion",
+  "split": "holdout",
+  "task": "Implement the index maintenance using session evidence, not the promoted vacuum schedule rule.",
+  "repo_state_fingerprint": "fp024-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "fp024-s1",
+      "tier": "session",
+      "content": "Current DB monitoring shows the promoted 'weekly VACUUM ANALYZE' causes table bloat between runs.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp024-p1",
+      "tier": "project",
+      "content": "Project DB analysis shows high-write tables need daily VACUUM ANALYZE to prevent page bloat.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp024-p2",
+      "tier": "project",
+      "content": "Correct schedule is daily for high-write tables (orders, events) and weekly for low-write tables.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp024-l1",
+      "tier": "long_term",
+      "content": "When session DB monitoring shows bloat from a promoted schedule, demote and implement per-table schedules.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp024-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 5): run VACUUM ANALYZE on all tables weekly for consistent maintenance.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted weekly schedule was based on read-heavy tables; high-write tables need daily maintenance"
+    },
+    {
+      "id": "fp024-x2",
+      "tier": "project",
+      "content": "Old promotion note says weekly VACUUM was confirmed by the DBA team as sufficient for all table types.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp024-s1",
+    "fp024-p1",
+    "fp024-p2",
+    "fp024-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp024-x1",
+    "fp024-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp024-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp024-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp024-p2",
+        "fp024-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

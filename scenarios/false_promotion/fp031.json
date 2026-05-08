@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp031",
+  "family": "false_promotion",
+  "split": "holdout",
+  "task": "Implement the token refresh fix using session evidence, not the promoted refresh window rule.",
+  "repo_state_fingerprint": "fp031-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "fp031-s1",
+      "tier": "session",
+      "content": "Current auth monitoring shows the promoted 'refresh tokens 5 minutes before expiry' rule causes refresh race conditions.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp031-p1",
+      "tier": "project",
+      "content": "Project auth analysis shows refreshing tokens 30 seconds before expiry is sufficient and avoids race conditions.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp031-p2",
+      "tier": "project",
+      "content": "Correct refresh window is 30 seconds before expiry; 5 minutes creates overlapping refresh requests.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp031-l1",
+      "tier": "long_term",
+      "content": "When session monitoring shows race conditions from a promoted refresh rule, demote and reduce the window.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp031-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 5): refresh access tokens when they are within 5 minutes of expiry.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted 5-minute window was based on slow network assumptions; fast networks cause refresh races"
+    },
+    {
+      "id": "fp031-x2",
+      "tier": "project",
+      "content": "Old promotion note says the 5-minute window was confirmed by the auth team as a safe proactive refresh margin.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp031-s1",
+    "fp031-p1",
+    "fp031-p2",
+    "fp031-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp031-x1",
+    "fp031-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp031-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp031-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp031-p2",
+        "fp031-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rse006",
+  "family": "retrieval_scope_enforcement",
+  "split": "public",
+  "task": "[Project: Cobalt/platform-team] Name the new REST endpoint for the Cobalt platform API.",
+  "repo_state_fingerprint": "rse006-repo-v1",
+  "token_budget": 204,
+  "candidate_memories": [
+    {
+      "id": "rse006-p1",
+      "tier": "project",
+      "content": "[Project: Cobalt] REST endpoints use kebab-case resource names with API version prefix: /api/v{n}/{resource-name}; no underscores in paths.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rse006-l1",
+      "tier": "long_term",
+      "content": "[Project: Cobalt] Naming convention was standardised in 2024; all new Cobalt endpoints must follow it; deviations require an ADR.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rse006-x1",
+      "tier": "project",
+      "content": "[Project: Orion] REST endpoints use snake_case resource names: /api/v{n}/{resource_name}; Orion's convention differs from Cobalt's.",
+      "validity": "irrelevant",
+      "bucket": "critical",
+      "notes": "note: scope=Orion; snake_case vs kebab-case conflict if injected"
+    },
+    {
+      "id": "rse006-x2",
+      "tier": "project",
+      "content": "[Project: Atlas] REST endpoints omit version prefix for internal APIs; /api/{resource} is acceptable for Atlas.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: scope=Atlas; different versioning strategy"
+    },
+    {
+      "id": "rse006-x3",
+      "tier": "long_term",
+      "content": "[General] REST API naming conventions vary by project; always check the project's API style guide before naming new endpoints.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: general meta-guidance, Cobalt-specific rule is authoritative"
+    },
+    {
+      "id": "rse006-x4",
+      "tier": "session",
+      "content": "[Project: Cobalt] The new endpoint is for managing deployment slots; resource name candidates: deployment-slot or deployment_slot.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rse006-p1",
+    "rse006-l1"
+  ],
+  "gold_invalid_ids": [
+    "rse006-x1",
+    "rse006-x2",
+    "rse006-x3",
+    "rse006-x4"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rse006-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rse006-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

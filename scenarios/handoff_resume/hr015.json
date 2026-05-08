@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "hr015",
+  "family": "handoff_resume",
+  "split": "holdout",
+  "task": "Resume minimal-context scenario work after token budget updates.",
+  "repo_state_fingerprint": "hr015-repo-v1",
+  "token_budget": 165,
+  "candidate_memories": [
+    {
+      "id": "hr015-s1",
+      "tier": "session",
+      "content": "Token budget updates are complete and the remaining work is to expand abstention-sensitive minimal tasks.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "hr015-p1",
+      "tier": "project",
+      "content": "Project memory says neutral minimal scenarios should explicitly reward correct non-injection.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "hr015-x1",
+      "tier": "session",
+      "content": "Old note says minimal scenarios are lower priority and can be left underspecified.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "hr015-s1",
+    "hr015-p1"
+  ],
+  "gold_invalid_ids": [
+    "hr015-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "hr015-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "hr015-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

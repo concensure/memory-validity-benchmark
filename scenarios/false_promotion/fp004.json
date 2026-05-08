@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp004",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Fix the database query timeout using session evidence, not the promoted timeout value rule.",
+  "repo_state_fingerprint": "fp004-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "fp004-s1",
+      "tier": "session",
+      "content": "Current production monitoring shows the promoted '30-second query timeout' is truncating valid long-running reports.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp004-p1",
+      "tier": "project",
+      "content": "Project SLA review shows report queries are expected to run up to 90 seconds during end-of-month peaks.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp004-p2",
+      "tier": "project",
+      "content": "Correct timeout is 90 seconds for report queries and 30 seconds for transactional queries.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp004-l1",
+      "tier": "long_term",
+      "content": "When session monitoring shows valid queries timing out, trust the evidence over the promoted timeout rule.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp004-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 4): all database queries must use a 30-second timeout without exception.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted universal 30s timeout was based on OLTP measurements; report queries have a longer SLA"
+    },
+    {
+      "id": "fp004-x2",
+      "tier": "project",
+      "content": "Old promotion note says the 30-second timeout was validated as a safe conservative limit for all queries.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp004-s1",
+    "fp004-p1",
+    "fp004-p2",
+    "fp004-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp004-x1",
+    "fp004-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp004-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp004-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp004-p2",
+        "fp004-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

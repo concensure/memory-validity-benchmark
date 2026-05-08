@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc030",
+  "family": "concurrent_conflict",
+  "split": "holdout",
+  "task": "Apply the hotfix branch merge after confirming no other agent is performing the same merge.",
+  "repo_state_fingerprint": "cc030-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "cc030-s1",
+      "tier": "session",
+      "content": "Merge-Agent-A started the hotfix/payment-fix merge into main at 16:00 after CI passed.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc030-p1",
+      "tier": "project",
+      "content": "Branch merges must be single-agent to prevent duplicate merge commits in the target branch.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc030-p2",
+      "tier": "project",
+      "content": "Merge-Agent-A's merge is waiting for the final pre-merge validation to complete.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc030-l1",
+      "tier": "long_term",
+      "content": "When two agents both initiate the same branch merge, surface the conflict before either applies.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc030-x1",
+      "tier": "session",
+      "content": "Merge-Agent-B also started the hotfix/payment-fix merge into main at 16:02 from a parallel trigger.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents both initiated the same branch merge into the main branch"
+    },
+    {
+      "id": "cc030-x2",
+      "tier": "project",
+      "content": "Old Git note says duplicate merge attempts are harmless because the second one will be a no-op.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc030-s1",
+    "cc030-p1",
+    "cc030-p2",
+    "cc030-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc030-x1",
+    "cc030-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc030-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc030-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc030-p2",
+        "cc030-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

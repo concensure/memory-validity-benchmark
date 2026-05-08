@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nm009",
+  "family": "neutral_minimal",
+  "split": "holdout",
+  "task": "Change a default value directly specified by the current issue text.",
+  "repo_state_fingerprint": "nm009-repo-v1",
+  "token_budget": 120,
+  "candidate_memories": [
+    {
+      "id": "nm009-s1",
+      "tier": "session",
+      "content": "The issue text names the exact default that must change and no historical memory is needed.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nm009-p1",
+      "tier": "project",
+      "content": "Project memory says neutral tasks should penalize context inflation.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nm009-x1",
+      "tier": "session",
+      "content": "Old habit note says every default change should retrieve prior incident memories just in case.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nm009-s1",
+    "nm009-p1"
+  ],
+  "gold_invalid_ids": [
+    "nm009-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "nm009-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nm009-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

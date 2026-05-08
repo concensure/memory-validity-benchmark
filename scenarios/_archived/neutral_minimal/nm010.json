@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nm010",
+  "family": "neutral_minimal",
+  "split": "holdout",
+  "task": "Apply a straightforward one-line fix from a deterministic failing assertion.",
+  "repo_state_fingerprint": "nm010-repo-v1",
+  "token_budget": 125,
+  "candidate_memories": [
+    {
+      "id": "nm010-s1",
+      "tier": "session",
+      "content": "The assertion already narrows the change to a one-line condition adjustment.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nm010-p1",
+      "tier": "project",
+      "content": "Project memory says over-injecting for one-line deterministic fixes wastes tokens and attention.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nm010-x1",
+      "tier": "session",
+      "content": "Old note says one-line fixes are still safer if the full historical memory stack is injected.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nm010-s1",
+    "nm010-p1"
+  ],
+  "gold_invalid_ids": [
+    "nm010-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "nm010-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nm010-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

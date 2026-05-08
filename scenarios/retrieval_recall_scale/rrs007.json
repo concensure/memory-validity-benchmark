@@ -1,0 +1,145 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rrs007",
+  "family": "retrieval_recall_scale",
+  "split": "public",
+  "task": "Scale up the order-events Kafka consumer group to handle 3\u00d7 the current message volume after a flash sale announcement. Candidate pool from a 200-entry store across messaging, order, and platform projects.",
+  "repo_state_fingerprint": "rrs007-repo-v1",
+  "token_budget": 250,
+  "candidate_memories": [
+    {
+      "id": "rrs007-s1",
+      "tier": "session",
+      "content": "Consumer lag on order-events is 420 k messages and growing; current group has 6 consumers, topic has 12 partitions.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs007-p1",
+      "tier": "project",
+      "content": "order-events consumer group can scale to a maximum of 12 consumers (one per partition); scale via helm upgrade order-consumer --set replicaCount=12.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs007-p2",
+      "tier": "project",
+      "content": "Consumers must not be scaled beyond partition count; excess consumers are idle and waste resources.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs007-l1",
+      "tier": "long_term",
+      "content": "After consumer scaling, monitor consumer lag for 5 min before closing the incident; lag should drop below 10 k within 3 min.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs007-x1",
+      "tier": "project",
+      "content": "payment-events topic has 24 partitions and its consumer group is separate; not involved in this incident.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs007-x2",
+      "tier": "long_term",
+      "content": "Kafka broker retention for order-events is 7 days; messages are not at risk of expiry during the lag event.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs007-x3",
+      "tier": "session",
+      "content": "Kafka broker CPU is at 38%; well within capacity headroom.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs007-x4",
+      "tier": "project",
+      "content": "order-events schema uses Avro with schema registry at http://schema-registry:8081; consumers auto-register schemas.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs007-x5",
+      "tier": "project",
+      "content": "Old note: consumer group was previously named order-processor-group; renamed to order-consumer-group in 2024.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: old group name, current name is order-consumer-group"
+    },
+    {
+      "id": "rrs007-x6",
+      "tier": "session",
+      "content": "Flash sale starts in 45 min; lag resolution must complete before sale traffic peaks.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs007-x7",
+      "tier": "long_term",
+      "content": "Consumer group rebalancing takes 30\u201390 s; expect a brief lag spike during the rebalance.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs007-x8",
+      "tier": "project",
+      "content": "Dead-letter topic for order-events is order-events-dlq; DLQ consumer is separate and must not be scaled here.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs007-x9",
+      "tier": "session",
+      "content": "Product catalog service is healthy; no upstream issues causing order-event generation anomalies.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rrs007-s1",
+    "rrs007-p1",
+    "rrs007-p2",
+    "rrs007-l1"
+  ],
+  "gold_invalid_ids": [
+    "rrs007-x1",
+    "rrs007-x2",
+    "rrs007-x3",
+    "rrs007-x4",
+    "rrs007-x5",
+    "rrs007-x6",
+    "rrs007-x7",
+    "rrs007-x8",
+    "rrs007-x9"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "rrs007-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rrs007-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rrs007-p2",
+        "rrs007-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

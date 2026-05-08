@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp020",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Fix the session handling using session evidence, not the promoted session storage rule.",
+  "repo_state_fingerprint": "fp020-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "fp020-s1",
+      "tier": "session",
+      "content": "Current memory profiling shows the promoted 'store all session state in Redis' rule causes 40GB memory usage.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp020-p1",
+      "tier": "project",
+      "content": "Project capacity planning shows ephemeral session data (cart contents) should stay in-process; only auth state needs Redis.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp020-p2",
+      "tier": "project",
+      "content": "Correct split is auth tokens and CSRF state in Redis; cart and UI state in encrypted cookies.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp020-l1",
+      "tier": "long_term",
+      "content": "When session memory profiles contradict a promoted storage rule, demote and split storage appropriately.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp020-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 4): store all session state in Redis for consistency across service instances.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted universal Redis rule was based on auth state needs; ephemeral UI state inflates Redis memory"
+    },
+    {
+      "id": "fp020-x2",
+      "tier": "project",
+      "content": "Old promotion note says all-Redis session storage was confirmed by the infrastructure team as the correct approach.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp020-s1",
+    "fp020-p1",
+    "fp020-p2",
+    "fp020-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp020-x1",
+    "fp020-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp020-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp020-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp020-p2",
+        "fp020-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

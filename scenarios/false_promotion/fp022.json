@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp022",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Apply the monitoring fix using session evidence, not the promoted metric cardinality rule.",
+  "repo_state_fingerprint": "fp022-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "fp022-s1",
+      "tier": "session",
+      "content": "Current Prometheus storage shows the promoted 'label all metrics with user_id' rule causes metric explosion.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp022-p1",
+      "tier": "project",
+      "content": "Project monitoring audit shows user_id as a metric label creates unbounded cardinality and crashes the TSDB.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp022-p2",
+      "tier": "project",
+      "content": "Correct approach is to use user_id only in trace spans, not as a Prometheus metric label.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp022-l1",
+      "tier": "long_term",
+      "content": "When session monitoring shows cardinality explosion from a promoted rule, demote and strip the high-cardinality label.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp022-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 6): label all request metrics with user_id for fine-grained user analysis.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted user_id label was based on small-scale testing; production user volume causes TSDB explosion"
+    },
+    {
+      "id": "fp022-x2",
+      "tier": "project",
+      "content": "Old promotion note says user_id labeling was validated by the observability team for per-user debugging.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp022-s1",
+    "fp022-p1",
+    "fp022-p2",
+    "fp022-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp022-x1",
+    "fp022-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp022-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp022-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp022-p2",
+        "fp022-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

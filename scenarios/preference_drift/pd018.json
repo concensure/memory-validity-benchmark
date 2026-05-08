@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd018",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Write the new API client using the updated preference for generated clients over hand-written.",
+  "repo_state_fingerprint": "pd018-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "pd018-s1",
+      "tier": "session",
+      "content": "User stated in session 43: stop hand-writing API clients; generate all clients from the OpenAPI spec.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd018-p1",
+      "tier": "project",
+      "content": "Client generation policy (updated session 43): generated clients from the OpenAPI spec are mandatory.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd018-p2",
+      "tier": "project",
+      "content": "Hand-written API client code in files touched during this task should be replaced with generated clients.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd018-l1",
+      "tier": "long_term",
+      "content": "When client generation preference changes, update the OpenAPI spec before running the code generator.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd018-x1",
+      "tier": "project",
+      "content": "Client generation policy (session 12): write API clients by hand to keep tight control over behavior.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old hand-written client preference superseded by generated client mandate in session 43"
+    },
+    {
+      "id": "pd018-x2",
+      "tier": "project",
+      "content": "Old API note says hand-written clients were chosen because the generator produced verbose boilerplate.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd018-s1",
+    "pd018-p1",
+    "pd018-p2",
+    "pd018-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd018-x1",
+    "pd018-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd018-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd018-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd018-p2",
+        "pd018-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

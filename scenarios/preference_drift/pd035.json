@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd035",
+  "family": "preference_drift",
+  "split": "holdout",
+  "task": "Apply the updated testing data preference: generated test data over hardcoded fixtures.",
+  "repo_state_fingerprint": "pd035-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "pd035-s1",
+      "tier": "session",
+      "content": "User directed in session 57: stop using hardcoded fixture files; generate all test data programmatically.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd035-p1",
+      "tier": "project",
+      "content": "Test data policy (updated session 57): programmatically generated test data is required for all new tests.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd035-p2",
+      "tier": "project",
+      "content": "Hardcoded fixture files touched during this task should be replaced with generator functions.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd035-l1",
+      "tier": "long_term",
+      "content": "When test data preference changes, write data generator utilities before migrating existing fixtures.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd035-x1",
+      "tier": "project",
+      "content": "Test data policy (session 27): use hardcoded fixture files for reproducibility and simplicity in test setup.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old hardcoded fixture preference superseded by programmatic generation mandate in session 57"
+    },
+    {
+      "id": "pd035-x2",
+      "tier": "project",
+      "content": "Old test note says hardcoded fixtures were chosen because generated data can produce non-deterministic test failures.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd035-s1",
+    "pd035-p1",
+    "pd035-p2",
+    "pd035-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd035-x1",
+    "pd035-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd035-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd035-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd035-p2",
+        "pd035-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

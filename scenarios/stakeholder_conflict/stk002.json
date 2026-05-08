@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk002",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Apply the database schema decision from the architect, not the PM's field addition request.",
+  "repo_state_fingerprint": "stk002-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "stk002-s1",
+      "tier": "session",
+      "content": "Architect issued a binding schema freeze decision in session 22: no new columns until migration debt is resolved.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk002-p1",
+      "tier": "project",
+      "content": "Schema changes require architect approval; the freeze decision blocks all new column additions until migration clears.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk002-p2",
+      "tier": "project",
+      "content": "The migration debt backlog has 6 unresolved items; the architect's freeze is in effect until all 6 are resolved.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk002-l1",
+      "tier": "long_term",
+      "content": "When an architect freezes a schema and a PM requests additions, enforce the freeze and document the PM request.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk002-x1",
+      "tier": "project",
+      "content": "PM instruction (session 23): add a user_preferences JSON column to the accounts table this sprint for the new feature.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM column addition request conflicts with architect's binding schema freeze decision"
+    },
+    {
+      "id": "stk002-x2",
+      "tier": "project",
+      "content": "Old workaround note says JSON columns can be added outside the normal schema review process.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk002-s1",
+    "stk002-p1",
+    "stk002-p2",
+    "stk002-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk002-x1",
+    "stk002-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk002-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk002-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk002-p2",
+        "stk002-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

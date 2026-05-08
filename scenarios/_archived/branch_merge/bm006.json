@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "bm006",
+  "family": "branch_merge",
+  "split": "public",
+  "task": "Handle refactor drift after branch integration moved validation order.",
+  "repo_state_fingerprint": "bm006-repo-v1",
+  "token_budget": 225,
+  "candidate_memories": [
+    {
+      "id": "bm006-s1",
+      "tier": "session",
+      "content": "Integration moved validation earlier in the request path and stale sequencing memories now mislead patches.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "bm006-p1",
+      "tier": "project",
+      "content": "Project memory says branch integration should invalidate old sequencing assumptions.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "bm006-x1",
+      "tier": "session",
+      "content": "Stale note says validation order memories remain safe unless request shape also changes.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "bm006-s1",
+    "bm006-p1"
+  ],
+  "gold_invalid_ids": [
+    "bm006-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "bm006-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "bm006-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

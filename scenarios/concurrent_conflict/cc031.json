@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc031",
+  "family": "concurrent_conflict",
+  "split": "holdout",
+  "task": "Execute the rollback after confirming no other agent is performing the same rollback.",
+  "repo_state_fingerprint": "cc031-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "cc031-s1",
+      "tier": "session",
+      "content": "Rollback-Agent-A started rolling back the v3.2.1 deployment to v3.2.0 at 22:00 after the incident.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc031-p1",
+      "tier": "project",
+      "content": "Deployment rollbacks must be single-agent to prevent interleaved rollback steps from corrupting state.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc031-p2",
+      "tier": "project",
+      "content": "Rollback-Agent-A has reverted 6 of 12 services to v3.2.0; the remaining 6 are still on v3.2.1.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc031-l1",
+      "tier": "long_term",
+      "content": "When two agents both claim a rollback task, check service reversion counts before proceeding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc031-x1",
+      "tier": "session",
+      "content": "Rollback-Agent-B also started rolling back v3.2.1 to v3.2.0 at 22:03 from a second alert trigger.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two rollback agents both claim ownership of the same deployment rollback"
+    },
+    {
+      "id": "cc031-x2",
+      "tier": "project",
+      "content": "Old incident note says concurrent rollback attempts are safe because service state is idempotent.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc031-s1",
+    "cc031-p1",
+    "cc031-p2",
+    "cc031-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc031-x1",
+    "cc031-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc031-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc031-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc031-p2",
+        "cc031-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

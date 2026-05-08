@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed033",
+  "family": "external_dependency_change",
+  "split": "holdout",
+  "task": "Fix the Kubernetes operator after the operator-framework deprecated the legacy reconciler interface.",
+  "repo_state_fingerprint": "ed033-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "ed033-s1",
+      "tier": "session",
+      "content": "Operator build fails; operator-framework v0.15 deprecated the Reconciler interface in favor of TypedReconciler.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed033-p1",
+      "tier": "project",
+      "content": "Operators must now implement the TypedReconciler interface with explicit request type parameters.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed033-p2",
+      "tier": "project",
+      "content": "The TypedReconciler interface requires a generics-aware Go version (1.18 or higher).",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed033-l1",
+      "tier": "long_term",
+      "content": "When the operator framework deprecates an interface, update the Go version requirement before migrating.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed033-x1",
+      "tier": "project",
+      "content": "Operator framework note (session 9): implement the Reconciler interface with Reconcile(ctx, Request) Result method.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: operator-framework v0.15 deprecated Reconciler; TypedReconciler is required"
+    },
+    {
+      "id": "ed033-x2",
+      "tier": "project",
+      "content": "Old k8s note says the Reconciler interface is the stable operator contract and rarely changes.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed033-s1",
+    "ed033-p1",
+    "ed033-p2",
+    "ed033-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed033-x1",
+    "ed033-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed033-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed033-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed033-p2",
+        "ed033-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

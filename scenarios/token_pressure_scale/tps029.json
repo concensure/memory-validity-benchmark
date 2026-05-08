@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps029",
+  "family": "token_pressure_scale",
+  "split": "holdout",
+  "task": "Fix the duplicate job execution after the distributed lock TTL was set too short.",
+  "repo_state_fingerprint": "tps029-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps029-s1",
+      "tier": "session",
+      "content": "Jobs are executing twice because the distributed lock expires before the job finishes on slow execution paths.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps029-p1",
+      "tier": "project",
+      "content": "The distributed lock TTL must be extended from 30 seconds to 5 minutes to cover the maximum job duration.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps029-p2",
+      "tier": "project",
+      "content": "The 30-second TTL was set for a fast code path; slow paths (large data sets) can take up to 4 minutes.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps029-l1",
+      "tier": "long_term",
+      "content": "Duplicate executions only happen for jobs processing data sets larger than 100,000 records.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps029-s2",
+      "tier": "session",
+      "content": "Session 2 note: the job monitoring dashboard shows duplicate execution counts for large data set jobs.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps029-n01",
+      "tier": "project",
+      "content": "Distributed job locks are implemented using Redis SETNX with automatic expiry.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps029-n02",
+      "tier": "session",
+      "content": "Session 7 note: the job scheduler was upgraded to use leader election for single-run guarantees.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps029-n03",
+      "tier": "long_term",
+      "content": "Old practice: distributed locks used a 10-second TTL before job execution times were profiled.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps029-n04",
+      "tier": "project",
+      "content": "The job executor uses a goroutine pool with a maximum concurrency of 20.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps029-n05",
+      "tier": "session",
+      "content": "Session 3 note: the monitoring team added a duplicate execution counter to the job metrics dashboard.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps029-n06",
+      "tier": "project",
+      "content": "Old lock guide: the 30-second TTL was chosen to balance lock holder failure detection and execution time.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps029-n07",
+      "tier": "long_term",
+      "content": "Distributed lock TTLs must exceed the p99 execution time of the longest expected job execution.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps029-n08",
+      "tier": "session",
+      "content": "Session 11 note: the data team found that monthly reconciliation jobs take up to 6 minutes.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps029-n09",
+      "tier": "project",
+      "content": "Redis lock keys use a random nonce to ensure only the original lock holder can release the lock.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps029-n10",
+      "tier": "session",
+      "content": "A job execution analysis in session 8 showed p50 job times of 15 seconds and p99 of 3.5 minutes.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps029-n11",
+      "tier": "project",
+      "content": "The job scheduler retries failed jobs up to 3 times before sending to the dead-letter queue.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps029-n12",
+      "tier": "long_term",
+      "content": "Extend distributed lock TTLs with heartbeat renewal for jobs that can run longer than the initial TTL.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps029-n13",
+      "tier": "session",
+      "content": "Session 5 note: the platform team added a job execution time histogram to the monitoring suite.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps029-n14",
+      "tier": "project",
+      "content": "Old job guide: the lock TTL was set to match the job timeout, which was incorrectly set to 30 seconds.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps029-n15",
+      "tier": "project",
+      "content": "Job results are stored in the job_results table with the execution duration recorded.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps029-s1",
+    "tps029-p1",
+    "tps029-p2",
+    "tps029-l1",
+    "tps029-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps029-n01",
+    "tps029-n02",
+    "tps029-n03",
+    "tps029-n04",
+    "tps029-n05",
+    "tps029-n06",
+    "tps029-n07",
+    "tps029-n08",
+    "tps029-n09",
+    "tps029-n10",
+    "tps029-n11",
+    "tps029-n12",
+    "tps029-n13",
+    "tps029-n14",
+    "tps029-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps029-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps029-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps029-p2",
+        "tps029-l1",
+        "tps029-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

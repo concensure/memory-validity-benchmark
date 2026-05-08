@@ -1,0 +1,92 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "lha010",
+  "family": "long_horizon_accumulation",
+  "split": "public",
+  "task": "Step 14 of 25 \u2014 observability migration: configure alerts for the new Grafana stack. Steps 1\u201313 complete. At step 12 legacy Prometheus alert rules were declared invalid for the new stack; new Grafana-native rules are required.",
+  "repo_state_fingerprint": "lha010-repo-v1",
+  "token_budget": 240,
+  "candidate_memories": [
+    {
+      "id": "lha010-s1",
+      "tier": "session",
+      "content": "Step 13 checkpoint: Grafana datasources configured and all dashboards imported; alert rule configuration is the remaining step before migration is complete.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 13"
+    },
+    {
+      "id": "lha010-p1",
+      "tier": "project",
+      "content": "Alert rules must be written in Grafana Unified Alerting YAML format (provisioning/alerting/); old Prometheus recording rules in alerts/legacy/ are invalid for the new stack.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 12"
+    },
+    {
+      "id": "lha010-p2",
+      "tier": "project",
+      "content": "Critical alerts must notify #oncall-alerts Slack channel and page PagerDuty; configure both contact points in provisioning/alerting/contact_points.yaml.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha010-l1",
+      "tier": "long_term",
+      "content": "All alerts migrated to the new stack must be validated in staging by triggering them with synthetic metrics before enabling in production.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha010-x1",
+      "tier": "project",
+      "content": "Step 5 alert rules: Prometheus rules in alerts/legacy/orders.yaml and alerts/legacy/payment.yaml are the source of truth.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 12; legacy rules declared invalid at step 12"
+    },
+    {
+      "id": "lha010-x2",
+      "tier": "session",
+      "content": "Step 11 note: Grafana Unified Alerting not yet available; using Prometheus rules as interim. Decision reversed at step 12.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 12; Grafana Unified Alerting is now the target"
+    }
+  ],
+  "gold_valid_ids": [
+    "lha010-s1",
+    "lha010-p1",
+    "lha010-p2",
+    "lha010-l1"
+  ],
+  "gold_invalid_ids": [
+    "lha010-x1",
+    "lha010-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "lha010-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "lha010-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "lha010-p2",
+        "lha010-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.06,
+    "ideal": 1.0
+  }
+}

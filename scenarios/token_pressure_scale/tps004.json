@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps004",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the memory leak in the HTTP connection pool after the keep-alive setting was changed.",
+  "repo_state_fingerprint": "tps004-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps004-s1",
+      "tier": "session",
+      "content": "Heap profiler shows HTTP client connections accumulating at 12 per minute; pool is not releasing idle connections.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps004-p1",
+      "tier": "project",
+      "content": "HTTP client idle connection timeout must be set to 90 seconds; the keep-alive change set it to zero, disabling timeouts.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps004-p2",
+      "tier": "project",
+      "content": "The keep-alive change was made in sprint 18 to improve throughput but the idle timeout was accidentally cleared.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps004-l1",
+      "tier": "long_term",
+      "content": "When changing keep-alive settings, always verify that idle connection timeout is preserved in the same commit.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps004-s2",
+      "tier": "session",
+      "content": "The memory leak affects all HTTP clients that target external APIs; internal service clients use a separate pool.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps004-n01",
+      "tier": "project",
+      "content": "The HTTP client library was upgraded from net/http to fasthttp in Q3.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps004-n02",
+      "tier": "session",
+      "content": "Session 2 note: the API documentation was updated for the new authentication flow.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps004-n03",
+      "tier": "long_term",
+      "content": "Old practice: HTTP connection pools were not reused between requests before the pool manager was added.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps004-n04",
+      "tier": "project",
+      "content": "The CDN configuration uses a 60-second keep-alive for edge connections.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps004-n05",
+      "tier": "session",
+      "content": "Memory profiling in session 16 showed no leaks in the internal connection pool.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps004-n06",
+      "tier": "project",
+      "content": "Old HTTP guide: connection pool max size was 100 before the throughput scaling work.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps004-n07",
+      "tier": "long_term",
+      "content": "HTTP connection pools must have explicit idle timeouts to prevent file descriptor exhaustion.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps004-n08",
+      "tier": "session",
+      "content": "The frontend team reported 502 errors during peak traffic in session 20.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps004-n09",
+      "tier": "project",
+      "content": "Internal service calls use gRPC with connection multiplexing; no HTTP pool is involved.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps004-n10",
+      "tier": "session",
+      "content": "Session 11 note: external API rate limit was increased from 100 to 500 req/min.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps004-n11",
+      "tier": "project",
+      "content": "The load balancer uses a 120-second idle connection timeout for upstream connections.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps004-n12",
+      "tier": "long_term",
+      "content": "When upgrading HTTP clients, verify all timeout settings are preserved by the new client.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps004-n13",
+      "tier": "session",
+      "content": "Session 8 note: API retry logic was updated with exponential backoff.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps004-n14",
+      "tier": "project",
+      "content": "Old performance note: disabling keep-alive improved throughput for short-lived connections.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps004-n15",
+      "tier": "project",
+      "content": "External API contracts require TLS 1.2 minimum for all connections.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps004-s1",
+    "tps004-p1",
+    "tps004-p2",
+    "tps004-l1",
+    "tps004-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps004-n01",
+    "tps004-n02",
+    "tps004-n03",
+    "tps004-n04",
+    "tps004-n05",
+    "tps004-n06",
+    "tps004-n07",
+    "tps004-n08",
+    "tps004-n09",
+    "tps004-n10",
+    "tps004-n11",
+    "tps004-n12",
+    "tps004-n13",
+    "tps004-n14",
+    "tps004-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps004-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps004-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps004-p2",
+        "tps004-l1",
+        "tps004-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

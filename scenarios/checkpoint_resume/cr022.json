@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr022",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Continue the configuration deployment at node 28 without re-deploying to nodes 1\u201327.",
+  "repo_state_fingerprint": "cr022-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "cr022-s1",
+      "tier": "session",
+      "content": "Deployment log shows nodes 1\u201327 updated and health-checked; node 28 is the next deployment target.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr022-p1",
+      "tier": "project",
+      "content": "Re-deploying to healthy nodes triggers unnecessary service restarts and disrupts live traffic.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr022-p2",
+      "tier": "project",
+      "content": "Nodes 29\u201350 have not received the config update and must be deployed to after node 28.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr022-l1",
+      "tier": "long_term",
+      "content": "When a config deployment is interrupted, verify node health logs before resuming to skip already-updated nodes.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr022-x1",
+      "tier": "session",
+      "content": "Restart the config deployment from node 1 to ensure all nodes receive the update in the same deployment pass.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests restart from node 1; correct behavior is to resume deployment from node 28"
+    },
+    {
+      "id": "cr022-x2",
+      "tier": "project",
+      "content": "Old deployment note says restarting from node 1 ensures all nodes share the same deployment sequence.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr022-s1",
+    "cr022-p1",
+    "cr022-p2",
+    "cr022-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr022-x1",
+    "cr022-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr022-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr022-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr022-p2",
+        "cr022-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

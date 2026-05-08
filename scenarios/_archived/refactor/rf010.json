@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rf010",
+  "family": "refactor",
+  "split": "holdout",
+  "task": "Refactor audit serialization without changing machine-facing payload contracts.",
+  "repo_state_fingerprint": "rf010-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "rf010-s1",
+      "tier": "session",
+      "content": "Audit payload reshaping must preserve keys consumed by tooling and replay harnesses.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rf010-p1",
+      "tier": "project",
+      "content": "Project memory says machine-facing contracts must stay stable through refactors.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rf010-x1",
+      "tier": "session",
+      "content": "Outdated note says replay tools only need human-readable audit summaries and can ignore exact payload keys.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rf010-s1",
+    "rf010-p1"
+  ],
+  "gold_invalid_ids": [
+    "rf010-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "rf010-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rf010-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc029",
+  "family": "concurrent_conflict",
+  "split": "holdout",
+  "task": "Run the data reconciliation job after confirming no other agent is running it.",
+  "repo_state_fingerprint": "cc029-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cc029-s1",
+      "tier": "session",
+      "content": "Reconcile-Agent-A started the nightly account balance reconciliation at 01:00.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc029-p1",
+      "tier": "project",
+      "content": "Account reconciliation must be single-agent; concurrent runs produce duplicate adjustment entries.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc029-p2",
+      "tier": "project",
+      "content": "Reconcile-Agent-A has processed 4,000 of 25,000 accounts; adjustments are being written.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc029-l1",
+      "tier": "long_term",
+      "content": "When two agents both claim the reconciliation job, check adjustment counts before proceeding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc029-x1",
+      "tier": "session",
+      "content": "Reconcile-Agent-B also started the account balance reconciliation at 01:03 from a parallel trigger.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two reconciliation agents both claim they are running the same nightly job"
+    },
+    {
+      "id": "cc029-x2",
+      "tier": "project",
+      "content": "Old finance note says reconciliation conflicts resolve because the idempotency key deduplicates adjustments.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc029-s1",
+    "cc029-p1",
+    "cc029-p2",
+    "cc029-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc029-x1",
+    "cc029-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc029-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc029-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc029-p2",
+        "cc029-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

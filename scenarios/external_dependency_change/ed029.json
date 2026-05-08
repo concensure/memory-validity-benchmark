@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed029",
+  "family": "external_dependency_change",
+  "split": "holdout",
+  "task": "Fix the Ruby gem after the Faraday HTTP library changed its error class hierarchy in v2.",
+  "repo_state_fingerprint": "ed029-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "ed029-s1",
+      "tier": "session",
+      "content": "Error rescue blocks are not catching network failures; Faraday v2 reorganized its error class hierarchy.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed029-p1",
+      "tier": "project",
+      "content": "Network errors must now be rescued with Faraday::Error instead of the removed Faraday::ClientError class.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed029-p2",
+      "tier": "project",
+      "content": "Faraday v2 also changed connection timeout errors to raise Faraday::TimeoutError directly.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed029-l1",
+      "tier": "long_term",
+      "content": "When an HTTP client library reorganizes error classes, update all rescue blocks before upgrading.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed029-x1",
+      "tier": "project",
+      "content": "Faraday gem note (session 8): rescue Faraday::ClientError to handle all Faraday HTTP client errors.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: Faraday v2 replaced Faraday::ClientError with Faraday::Error as the base class"
+    },
+    {
+      "id": "ed029-x2",
+      "tier": "project",
+      "content": "Old Ruby note says Faraday error class hierarchy is stable across minor versions of the gem.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed029-s1",
+    "ed029-p1",
+    "ed029-p2",
+    "ed029-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed029-x1",
+    "ed029-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed029-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed029-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed029-p2",
+        "ed029-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

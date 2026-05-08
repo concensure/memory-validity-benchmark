@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed025",
+  "family": "external_dependency_change",
+  "split": "holdout",
+  "task": "Fix the GraphQL client after the apollo-client library removed the deprecated ApolloClient constructor.",
+  "repo_state_fingerprint": "ed025-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "ed025-s1",
+      "tier": "session",
+      "content": "Apollo client initialization fails; apollo-client v3 removed the deprecated ApolloClient({client}) constructor.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed025-p1",
+      "tier": "project",
+      "content": "ApolloClient must now be constructed with ApolloClient({link, cache}) using the InMemoryCache.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed025-p2",
+      "tier": "project",
+      "content": "Apollo v3 also removed the deprecated apollo-link-http package in favor of @apollo/client/link/http.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed025-l1",
+      "tier": "long_term",
+      "content": "When a GraphQL client removes a constructor overload, update both initialization and link imports together.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed025-x1",
+      "tier": "project",
+      "content": "Apollo client note (session 10): initialize ApolloClient with the client option pointing to an HttpLink instance.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: apollo-client v3 removed deprecated constructor; link and cache are required"
+    },
+    {
+      "id": "ed025-x2",
+      "tier": "project",
+      "content": "Old GraphQL note says the Apollo client constructor accepts flexible options and rarely has breaking changes.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed025-s1",
+    "ed025-p1",
+    "ed025-p2",
+    "ed025-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed025-x1",
+    "ed025-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed025-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed025-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed025-p2",
+        "ed025-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

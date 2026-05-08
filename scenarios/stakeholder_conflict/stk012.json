@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk012",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Apply the rate limit policy from the API team lead, not the PM's partner exception request.",
+  "repo_state_fingerprint": "stk012-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "stk012-s1",
+      "tier": "session",
+      "content": "API team lead issued a binding rate limit policy in session 24: all external clients are limited to 1000 req/min.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk012-p1",
+      "tier": "project",
+      "content": "API rate limit policies are set by the API team lead and may not be overridden for individual partners without review.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk012-p2",
+      "tier": "project",
+      "content": "The 1000 req/min limit protects shared infrastructure; exceptions require a capacity review before approval.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk012-l1",
+      "tier": "long_term",
+      "content": "When a PM requests a partner rate limit exception, hold the exception and initiate a capacity review.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk012-x1",
+      "tier": "project",
+      "content": "PM instruction (session 25): grant the enterprise partner an unlimited rate limit to support their batch workload.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM unlimited exception conflicts with API team lead's binding per-partner rate limit policy"
+    },
+    {
+      "id": "stk012-x2",
+      "tier": "project",
+      "content": "Old partner note says a previous enterprise partner was given an informal unlimited rate limit before the policy existed.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk012-s1",
+    "stk012-p1",
+    "stk012-p2",
+    "stk012-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk012-x1",
+    "stk012-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk012-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk012-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk012-p2",
+        "stk012-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

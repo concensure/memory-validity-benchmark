@@ -1,0 +1,93 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "lha009",
+  "family": "long_horizon_accumulation",
+  "split": "public",
+  "task": "Step 10 of 20 \u2014 infrastructure-as-code conversion: convert the analytics cluster Terraform to use the new AWS provider v5. Steps 1\u20139 complete. At step 8 the cloud provider changed from GCP (original plan) to AWS after a cost review.",
+  "repo_state_fingerprint": "lha009-repo-v1",
+  "token_budget": 242,
+  "candidate_memories": [
+    {
+      "id": "lha009-s1",
+      "tier": "session",
+      "content": "Step 9 checkpoint: core VPC and IAM resources migrated to AWS provider v5; analytics cluster EKS config is the next resource block.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 9"
+    },
+    {
+      "id": "lha009-p1",
+      "tier": "project",
+      "content": "Analytics cluster is now on AWS EKS (since step 8); use aws_eks_cluster resource with provider version '>= 5.0'; GCP GKE resources in the old Terraform are to be deleted.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 8; AWS decision"
+    },
+    {
+      "id": "lha009-p2",
+      "tier": "project",
+      "content": "AWS provider v5 removed the aws_eks_node_group.launch_template.name field; use launch_template_id instead.",
+      "validity": "valid",
+      "bucket": "supporting",
+      "notes": "created_at_step: 8"
+    },
+    {
+      "id": "lha009-l1",
+      "tier": "long_term",
+      "content": "After provider upgrade, run terraform plan and review all resource replacements before applying; replace != in-place update.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha009-x1",
+      "tier": "project",
+      "content": "Step 3 IaC plan: analytics cluster uses GCP GKE; Terraform uses google_container_cluster resource.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 8; GCP abandoned in favour of AWS"
+    },
+    {
+      "id": "lha009-x2",
+      "tier": "session",
+      "content": "Step 7 note: cost review comparing GCP vs AWS ongoing; decision expected at step 8.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 8; decision made; AWS selected"
+    }
+  ],
+  "gold_valid_ids": [
+    "lha009-s1",
+    "lha009-p1",
+    "lha009-p2",
+    "lha009-l1"
+  ],
+  "gold_invalid_ids": [
+    "lha009-x1",
+    "lha009-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "lha009-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "lha009-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "lha009-p2",
+        "lha009-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.06,
+    "ideal": 1.0
+  }
+}

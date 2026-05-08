@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nm005",
+  "family": "neutral_minimal",
+  "split": "public",
+  "task": "Rename a local variable in one file without semantic drift.",
+  "repo_state_fingerprint": "nm005-repo-v1",
+  "token_budget": 105,
+  "candidate_memories": [
+    {
+      "id": "nm005-s1",
+      "tier": "session",
+      "content": "The variable rename is entirely local and no durable memory should be necessary.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nm005-p1",
+      "tier": "project",
+      "content": "Project memory says some tasks should be scored partly on correct abstention.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nm005-x1",
+      "tier": "session",
+      "content": "Old habit note says every code edit should inject at least session and project memory.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nm005-s1",
+    "nm005-p1"
+  ],
+  "gold_invalid_ids": [
+    "nm005-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "nm005-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nm005-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

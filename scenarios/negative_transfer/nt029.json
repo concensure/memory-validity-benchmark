@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt029",
+  "family": "negative_transfer",
+  "split": "holdout",
+  "task": "Implement aggregate_metrics for the analytics dashboard without importing the billing aggregation.",
+  "repo_state_fingerprint": "nt029-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "nt029-s1",
+      "tier": "session",
+      "content": "Analytics dashboard aggregate_metrics computes percentiles and rates over event counts for display.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt029-p1",
+      "tier": "project",
+      "content": "Dashboard aggregation is read-only and can tolerate eventual consistency up to 30 seconds.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt029-p2",
+      "tier": "project",
+      "content": "Analytics aggregations are pre-computed in a time-series store, not computed on-demand from raw events.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt029-l1",
+      "tier": "long_term",
+      "content": "When aggregate_metrics spans analytics and billing, confirm the consistency model before coding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt029-x1",
+      "tier": "project",
+      "content": "Billing: aggregate_metrics sums usage quantities per tenant and applies pricing tiers for invoice calculation.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: billing's usage aggregation for invoicing requires strict consistency, not eventual"
+    },
+    {
+      "id": "nt029-x2",
+      "tier": "project",
+      "content": "Old platform note says aggregation should be unified under a single aggregate_metrics interface.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt029-s1",
+    "nt029-p1",
+    "nt029-p2",
+    "nt029-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt029-x1",
+    "nt029-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt029-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt029-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt029-p2",
+        "nt029-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

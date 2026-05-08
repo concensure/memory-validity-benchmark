@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps003",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the deadlock in the order fulfillment pipeline after the inventory lock refactor.",
+  "repo_state_fingerprint": "tps003-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps003-s1",
+      "tier": "session",
+      "content": "Deadlock traces show fulfillment goroutines acquiring inventory lock then order lock; previous code did the reverse.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps003-p1",
+      "tier": "project",
+      "content": "Lock acquisition order must be: order lock \u2192 inventory lock \u2192 shipment lock across all fulfillment code paths.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps003-p2",
+      "tier": "project",
+      "content": "The inventory lock refactor in sprint 14 reversed the lock order in two out of five code paths.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps003-l1",
+      "tier": "long_term",
+      "content": "When a deadlock is introduced by a refactor, audit all lock acquisitions before fixing any single path.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps003-s2",
+      "tier": "session",
+      "content": "The deadlock only manifests when more than 200 concurrent orders are in flight; single-order tests pass.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps003-n01",
+      "tier": "project",
+      "content": "The order fulfillment service was split from the monolith in 2021.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps003-n02",
+      "tier": "session",
+      "content": "The order dashboard pagination was fixed in session 6 to handle large result sets.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps003-n03",
+      "tier": "long_term",
+      "content": "Old lesson: use per-resource locks rather than global locks for inventory management.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps003-n04",
+      "tier": "project",
+      "content": "Inventory data is synced from the ERP system every 15 minutes.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps003-n05",
+      "tier": "session",
+      "content": "Session 10 note: the fulfillment team requested a bulk cancel feature.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps003-n06",
+      "tier": "project",
+      "content": "Old inventory guide: shipment lock was acquired first before the inventory refactor.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps003-n07",
+      "tier": "session",
+      "content": "A performance test in session 13 showed the order API handles 500 rps at p99 120ms.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps003-n08",
+      "tier": "project",
+      "content": "The shipment tracking integration uses a third-party webhook from FedEx.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps003-n09",
+      "tier": "long_term",
+      "content": "Old practice: single global mutex was used for all inventory operations before the refactor.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps003-n10",
+      "tier": "session",
+      "content": "The order fulfillment dashboard was redesigned with Gantt chart view in session 4.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps003-n11",
+      "tier": "project",
+      "content": "Fulfillment workers run as Kubernetes Jobs with a 15-minute timeout.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps003-n12",
+      "tier": "session",
+      "content": "Session 7 note: email notifications for order status were added.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps003-n13",
+      "tier": "project",
+      "content": "The ERP sync produces an audit log of all inventory changes.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps003-n14",
+      "tier": "long_term",
+      "content": "In distributed systems, use consistent lock ordering across all code paths to prevent deadlocks.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps003-n15",
+      "tier": "project",
+      "content": "Old fulfillment guide: the fulfillment SLA was 24 hours before it was tightened to 4 hours.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps003-s1",
+    "tps003-p1",
+    "tps003-p2",
+    "tps003-l1",
+    "tps003-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps003-n01",
+    "tps003-n02",
+    "tps003-n03",
+    "tps003-n04",
+    "tps003-n05",
+    "tps003-n06",
+    "tps003-n07",
+    "tps003-n08",
+    "tps003-n09",
+    "tps003-n10",
+    "tps003-n11",
+    "tps003-n12",
+    "tps003-n13",
+    "tps003-n14",
+    "tps003-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps003-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps003-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps003-p2",
+        "tps003-l1",
+        "tps003-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

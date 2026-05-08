@@ -1,0 +1,1068 @@
+{
+  "runs": [
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "cb001",
+      "selected_memories": [
+        {
+          "id": "cb001-s1",
+          "tier": "session",
+          "content": "Recent failing test: parse('(-1)') emits unexpected BinaryExpr node."
+        },
+        {
+          "id": "cb001-p1",
+          "tier": "project",
+          "content": "Parser precedence rules treat unary operators in parsePrefix, not in parseInfix."
+        },
+        {
+          "id": "cb001-p2",
+          "tier": "project",
+          "content": "AST changed last week: PrefixExpr replaced UnaryExpr."
+        },
+        {
+          "id": "cb001-s2",
+          "tier": "session",
+          "content": "Last attempted fix in lexer.go only changed whitespace handling and did not affect minus token classification."
+        },
+        {
+          "id": "cb001-l1",
+          "tier": "long_term",
+          "content": "When parsers fail around unary operators, preserve failing input examples and inspect prefix vs infix dispatch."
+        },
+        {
+          "id": "cb001-p3",
+          "tier": "project",
+          "content": "Legacy note: minus after left parenthesis is always binary and should be handled in parseInfix."
+        }
+      ],
+      "final_injection_order": [
+        "cb001-s1",
+        "cb001-p1",
+        "cb001-p2",
+        "cb001-s2",
+        "cb001-l1",
+        "cb001-p3"
+      ],
+      "token_estimate": 127,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "cb002",
+      "selected_memories": [
+        {
+          "id": "cb002-s1",
+          "tier": "session",
+          "content": "Observed failure only on CI runners in non-UTC time zones."
+        },
+        {
+          "id": "cb002-p1",
+          "tier": "project",
+          "content": "retryDeadline helper should use time.Now().UTC() before formatting or comparison."
+        },
+        {
+          "id": "cb002-l1",
+          "tier": "long_term",
+          "content": "Time-sensitive tests should avoid local timezone assumptions and normalize comparisons to UTC."
+        },
+        {
+          "id": "cb002-p2",
+          "tier": "project",
+          "content": "Scheduler metrics are unrelated to retry deadline logic."
+        }
+      ],
+      "final_injection_order": [
+        "cb002-s1",
+        "cb002-p1",
+        "cb002-l1",
+        "cb002-p2"
+      ],
+      "token_estimate": 71,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "cb003",
+      "selected_memories": [
+        {
+          "id": "cb003-s1",
+          "tier": "session",
+          "content": "Recent failure shows nested template literals lose closing backtick state in tokenizer hot path."
+        },
+        {
+          "id": "cb003-p1",
+          "tier": "project",
+          "content": "Project memory says template nesting is tracked in scanner state, not parser recovery."
+        },
+        {
+          "id": "cb003-x1",
+          "tier": "session",
+          "content": "Old note claims parser recovery should synthesize closing backticks automatically."
+        }
+      ],
+      "final_injection_order": [
+        "cb003-s1",
+        "cb003-p1",
+        "cb003-x1"
+      ],
+      "token_estimate": 65,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "cb004",
+      "selected_memories": [
+        {
+          "id": "cb004-s1",
+          "tier": "session",
+          "content": "Failing fixture shows deleted final line without newline crashes chunk rendering."
+        },
+        {
+          "id": "cb004-p1",
+          "tier": "project",
+          "content": "Renderer code expects newline sentinel to be appended before chunk emission."
+        },
+        {
+          "id": "cb004-x1",
+          "tier": "session",
+          "content": "Stale workaround says force-add newline during file read for every deleted file."
+        }
+      ],
+      "final_injection_order": [
+        "cb004-s1",
+        "cb004-p1",
+        "cb004-x1"
+      ],
+      "token_estimate": 59,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "cb005",
+      "selected_memories": [
+        {
+          "id": "cb005-s1",
+          "tier": "session",
+          "content": "Session trace shows reconnect loop starts only after token refresh returns 401 once."
+        },
+        {
+          "id": "cb005-p1",
+          "tier": "project",
+          "content": "Project memory says reconnect backoff must reset only after successful authenticated subscribe."
+        },
+        {
+          "id": "cb005-x1",
+          "tier": "session",
+          "content": "Outdated comment says reconnect loop is caused by DNS cache expiry."
+        }
+      ],
+      "final_injection_order": [
+        "cb005-s1",
+        "cb005-p1",
+        "cb005-x1"
+      ],
+      "token_estimate": 60,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "cb006",
+      "selected_memories": [
+        {
+          "id": "cb006-s1",
+          "tier": "session",
+          "content": "Recent test indicates partial save leaves stale symbol cache for renamed functions."
+        },
+        {
+          "id": "cb006-p1",
+          "tier": "project",
+          "content": "Project memory states symbol cache keys depend on file version and normalized path."
+        },
+        {
+          "id": "cb006-x1",
+          "tier": "session",
+          "content": "Old memory says cache only needs invalidation on full project save."
+        }
+      ],
+      "final_injection_order": [
+        "cb006-s1",
+        "cb006-p1",
+        "cb006-x1"
+      ],
+      "token_estimate": 56,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "hr001",
+      "selected_memories": [
+        {
+          "id": "hr001-s1",
+          "tier": "session",
+          "content": "Previous agent already tried replacing the entire auth stack and user explicitly rejected that scope."
+        },
+        {
+          "id": "hr001-s2",
+          "tier": "session",
+          "content": "Current next step is to migrate token parsing first, not session storage."
+        },
+        {
+          "id": "hr001-p1",
+          "tier": "project",
+          "content": "Session storage depends on token claims format; changing order caused breakage in prior attempt."
+        },
+        {
+          "id": "hr001-l1",
+          "tier": "long_term",
+          "content": "For agent handoffs, inject recent explicit user constraints before broad architectural context."
+        }
+      ],
+      "final_injection_order": [
+        "hr001-s1",
+        "hr001-s2",
+        "hr001-p1",
+        "hr001-l1"
+      ],
+      "token_estimate": 90,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "hr002",
+      "selected_memories": [
+        {
+          "id": "hr002-s1",
+          "tier": "session",
+          "content": "Planner already fixed schema naming and implementer should only wire call sites now."
+        },
+        {
+          "id": "hr002-p1",
+          "tier": "project",
+          "content": "Project memory says migration retries must not reapply already committed schema steps."
+        },
+        {
+          "id": "hr002-x1",
+          "tier": "session",
+          "content": "Old handoff note says rerunning the full migration is harmless."
+        }
+      ],
+      "final_injection_order": [
+        "hr002-s1",
+        "hr002-p1",
+        "hr002-x1"
+      ],
+      "token_estimate": 57,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "hr003",
+      "selected_memories": [
+        {
+          "id": "hr003-s1",
+          "tier": "session",
+          "content": "Current checkpoint says deterministic validation is complete and optional judge work remains isolated."
+        },
+        {
+          "id": "hr003-p1",
+          "tier": "project",
+          "content": "Architect memory says judge failures must never change stored memory status."
+        },
+        {
+          "id": "hr003-x1",
+          "tier": "session",
+          "content": "Stale handoff note says judge verdicts may directly mark items invalid."
+        }
+      ],
+      "final_injection_order": [
+        "hr003-s1",
+        "hr003-p1",
+        "hr003-x1"
+      ],
+      "token_estimate": 61,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "hr004",
+      "selected_memories": [
+        {
+          "id": "hr004-s1",
+          "tier": "session",
+          "content": "Existing graph model already covers supersedes, cites, validations, consensus, and promotions."
+        },
+        {
+          "id": "hr004-p1",
+          "tier": "project",
+          "content": "Project memory says graph additions must be read-only and not alter persistence."
+        },
+        {
+          "id": "hr004-x1",
+          "tier": "session",
+          "content": "Obsolete task note says graph edges should be denormalized into the memory table first."
+        }
+      ],
+      "final_injection_order": [
+        "hr004-s1",
+        "hr004-p1",
+        "hr004-x1"
+      ],
+      "token_estimate": 64,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "hr005",
+      "selected_memories": [
+        {
+          "id": "hr005-s1",
+          "tier": "session",
+          "content": "Current state already requires confirming consensus and citation quality for long-term promotion."
+        },
+        {
+          "id": "hr005-p1",
+          "tier": "project",
+          "content": "Project memory says contradictory consensus must block promotion completely."
+        },
+        {
+          "id": "hr005-x1",
+          "tier": "session",
+          "content": "Outdated note says any two consensus records are enough even if one rejects."
+        }
+      ],
+      "final_injection_order": [
+        "hr005-s1",
+        "hr005-p1",
+        "hr005-x1"
+      ],
+      "token_estimate": 62,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "ma001",
+      "selected_memories": [
+        {
+          "id": "ma001-s1",
+          "tier": "session",
+          "content": "Planner has already fixed scope: implementer should edit only transport adapters this pass."
+        },
+        {
+          "id": "ma001-p1",
+          "tier": "project",
+          "content": "Project memory says ownership boundaries reduce merge conflict risk in concurrent work."
+        },
+        {
+          "id": "ma001-x1",
+          "tier": "session",
+          "content": "Old coordination note says both agents should rewrite the same orchestrator file together."
+        }
+      ],
+      "final_injection_order": [
+        "ma001-s1",
+        "ma001-p1",
+        "ma001-x1"
+      ],
+      "token_estimate": 65,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "ma002",
+      "selected_memories": [
+        {
+          "id": "ma002-s1",
+          "tier": "session",
+          "content": "Reviewer focus is regressions and missing tests, not restating the change summary."
+        },
+        {
+          "id": "ma002-p1",
+          "tier": "project",
+          "content": "Project memory says findings should be ordered by severity with references."
+        },
+        {
+          "id": "ma002-x1",
+          "tier": "session",
+          "content": "Stale process note says reviewer output can skip concrete findings if tests pass."
+        }
+      ],
+      "final_injection_order": [
+        "ma002-s1",
+        "ma002-p1",
+        "ma002-x1"
+      ],
+      "token_estimate": 58,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "ma003",
+      "selected_memories": [
+        {
+          "id": "ma003-s1",
+          "tier": "session",
+          "content": "Benchmark-specific code should remain isolated from the core orchestrator logic."
+        },
+        {
+          "id": "ma003-p1",
+          "tier": "project",
+          "content": "Project memory says product changes must preserve the published benchmark contract."
+        },
+        {
+          "id": "ma003-x1",
+          "tier": "session",
+          "content": "Old shortcut says benchmark hooks can be embedded directly into production validation code."
+        }
+      ],
+      "final_injection_order": [
+        "ma003-s1",
+        "ma003-p1",
+        "ma003-x1"
+      ],
+      "token_estimate": 62,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "ma004",
+      "selected_memories": [
+        {
+          "id": "ma004-s1",
+          "tier": "session",
+          "content": "Shared transport client should reuse the same stdio and HTTP contract without forking memory semantics."
+        },
+        {
+          "id": "ma004-p1",
+          "tier": "project",
+          "content": "Project memory says private extension code should sit outside the open local core."
+        },
+        {
+          "id": "ma004-x1",
+          "tier": "session",
+          "content": "Obsolete note says extension transport can redefine memory tiers for UI convenience."
+        }
+      ],
+      "final_injection_order": [
+        "ma004-s1",
+        "ma004-p1",
+        "ma004-x1"
+      ],
+      "token_estimate": 66,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "oc001",
+      "selected_memories": [
+        {
+          "id": "oc001-s1",
+          "tier": "session",
+          "content": "Do not rerun the destructive cleanup command; it already deleted unrelated temp fixtures in a prior attempt."
+        },
+        {
+          "id": "oc001-s2",
+          "tier": "session",
+          "content": "Immediate task order: inspect config file, patch handler, run non-destructive verification."
+        },
+        {
+          "id": "oc001-p1",
+          "tier": "project",
+          "content": "Handler patch must preserve JSON response shape because downstream scraper expects exact keys."
+        },
+        {
+          "id": "oc001-l1",
+          "tier": "long_term",
+          "content": "Tool-using agents should front-load destructive-action constraints before procedural notes."
+        },
+        {
+          "id": "oc001-p2",
+          "tier": "project",
+          "content": "Temporary fixture cleanup can be rerun anytime without consequences."
+        }
+      ],
+      "final_injection_order": [
+        "oc001-s1",
+        "oc001-s2",
+        "oc001-p1",
+        "oc001-l1",
+        "oc001-p2"
+      ],
+      "token_estimate": 111,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "oc002",
+      "selected_memories": [
+        {
+          "id": "oc002-s1",
+          "tier": "session",
+          "content": "Do not rerun the recursive cleanup command because it previously removed fixture snapshots."
+        },
+        {
+          "id": "oc002-p1",
+          "tier": "project",
+          "content": "Project memory says safe order is inspect, patch target file, run non-destructive verification."
+        },
+        {
+          "id": "oc002-x1",
+          "tier": "session",
+          "content": "Stale memory says cleanup is safe to rerun before every verification."
+        }
+      ],
+      "final_injection_order": [
+        "oc002-s1",
+        "oc002-p1",
+        "oc002-x1"
+      ],
+      "token_estimate": 62,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "oc003",
+      "selected_memories": [
+        {
+          "id": "oc003-s1",
+          "tier": "session",
+          "content": "Machine-facing clients depend on the exact JSON keys returned by the command protocol."
+        },
+        {
+          "id": "oc003-p1",
+          "tier": "project",
+          "content": "Project memory says transport parity matters more than adding a shortcut endpoint."
+        },
+        {
+          "id": "oc003-x1",
+          "tier": "session",
+          "content": "Old suggestion says editor mode can return plain text because humans read it anyway."
+        }
+      ],
+      "final_injection_order": [
+        "oc003-s1",
+        "oc003-p1",
+        "oc003-x1"
+      ],
+      "token_estimate": 62,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "oc004",
+      "selected_memories": [
+        {
+          "id": "oc004-s1",
+          "tier": "session",
+          "content": "The previous agent already triggered a risky delete and the next step must avoid further destructive actions."
+        },
+        {
+          "id": "oc004-p1",
+          "tier": "project",
+          "content": "Project memory says destructive constraints should be surfaced before procedural hints."
+        },
+        {
+          "id": "oc004-x1",
+          "tier": "session",
+          "content": "Stale note says the failed delete proves the directory is safe to wipe entirely."
+        }
+      ],
+      "final_injection_order": [
+        "oc004-s1",
+        "oc004-p1",
+        "oc004-x1"
+      ],
+      "token_estimate": 68,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "oc005",
+      "selected_memories": [
+        {
+          "id": "oc005-s1",
+          "tier": "session",
+          "content": "Immediate order is inspect target module, patch only owned files, then run focused tests."
+        },
+        {
+          "id": "oc005-p1",
+          "tier": "project",
+          "content": "Project memory says verification should stay scoped to touched behavior before full-suite runs."
+        },
+        {
+          "id": "oc005-x1",
+          "tier": "session",
+          "content": "Contradicted note says broad cleanup commands are the fastest validation path."
+        }
+      ],
+      "final_injection_order": [
+        "oc005-s1",
+        "oc005-p1",
+        "oc005-x1"
+      ],
+      "token_estimate": 64,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "rf001",
+      "selected_memories": [
+        {
+          "id": "rf001-s1",
+          "tier": "session",
+          "content": "Current refactor goal is to extract parsing only; response formatting must remain in handler for this PR."
+        },
+        {
+          "id": "rf001-p1",
+          "tier": "project",
+          "content": "Validation errors must remain byte-for-byte compatible with existing contract tests."
+        },
+        {
+          "id": "rf001-p2",
+          "tier": "project",
+          "content": "Last refactor attempt moved validation after business logic and broke contract tests."
+        },
+        {
+          "id": "rf001-l1",
+          "tier": "long_term",
+          "content": "Safe refactors preserve externally observable behavior first, then separate concerns incrementally."
+        },
+        {
+          "id": "rf001-p3",
+          "tier": "project",
+          "content": "New architecture mandates immediate handler decomposition into five layers in one patch."
+        }
+      ],
+      "final_injection_order": [
+        "rf001-s1",
+        "rf001-p1",
+        "rf001-p2",
+        "rf001-l1",
+        "rf001-p3"
+      ],
+      "token_estimate": 114,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "rf002",
+      "selected_memories": [
+        {
+          "id": "rf002-s1",
+          "tier": "session",
+          "content": "User reported only one bug: env variables stop overriding file config after the split."
+        },
+        {
+          "id": "rf002-p1",
+          "tier": "project",
+          "content": "Effective precedence is defaults < config file < env overrides."
+        },
+        {
+          "id": "rf002-p2",
+          "tier": "project",
+          "content": "CLI flags are parsed later and should remain outside this refactor."
+        },
+        {
+          "id": "rf002-l1",
+          "tier": "long_term",
+          "content": "Configuration refactors commonly regress precedence when helpers eagerly bind defaults."
+        },
+        {
+          "id": "rf002-l2",
+          "tier": "long_term",
+          "content": "Prefer a full rewrite of configuration loading whenever the module is touched."
+        }
+      ],
+      "final_injection_order": [
+        "rf002-s1",
+        "rf002-p1",
+        "rf002-p2",
+        "rf002-l1",
+        "rf002-l2"
+      ],
+      "token_estimate": 92,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "rf003",
+      "selected_memories": [
+        {
+          "id": "rf003-s1",
+          "tier": "session",
+          "content": "Current handlers and workers both use the same retry policy shape for transient failures."
+        },
+        {
+          "id": "rf003-p1",
+          "tier": "project",
+          "content": "Architect decision says retry policy helpers must stay transport-agnostic."
+        },
+        {
+          "id": "rf003-x1",
+          "tier": "session",
+          "content": "Old branch note suggests embedding HTTP status mapping directly in retry helper."
+        }
+      ],
+      "final_injection_order": [
+        "rf003-s1",
+        "rf003-p1",
+        "rf003-x1"
+      ],
+      "token_estimate": 60,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "rf004",
+      "selected_memories": [
+        {
+          "id": "rf004-s1",
+          "tier": "session",
+          "content": "Claim parsing must keep support for optional team scope because CLI and API both depend on it."
+        },
+        {
+          "id": "rf004-p1",
+          "tier": "project",
+          "content": "Project memory says shared auth packages may not import request context types."
+        },
+        {
+          "id": "rf004-x1",
+          "tier": "session",
+          "content": "Stale memory says CLI auth path can ignore team scopes entirely."
+        }
+      ],
+      "final_injection_order": [
+        "rf004-s1",
+        "rf004-p1",
+        "rf004-x1"
+      ],
+      "token_estimate": 58,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "rf005",
+      "selected_memories": [
+        {
+          "id": "rf005-s1",
+          "tier": "session",
+          "content": "Watcher and importer both depend on normalized slash handling for deterministic hashes."
+        },
+        {
+          "id": "rf005-p1",
+          "tier": "project",
+          "content": "Project memory says normalization must preserve case on display even when hashing lowercases."
+        },
+        {
+          "id": "rf005-x1",
+          "tier": "session",
+          "content": "Obsolete shortcut says converting all paths to lowercase is safe on every platform."
+        }
+      ],
+      "final_injection_order": [
+        "rf005-s1",
+        "rf005-p1",
+        "rf005-x1"
+      ],
+      "token_estimate": 64,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "rf006",
+      "selected_memories": [
+        {
+          "id": "rf006-s1",
+          "tier": "session",
+          "content": "Response helpers must preserve exact error key names consumed by automation clients."
+        },
+        {
+          "id": "rf006-p1",
+          "tier": "project",
+          "content": "Project memory says shared response writers cannot own auth redirect behavior."
+        },
+        {
+          "id": "rf006-x1",
+          "tier": "session",
+          "content": "Contradicted note says client scripts tolerate any error payload shape."
+        }
+      ],
+      "final_injection_order": [
+        "rf006-s1",
+        "rf006-p1",
+        "rf006-x1"
+      ],
+      "token_estimate": 57,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "sm001",
+      "selected_memories": [
+        {
+          "id": "sm001-s1",
+          "tier": "session",
+          "content": "Current compile error says UnaryExpr is undefined."
+        },
+        {
+          "id": "sm001-p1",
+          "tier": "project",
+          "content": "AST rename: UnaryExpr was replaced by PrefixExpr in the parser package."
+        },
+        {
+          "id": "sm001-l1",
+          "tier": "long_term",
+          "content": "When type renames land, treat historical construction notes as invalid until checked against current symbols."
+        },
+        {
+          "id": "sm001-p2",
+          "tier": "project",
+          "content": "Refactor note from last month: keep constructing UnaryExpr until migration is complete."
+        }
+      ],
+      "final_injection_order": [
+        "sm001-s1",
+        "sm001-p1",
+        "sm001-l1",
+        "sm001-p2"
+      ],
+      "token_estimate": 77,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "sm002",
+      "selected_memories": [
+        {
+          "id": "sm002-s1",
+          "tier": "session",
+          "content": "Current rollout uses the new scheduler loop and old manual retry steps are stale."
+        },
+        {
+          "id": "sm002-p1",
+          "tier": "project",
+          "content": "Project memory says expired review items belong in review queue, not the active context pack."
+        },
+        {
+          "id": "sm002-x1",
+          "tier": "session",
+          "content": "Obsolete rollout note says every historical retry instruction should be injected for safety."
+        }
+      ],
+      "final_injection_order": [
+        "sm002-s1",
+        "sm002-p1",
+        "sm002-x1"
+      ],
+      "token_estimate": 66,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "sm003",
+      "selected_memories": [
+        {
+          "id": "sm003-s1",
+          "tier": "session",
+          "content": "Active deployment path uses versioned schema checks and diagnostics endpoints."
+        },
+        {
+          "id": "sm003-p1",
+          "tier": "project",
+          "content": "Project memory says contradicted deployment instructions must be suppressed before injection."
+        },
+        {
+          "id": "sm003-x1",
+          "tier": "session",
+          "content": "Old note says schema version checks can be skipped on reopen."
+        }
+      ],
+      "final_injection_order": [
+        "sm003-s1",
+        "sm003-p1",
+        "sm003-x1"
+      ],
+      "token_estimate": 57,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "sm004",
+      "selected_memories": [
+        {
+          "id": "sm004-s1",
+          "tier": "session",
+          "content": "Pointer rendering already excludes stale and superseded items in deterministic order."
+        },
+        {
+          "id": "sm004-p1",
+          "tier": "project",
+          "content": "Project memory says stale memories should not appear in POINTERS even if recently touched."
+        },
+        {
+          "id": "sm004-x1",
+          "tier": "session",
+          "content": "Outdated note says recently updated stale items should still be shown to users."
+        }
+      ],
+      "final_injection_order": [
+        "sm004-s1",
+        "sm004-p1",
+        "sm004-x1"
+      ],
+      "token_estimate": 62,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    },
+    {
+      "system_name": "baseline:heuristic_tiered",
+      "scenario_id": "sm005",
+      "selected_memories": [
+        {
+          "id": "sm005-s1",
+          "tier": "session",
+          "content": "Current watcher path is optional and runs only when file watcher config is enabled."
+        },
+        {
+          "id": "sm005-p1",
+          "tier": "project",
+          "content": "Project memory says startup behavior must remain unchanged when automation is disabled."
+        },
+        {
+          "id": "sm005-x1",
+          "tier": "session",
+          "content": "Old advice says watcher bootstrap should always run on daemon start."
+        }
+      ],
+      "final_injection_order": [
+        "sm005-s1",
+        "sm005-p1",
+        "sm005-x1"
+      ],
+      "token_estimate": 58,
+      "task_outcome": {
+        "passed": true,
+        "score": 1.0,
+        "notes": "baseline heuristic run"
+      }
+    }
+  ]
+}

@@ -3,6 +3,7 @@
   "title": "MVI Run Artifact",
   "type": "object",
   "required": [
+    "schema_version",
     "system_name",
     "scenario_id",
     "selected_memories",
@@ -10,6 +11,9 @@
     "token_estimate"
   ],
   "properties": {
+    "schema_version": {
+      "const": "mvi-run-v1"
+    },
     "system_name": { "type": "string" },
     "scenario_id": { "type": "string" },
     "selected_memories": {

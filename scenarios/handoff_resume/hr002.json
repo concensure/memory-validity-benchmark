@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "hr002",
+  "family": "handoff_resume",
+  "split": "public",
+  "task": "Resume agent work after interrupted migration.",
+  "repo_state_fingerprint": "hr002-repo-v1",
+  "token_budget": 160,
+  "candidate_memories": [
+    {
+      "id": "hr002-s1",
+      "tier": "session",
+      "content": "Planner already fixed schema naming and implementer should only wire call sites now.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "hr002-p1",
+      "tier": "project",
+      "content": "Project memory says migration retries must not reapply already committed schema steps.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "hr002-x1",
+      "tier": "session",
+      "content": "Old handoff note says rerunning the full migration is harmless.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "hr002-s1",
+    "hr002-p1"
+  ],
+  "gold_invalid_ids": [
+    "hr002-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "hr002-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "hr002-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

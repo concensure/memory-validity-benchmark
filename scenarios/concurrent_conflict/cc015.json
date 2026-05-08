@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc015",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Flush the event buffer after confirming no other agent has already initiated the flush.",
+  "repo_state_fingerprint": "cc015-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "cc015-s1",
+      "tier": "session",
+      "content": "Event-Flusher-A acquired the flush lock at 23:55 and is draining 15,000 buffered events.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc015-p1",
+      "tier": "project",
+      "content": "Flush operations hold an exclusive lock to prevent double-delivery of buffered events.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc015-p2",
+      "tier": "project",
+      "content": "Event-Flusher-A's flush is 45% complete; 8,250 events have been confirmed as written.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc015-l1",
+      "tier": "long_term",
+      "content": "When two agents both claim a flush lock, check delivery confirmations before allowing a second flush.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc015-x1",
+      "tier": "session",
+      "content": "Event-Flusher-B also claims it holds the flush lock and has begun writing the same event buffer.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two flush agents both claim ownership of the same buffered event set"
+    },
+    {
+      "id": "cc015-x2",
+      "tier": "project",
+      "content": "Old event note says double-flush is safe because the event store deduplicates on event ID.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc015-s1",
+    "cc015-p1",
+    "cc015-p2",
+    "cc015-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc015-x1",
+    "cc015-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc015-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc015-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc015-p2",
+        "cc015-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

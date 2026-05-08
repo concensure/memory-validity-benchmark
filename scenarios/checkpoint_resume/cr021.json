@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr021",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Resume the compliance audit at control 15 without re-auditing controls 1\u201314.",
+  "repo_state_fingerprint": "cr021-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "cr021-s1",
+      "tier": "session",
+      "content": "Audit log shows controls 1\u201314 assessed with findings documented; control 15 (access logging) is the next assessment.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr021-p1",
+      "tier": "project",
+      "content": "Re-auditing completed controls would produce duplicate findings and confuse the audit trail.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr021-p2",
+      "tier": "project",
+      "content": "Controls 16\u201342 have not been assessed and must be evaluated after control 15.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr021-l1",
+      "tier": "long_term",
+      "content": "When a compliance audit is interrupted, check the control log to identify the resume point.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr021-x1",
+      "tier": "session",
+      "content": "Reset all audit findings and restart the compliance audit from control 1 for a complete assessment.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full audit reset and restart; correct behavior is to resume from control 15"
+    },
+    {
+      "id": "cr021-x2",
+      "tier": "project",
+      "content": "Old audit note says re-auditing from the beginning produces a more defensible audit report.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr021-s1",
+    "cr021-p1",
+    "cr021-p2",
+    "cr021-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr021-x1",
+    "cr021-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr021-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr021-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr021-p2",
+        "cr021-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

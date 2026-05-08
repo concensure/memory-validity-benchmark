@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp029",
+  "family": "false_promotion",
+  "split": "holdout",
+  "task": "Apply the TLS configuration fix using session evidence, not the promoted cipher suite rule.",
+  "repo_state_fingerprint": "fp029-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "fp029-s1",
+      "tier": "session",
+      "content": "Current security scan shows the promoted 'TLS 1.2 with ECDHE-RSA-AES256-GCM' cipher suite is still vulnerable to BEAST.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp029-p1",
+      "tier": "project",
+      "content": "Project security audit shows TLS 1.3 with ChaCha20-Poly1305 provides better security and performance.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp029-p2",
+      "tier": "project",
+      "content": "Correct minimum is TLS 1.3 with the three standard TLS 1.3 cipher suites; TLS 1.2 should be disabled.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp029-l1",
+      "tier": "long_term",
+      "content": "When session security scans reveal a promoted cipher rule has known vulnerabilities, demote and upgrade.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp029-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 4): use TLS 1.2 with ECDHE-RSA-AES256-GCM as the minimum cipher configuration.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted TLS 1.2 rule was current in 2019; TLS 1.3 has since become the recommended minimum"
+    },
+    {
+      "id": "fp029-x2",
+      "tier": "project",
+      "content": "Old promotion note says the TLS 1.2 cipher was confirmed by the security team as meeting industry standards.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp029-s1",
+    "fp029-p1",
+    "fp029-p2",
+    "fp029-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp029-x1",
+    "fp029-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp029-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp029-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp029-p2",
+        "fp029-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

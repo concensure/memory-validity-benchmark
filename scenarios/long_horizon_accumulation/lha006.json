@@ -1,0 +1,93 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "lha006",
+  "family": "long_horizon_accumulation",
+  "split": "public",
+  "task": "Step 18 of 30 \u2014 data model migration: migrate the user preferences schema from a JSON blob column to a normalised table. Steps 1\u201317 complete. Multiple design decisions have accumulated and two early decisions were reversed.",
+  "repo_state_fingerprint": "lha006-repo-v1",
+  "token_budget": 245,
+  "candidate_memories": [
+    {
+      "id": "lha006-s1",
+      "tier": "session",
+      "content": "Step 17 checkpoint: backfill of 8.2 M rows complete; normalised table has 8.2 M rows matching source; dual-write is active.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 17"
+    },
+    {
+      "id": "lha006-p1",
+      "tier": "project",
+      "content": "Step 18 task: enable reads from the normalised table for 10% of traffic via feature flag user_prefs_normalised_read_v2; monitor error rate for 30 min before increasing.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 16; current read rollout plan"
+    },
+    {
+      "id": "lha006-p2",
+      "tier": "project",
+      "content": "Dual-write is required until read rollout reaches 100%; do not disable dual-write before full cutover is confirmed.",
+      "validity": "valid",
+      "bucket": "supporting",
+      "notes": "created_at_step: 14"
+    },
+    {
+      "id": "lha006-l1",
+      "tier": "long_term",
+      "content": "Schema migrations with dual-write phases must have an explicit cutover checklist before disabling the legacy write path.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha006-x1",
+      "tier": "project",
+      "content": "Step 4 decision: normalised table would use a single user_preferences table; revised at step 11 to split into user_ui_prefs and user_notification_prefs for query performance.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 11; single-table design abandoned"
+    },
+    {
+      "id": "lha006-x2",
+      "tier": "session",
+      "content": "Step 8 note: backfill script estimated 6 h; actual backfill took 11 h due to lock contention; completed at step 17.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 17; backfill complete, estimate no longer relevant"
+    }
+  ],
+  "gold_valid_ids": [
+    "lha006-s1",
+    "lha006-p1",
+    "lha006-p2",
+    "lha006-l1"
+  ],
+  "gold_invalid_ids": [
+    "lha006-x1",
+    "lha006-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "lha006-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "lha006-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "lha006-p2",
+        "lha006-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.06,
+    "ideal": 1.0
+  }
+}

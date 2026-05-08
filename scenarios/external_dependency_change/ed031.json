@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed031",
+  "family": "external_dependency_change",
+  "split": "holdout",
+  "task": "Fix the PHP client after Guzzle removed the deprecated http_errors option in version 7.",
+  "repo_state_fingerprint": "ed031-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "ed031-s1",
+      "tier": "session",
+      "content": "Guzzle throws exceptions for 4xx responses unexpectedly; Guzzle 7 removed the http_errors=false option.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed031-p1",
+      "tier": "project",
+      "content": "HTTP error response handling must now use try/catch around Guzzle\\Exception\\RequestException.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed031-p2",
+      "tier": "project",
+      "content": "Guzzle 7 also removed the GuzzleHttp\\json_decode function; use json_decode() directly.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed031-l1",
+      "tier": "long_term",
+      "content": "When a PHP HTTP client removes response error options, update all error handling to use exceptions.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed031-x1",
+      "tier": "project",
+      "content": "Guzzle integration note (session 7): set http_errors=>false to prevent Guzzle from throwing on 4xx responses.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: Guzzle 7 removed http_errors option; RequestException handling is required"
+    },
+    {
+      "id": "ed031-x2",
+      "tier": "project",
+      "content": "Old PHP note says the http_errors option is a clean way to handle error responses without try/catch.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed031-s1",
+    "ed031-p1",
+    "ed031-p2",
+    "ed031-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed031-x1",
+    "ed031-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed031-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed031-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed031-p2",
+        "ed031-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

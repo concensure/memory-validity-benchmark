@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk007",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Apply the deployment freeze from ops, not the PM's urgent release request.",
+  "repo_state_fingerprint": "stk007-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "stk007-s1",
+      "tier": "session",
+      "content": "Ops issued a deployment freeze in session 30: no deployments to production between Dec 23 and Jan 3.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk007-p1",
+      "tier": "project",
+      "content": "Ops deployment freezes override PM release urgency during the defined freeze window.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk007-p2",
+      "tier": "project",
+      "content": "The freeze was approved by leadership to protect the revenue-critical holiday period from deployment risk.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk007-l1",
+      "tier": "long_term",
+      "content": "When a PM requests deployment during an ops freeze, document the request and hold deployment until the freeze lifts.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk007-x1",
+      "tier": "project",
+      "content": "PM instruction (session 31): deploy the new checkout feature to production today to capture holiday traffic.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM urgent deployment conflicts with ops leadership-approved holiday deployment freeze"
+    },
+    {
+      "id": "stk007-x2",
+      "tier": "project",
+      "content": "Old release note says critical features have been deployed during freezes with executive approval in the past.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk007-s1",
+    "stk007-p1",
+    "stk007-p2",
+    "stk007-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk007-x1",
+    "stk007-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk007-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk007-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk007-p2",
+        "stk007-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

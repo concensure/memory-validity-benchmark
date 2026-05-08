@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps017",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the incorrect time zone handling in the scheduled job after the server time zone was changed.",
+  "repo_state_fingerprint": "tps017-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps017-s1",
+      "tier": "session",
+      "content": "Scheduled jobs are running 5 hours late after the server time zone was changed from UTC to EST.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps017-p1",
+      "tier": "project",
+      "content": "All job schedules must be specified in UTC; the cron expressions must not change when server time zones change.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps017-p2",
+      "tier": "project",
+      "content": "The server time zone was changed by the infrastructure team to align with the new data center location.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps017-l1",
+      "tier": "long_term",
+      "content": "Cron expressions must always use UTC as the reference time zone regardless of server time zone settings.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps017-s2",
+      "tier": "session",
+      "content": "The time zone change affected only the job scheduler; the API server still uses UTC internally.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps017-n01",
+      "tier": "project",
+      "content": "The job scheduler is Quartz with a PostgreSQL job store for persistence.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps017-n02",
+      "tier": "session",
+      "content": "Session 6 note: the data team added three new scheduled reports to the job scheduler.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps017-n03",
+      "tier": "long_term",
+      "content": "Old practice: cron schedules were specified in local server time in the early version of the scheduler.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps017-n04",
+      "tier": "project",
+      "content": "The data center migration from US-East to US-West was completed on March 20.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps017-n05",
+      "tier": "session",
+      "content": "Session 11 note: the scheduler monitoring dashboard was updated to show next-run times in UTC.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps017-n06",
+      "tier": "project",
+      "content": "Old scheduler guide: the time zone for job schedules was inherited from the JVM default time zone.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps017-n07",
+      "tier": "long_term",
+      "content": "Job schedules must be anchored to a fixed time zone reference to prevent drift after server moves.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps017-n08",
+      "tier": "session",
+      "content": "Session 4 note: the scheduler was upgraded from Quartz 2.3 to 2.4 for improved clustering support.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps017-n09",
+      "tier": "project",
+      "content": "Jobs that process daily reports use a 00:00 UTC schedule to align with the data warehouse refresh.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps017-n10",
+      "tier": "session",
+      "content": "A scheduler health check in session 9 showed all jobs running within 1 minute of their scheduled time.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps017-n11",
+      "tier": "project",
+      "content": "The job scheduler cluster has 3 nodes with leader election for single-run guarantees.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps017-n12",
+      "tier": "long_term",
+      "content": "UTC-anchored schedules avoid daylight saving time issues that cause jobs to run at unexpected times.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps017-n13",
+      "tier": "session",
+      "content": "Session 7 note: the billing team requested a new scheduled job for monthly invoice generation.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps017-n14",
+      "tier": "project",
+      "content": "Old scheduler config: the time zone was explicitly set to UTC in the config file before the data center move.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps017-n15",
+      "tier": "project",
+      "content": "Job execution history is retained for 90 days and is queryable via the scheduler admin API.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps017-s1",
+    "tps017-p1",
+    "tps017-p2",
+    "tps017-l1",
+    "tps017-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps017-n01",
+    "tps017-n02",
+    "tps017-n03",
+    "tps017-n04",
+    "tps017-n05",
+    "tps017-n06",
+    "tps017-n07",
+    "tps017-n08",
+    "tps017-n09",
+    "tps017-n10",
+    "tps017-n11",
+    "tps017-n12",
+    "tps017-n13",
+    "tps017-n14",
+    "tps017-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps017-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps017-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps017-p2",
+        "tps017-l1",
+        "tps017-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rvb007",
+  "family": "retrieval_vocabulary_bridge",
+  "split": "public",
+  "task": "Audit log queries are slow because the audit table is rebuilt nightly from application logs. Keep a full history of changes as they happen.",
+  "repo_state_fingerprint": "rvb007-repo-v1",
+  "token_budget": 199,
+  "candidate_memories": [
+    {
+      "id": "rvb007-p1",
+      "tier": "project",
+      "content": "The audit system uses event sourcing: every state change is appended as an immutable event to audit_events; the current state is derived by replaying the event stream.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb007-l1",
+      "tier": "long_term",
+      "content": "Event sourcing provides a complete, immutable history of all state changes without nightly rebuilds; queries against event streams are faster than rebuilding from logs.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb007-p2",
+      "tier": "project",
+      "content": "audit_events table is append-only with a composite index on (entity_type, entity_id, occurred_at); queries by entity_id are O(log n).",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rvb007-x1",
+      "tier": "project",
+      "content": "Audit logs are also shipped to Splunk for SIEM analysis; Splunk ingestion is separate from the event-sourced audit_events table.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: Splunk is a separate log sink, not the event sourcing system"
+    },
+    {
+      "id": "rvb007-x2",
+      "tier": "long_term",
+      "content": "Database change-data-capture (CDC) captures row-level changes but requires the source table to exist; CDC is not the same as event sourcing.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: CDC is a different history mechanism"
+    },
+    {
+      "id": "rvb007-x3",
+      "tier": "session",
+      "content": "Nightly rebuild job takes 4 h and is the primary source of slow audit queries; event sourcing eliminates the need for the rebuild.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rvb007-p1",
+    "rvb007-l1",
+    "rvb007-p2"
+  ],
+  "gold_invalid_ids": [
+    "rvb007-x1",
+    "rvb007-x2",
+    "rvb007-x3"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rvb007-p1",
+        "rvb007-l1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rvb007-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

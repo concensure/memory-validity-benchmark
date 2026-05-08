@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk003",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Implement the API versioning strategy chosen by the tech lead, not the PM's shortcut proposal.",
+  "repo_state_fingerprint": "stk003-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "stk003-s1",
+      "tier": "session",
+      "content": "Tech lead decided in session 15: all breaking API changes require a new major version path prefix.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk003-p1",
+      "tier": "project",
+      "content": "Tech lead API versioning decisions are binding; they protect downstream integrators from silent breakage.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk003-p2",
+      "tier": "project",
+      "content": "The versioning policy requires a migration guide and deprecation notice before any breaking change ships.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk003-l1",
+      "tier": "long_term",
+      "content": "When tech lead and PM conflict on API versioning, apply the versioning policy and log the PM's shortcut request.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk003-x1",
+      "tier": "project",
+      "content": "PM instruction (session 16): make the breaking change in-place on the current endpoint to ship faster this week.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM in-place change request conflicts with tech lead's binding API versioning policy"
+    },
+    {
+      "id": "stk003-x2",
+      "tier": "project",
+      "content": "Old delivery note says minor breaking changes can sometimes be absorbed without a version bump.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk003-s1",
+    "stk003-p1",
+    "stk003-p2",
+    "stk003-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk003-x1",
+    "stk003-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk003-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk003-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk003-p2",
+        "stk003-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

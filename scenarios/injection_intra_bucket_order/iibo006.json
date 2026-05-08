@@ -1,0 +1,66 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iibo006",
+  "family": "injection_intra_bucket_order",
+  "split": "public",
+  "task": "Scale down the worker fleet during the upcoming maintenance window to reduce costs.",
+  "repo_state_fingerprint": "iibo006-repo-v1",
+  "token_budget": 207,
+  "candidate_memories": [
+    {
+      "id": "iibo006-p1",
+      "tier": "project",
+      "content": "Before scaling down workers, drain the job queue to zero or pause the queue to prevent in-flight jobs from being killed mid-execution; killing workers with active jobs corrupts job state.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iibo006-s1",
+      "tier": "session",
+      "content": "Maintenance window starts in 45 min; current queue depth is 320 jobs with estimated drain time of 12 min at current throughput.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iibo006-p2",
+      "tier": "project",
+      "content": "Scale down via kubectl scale deployment workers --replicas=0; scale back up to 10 replicas after the maintenance window.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iibo006-l1",
+      "tier": "long_term",
+      "content": "Worker scale-down events must be logged in the maintenance log at docs/maintenance.md with start time, end time, and reason.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iibo006-p1",
+    "iibo006-s1",
+    "iibo006-p2",
+    "iibo006-l1"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "iibo006-p1",
+        "iibo006-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iibo006-p2",
+        "iibo006-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr001",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Resume the database migration at step 8 without redoing steps 1\u20137.",
+  "repo_state_fingerprint": "cr001-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "cr001-s1",
+      "tier": "session",
+      "content": "Checkpoint log confirms steps 1\u20137 completed successfully; step 8 (index creation on orders.customer_id) is next.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr001-p1",
+      "tier": "project",
+      "content": "Resuming a migration must start from the checkpoint step; rerunning completed steps risks duplicate index creation.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr001-p2",
+      "tier": "project",
+      "content": "Steps 9 and 10 (foreign key constraints) depend on step 8 completing; they must not be skipped.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr001-l1",
+      "tier": "long_term",
+      "content": "When resuming an interrupted migration, verify checkpoint state before executing any step.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr001-x1",
+      "tier": "session",
+      "content": "Resume by rerunning the migration from step 1 to ensure all steps are applied cleanly.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full restart; correct behavior is to continue from the verified checkpoint at step 8"
+    },
+    {
+      "id": "cr001-x2",
+      "tier": "project",
+      "content": "Old migration runbook says rerunning the full migration from scratch is the safest recovery approach.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr001-s1",
+    "cr001-p1",
+    "cr001-p2",
+    "cr001-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr001-x1",
+    "cr001-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr001-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr001-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr001-p2",
+        "cr001-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

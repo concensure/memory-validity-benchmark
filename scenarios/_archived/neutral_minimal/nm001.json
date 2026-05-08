@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nm001",
+  "family": "neutral_minimal",
+  "split": "public",
+  "task": "Solve a small naming cleanup directly from current file state.",
+  "repo_state_fingerprint": "nm001-repo-v1",
+  "token_budget": 120,
+  "candidate_memories": [
+    {
+      "id": "nm001-s1",
+      "tier": "session",
+      "content": "The current repo state already shows the exact function rename needed and extra memory would add noise.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nm001-p1",
+      "tier": "project",
+      "content": "Project memory says minimal-memory tasks should avoid injecting unrelated durable context.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nm001-x1",
+      "tier": "session",
+      "content": "Old memory says every rename task should preload all historical refactor lessons first.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nm001-s1",
+    "nm001-p1"
+  ],
+  "gold_invalid_ids": [
+    "nm001-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "nm001-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nm001-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

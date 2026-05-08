@@ -1,0 +1,92 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "lha015",
+  "family": "long_horizon_accumulation",
+  "split": "holdout",
+  "task": "Step 20 of 35 \u2014 system compliance audit: document the data flow for the new analytics pipeline. Steps 1\u201319 complete. Two parallel agent sessions produced conflicting memories about the pipeline's data residency configuration.",
+  "repo_state_fingerprint": "lha015-repo-v1",
+  "token_budget": 243,
+  "candidate_memories": [
+    {
+      "id": "lha015-s1",
+      "tier": "session",
+      "content": "[compliance-agent at step 19] Data residency audit confirmed: analytics pipeline routes EU data exclusively through eu-west-1; no cross-region data transfer for EU records.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 19; authoritative compliance finding"
+    },
+    {
+      "id": "lha015-p1",
+      "tier": "project",
+      "content": "Analytics pipeline uses a region-aware router; EU records are tagged at ingestion and routed to the EU processor; routing config is in pipeline/router/region_rules.yaml.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "lha015-p2",
+      "tier": "project",
+      "content": "Data flow diagram for the analytics pipeline is in docs/architecture/analytics-pipeline-flow.svg; update this diagram to reflect the region-aware router added at step 14.",
+      "validity": "valid",
+      "bucket": "supporting",
+      "notes": "created_at_step: 14"
+    },
+    {
+      "id": "lha015-l1",
+      "tier": "long_term",
+      "content": "All data flow documentation must accurately reflect the current routing topology; stale diagrams have caused incorrect audit findings in the past.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha015-x1",
+      "tier": "session",
+      "content": "[infra-agent at step 15] Note: analytics pipeline does not have region-specific routing; all data processed in us-east-1.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 19; compliance-agent audit at step 19 disproves this; region-aware routing is active"
+    },
+    {
+      "id": "lha015-x2",
+      "tier": "session",
+      "content": "[data-agent at step 12] Preliminary assessment: EU data may be routed through us-east-1 temporarily; full routing audit pending.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 19; audit completed at step 19; EU data stays in eu-west-1"
+    }
+  ],
+  "gold_valid_ids": [
+    "lha015-s1",
+    "lha015-p1",
+    "lha015-p2",
+    "lha015-l1"
+  ],
+  "gold_invalid_ids": [
+    "lha015-x1",
+    "lha015-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "lha015-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "lha015-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "lha015-p2",
+        "lha015-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.06,
+    "ideal": 1.0
+  }
+}

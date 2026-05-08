@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd029",
+  "family": "preference_drift",
+  "split": "holdout",
+  "task": "Implement rate limiting using the updated preference for token bucket over fixed window.",
+  "repo_state_fingerprint": "pd029-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "pd029-s1",
+      "tier": "session",
+      "content": "User stated in session 51: replace all fixed-window rate limiting with token bucket rate limiting.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd029-p1",
+      "tier": "project",
+      "content": "Rate limiting policy (updated session 51): token bucket algorithm is required for all rate limiting.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd029-p2",
+      "tier": "project",
+      "content": "Fixed-window rate limit implementations in files touched during this task should be migrated to token bucket.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd029-l1",
+      "tier": "long_term",
+      "content": "When rate limiting algorithm preference changes, verify token bucket parameters with the team before migrating.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd029-x1",
+      "tier": "project",
+      "content": "Rate limiting policy (session 21): use fixed-window rate limiting for simplicity and predictable behavior.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old fixed-window preference superseded by token bucket mandate in session 51"
+    },
+    {
+      "id": "pd029-x2",
+      "tier": "project",
+      "content": "Old API note says fixed-window limiting was chosen because token bucket state is harder to distribute.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd029-s1",
+    "pd029-p1",
+    "pd029-p2",
+    "pd029-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd029-x1",
+    "pd029-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd029-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd029-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd029-p2",
+        "pd029-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

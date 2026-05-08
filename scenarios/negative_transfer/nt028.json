@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt028",
+  "family": "negative_transfer",
+  "split": "holdout",
+  "task": "Implement revoke_access for the API key service without using OAuth revocation behavior.",
+  "repo_state_fingerprint": "nt028-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "nt028-s1",
+      "tier": "session",
+      "content": "API key service revoke_access marks the key as revoked in the key store and flushes the key cache.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt028-p1",
+      "tier": "project",
+      "content": "API key revocation takes effect immediately; subsequent requests using the key receive 401.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt028-p2",
+      "tier": "project",
+      "content": "Revoked keys must be retained in the key store for audit purposes; they are never deleted.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt028-l1",
+      "tier": "long_term",
+      "content": "When revoke_access spans API keys and OAuth, confirm the immediate vs deferred model first.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt028-x1",
+      "tier": "project",
+      "content": "OAuth: revoke_access submits a revocation request to the authorization server's revocation endpoint.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: OAuth revocation endpoint semantics conflict with in-process API key store revocation"
+    },
+    {
+      "id": "nt028-x2",
+      "tier": "project",
+      "content": "Old auth note says revocation should be unified across API keys and OAuth tokens.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt028-s1",
+    "nt028-p1",
+    "nt028-p2",
+    "nt028-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt028-x1",
+    "nt028-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt028-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt028-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt028-p2",
+        "nt028-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

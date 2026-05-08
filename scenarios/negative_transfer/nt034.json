@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt034",
+  "family": "negative_transfer",
+  "split": "holdout",
+  "task": "Implement evaluate_rule for the policy engine without using the workflow rule evaluator.",
+  "repo_state_fingerprint": "nt034-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "nt034-s1",
+      "tier": "session",
+      "content": "Policy engine evaluate_rule checks a structured permission rule against the request context.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt034-p1",
+      "tier": "project",
+      "content": "Policy rules are evaluated statically against a snapshot of claims; they do not call external services.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt034-p2",
+      "tier": "project",
+      "content": "Policy rule evaluation must be sub-millisecond to stay within the request processing budget.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt034-l1",
+      "tier": "long_term",
+      "content": "When evaluate_rule spans policy and workflow systems, confirm the latency and statefulness model.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt034-x1",
+      "tier": "project",
+      "content": "Workflow engine: evaluate_rule executes a condition function that may trigger async state transitions.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: async state transition triggers violate the sub-millisecond policy evaluation requirement"
+    },
+    {
+      "id": "nt034-x2",
+      "tier": "project",
+      "content": "Old platform note says rule evaluation should be unified across policy and workflow engines.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt034-s1",
+    "nt034-p1",
+    "nt034-p2",
+    "nt034-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt034-x1",
+    "nt034-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt034-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt034-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt034-p2",
+        "nt034-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

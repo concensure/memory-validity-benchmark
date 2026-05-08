@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk034",
+  "family": "stakeholder_conflict",
+  "split": "holdout",
+  "task": "Use the UI design standard from the design system team, not the PM's custom component request.",
+  "repo_state_fingerprint": "stk034-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "stk034-s1",
+      "tier": "session",
+      "content": "Design system team issued a binding standard in session 64: all UI components must use the approved design system.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk034-p1",
+      "tier": "project",
+      "content": "Design system requirements are binding; custom components outside the design system create inconsistency and debt.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk034-p2",
+      "tier": "project",
+      "content": "New UI components must be submitted to the design system backlog if they are not already available.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk034-l1",
+      "tier": "long_term",
+      "content": "When a PM requests a custom component outside the design system, submit the component to the backlog and use the closest existing one.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk034-x1",
+      "tier": "project",
+      "content": "PM instruction (session 65): create a custom date picker with a unique visual style for this feature launch.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM custom component request conflicts with design system team's binding component standardization policy"
+    },
+    {
+      "id": "stk034-x2",
+      "tier": "project",
+      "content": "Old design note says custom components were built for specific features before the design system was established.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk034-s1",
+    "stk034-p1",
+    "stk034-p2",
+    "stk034-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk034-x1",
+    "stk034-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk034-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk034-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk034-p2",
+        "stk034-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

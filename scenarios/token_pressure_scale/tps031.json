@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps031",
+  "family": "token_pressure_scale",
+  "split": "holdout",
+  "task": "Fix the data encoding corruption after the character encoding was changed from UTF-8 to Latin-1.",
+  "repo_state_fingerprint": "tps031-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps031-s1",
+      "tier": "session",
+      "content": "International characters in user records are corrupted after the database connection encoding was changed to Latin-1.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps031-p1",
+      "tier": "project",
+      "content": "The database connection must use UTF-8 encoding; the connection string must specify charset=utf8mb4.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps031-p2",
+      "tier": "project",
+      "content": "The encoding was changed in the connection pool config during a maintenance window without testing international data.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps031-l1",
+      "tier": "long_term",
+      "content": "Only records created or updated after the encoding change are corrupted; older records are intact.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps031-s2",
+      "tier": "session",
+      "content": "Session 3 note: the localization team reported corrupted international characters in user records during acceptance testing.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps031-n01",
+      "tier": "project",
+      "content": "MySQL is the production database; the database schema uses utf8mb4 for all text columns.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps031-n02",
+      "tier": "session",
+      "content": "Session 4 note: the data team added a character set validation check to the migration runbook.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps031-n03",
+      "tier": "long_term",
+      "content": "Old practice: Latin-1 was the default encoding before the team adopted internationalization.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps031-n04",
+      "tier": "project",
+      "content": "The ORM connection pool is configured in database.yaml with the charset parameter.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps031-n05",
+      "tier": "session",
+      "content": "Session 9 note: the QA team added international character test cases to the user registration suite.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps031-n06",
+      "tier": "project",
+      "content": "Old encoding guide: the Latin-1 encoding was used during the initial prototype for the single-language MVP.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps031-n07",
+      "tier": "long_term",
+      "content": "Database connections must always specify the character encoding explicitly to prevent implicit encoding mismatches.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps031-n08",
+      "tier": "session",
+      "content": "Session 6 note: the frontend team added emoji support to the user profile display.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps031-n09",
+      "tier": "project",
+      "content": "The database server is configured with character-set-server=utf8mb4 as the default.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps031-n10",
+      "tier": "session",
+      "content": "A data quality report in session 11 showed zero encoding errors across all existing records.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps031-n11",
+      "tier": "project",
+      "content": "Read replicas also use utf8mb4; the encoding is consistent across primary and replicas.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps031-n12",
+      "tier": "long_term",
+      "content": "Character encoding must be validated end-to-end from the connection layer to the storage layer.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps031-n13",
+      "tier": "session",
+      "content": "Session 7 note: the localization team added support for Japanese and Korean user interfaces.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps031-n14",
+      "tier": "project",
+      "content": "Old connection guide: the pool was configured without a charset parameter and relied on the server default.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps031-n15",
+      "tier": "project",
+      "content": "The database migration tooling always runs with explicit charset=utf8mb4 in its connection parameters.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps031-s1",
+    "tps031-p1",
+    "tps031-p2",
+    "tps031-l1",
+    "tps031-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps031-n01",
+    "tps031-n02",
+    "tps031-n03",
+    "tps031-n04",
+    "tps031-n05",
+    "tps031-n06",
+    "tps031-n07",
+    "tps031-n08",
+    "tps031-n09",
+    "tps031-n10",
+    "tps031-n11",
+    "tps031-n12",
+    "tps031-n13",
+    "tps031-n14",
+    "tps031-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps031-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps031-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps031-p2",
+        "tps031-l1",
+        "tps031-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

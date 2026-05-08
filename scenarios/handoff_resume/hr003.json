@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "hr003",
+  "family": "handoff_resume",
+  "split": "public",
+  "task": "Resume a partially completed validation expansion.",
+  "repo_state_fingerprint": "hr003-repo-v1",
+  "token_budget": 165,
+  "candidate_memories": [
+    {
+      "id": "hr003-s1",
+      "tier": "session",
+      "content": "Current checkpoint says deterministic validation is complete and optional judge work remains isolated.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "hr003-p1",
+      "tier": "project",
+      "content": "Architect memory says judge failures must never change stored memory status.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "hr003-x1",
+      "tier": "session",
+      "content": "Stale handoff note says judge verdicts may directly mark items invalid.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "hr003-s1",
+    "hr003-p1"
+  ],
+  "gold_invalid_ids": [
+    "hr003-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "hr003-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "hr003-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

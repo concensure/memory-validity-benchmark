@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp035",
+  "family": "false_promotion",
+  "split": "holdout",
+  "task": "Fix the deployment health check using session evidence, not the promoted readiness probe rule.",
+  "repo_state_fingerprint": "fp035-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "fp035-s1",
+      "tier": "session",
+      "content": "Current deployment monitoring shows the promoted 'HTTP 200 from /health as readiness' probe passes too early.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp035-p1",
+      "tier": "project",
+      "content": "Project deployment analysis shows /health returns 200 before database connections are established.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp035-p2",
+      "tier": "project",
+      "content": "Correct readiness probe is /ready which checks database connectivity, cache connection, and dependency health.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp035-l1",
+      "tier": "long_term",
+      "content": "When session deployment monitoring shows false-positive readiness from a promoted rule, demote and fix the probe.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp035-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 7): use the /health endpoint HTTP 200 response as the readiness probe.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted /health probe was based on single-service testing; it does not check dependencies"
+    },
+    {
+      "id": "fp035-x2",
+      "tier": "project",
+      "content": "Old promotion note says the /health endpoint was confirmed by the DevOps team as the standard readiness signal.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp035-s1",
+    "fp035-p1",
+    "fp035-p2",
+    "fp035-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp035-x1",
+    "fp035-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp035-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp035-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp035-p2",
+        "fp035-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

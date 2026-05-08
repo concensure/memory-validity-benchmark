@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps019",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the slow query plan regression after statistics were not collected on the new partition.",
+  "repo_state_fingerprint": "tps019-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps019-s1",
+      "tier": "session",
+      "content": "Query optimizer uses a full table scan on the new November partition because no statistics exist for that partition.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps019-p1",
+      "tier": "project",
+      "content": "Run ANALYZE on the November partition to generate statistics; the query planner will then use the correct index scan.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps019-p2",
+      "tier": "project",
+      "content": "Partitioned tables require ANALYZE to be run explicitly on each new partition; autovacuum does not cover new partitions.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps019-l1",
+      "tier": "long_term",
+      "content": "When adding a new table partition, include ANALYZE in the post-partition-creation runbook.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps019-s2",
+      "tier": "session",
+      "content": "Only queries that filter on the November partition date range are affected; other partitions have correct statistics.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps019-n01",
+      "tier": "project",
+      "content": "The transactions table is partitioned by month; each partition is created on the first of the month.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps019-n02",
+      "tier": "session",
+      "content": "Session 4 note: the DBA team increased the default statistics target from 100 to 300 for the transactions table.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps019-n03",
+      "tier": "long_term",
+      "content": "Old practice: ANALYZE was run manually on the whole table before partitioning was introduced.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps019-n04",
+      "tier": "project",
+      "content": "PostgreSQL autovacuum runs on the parent table but does not automatically trigger on child partitions.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps019-n05",
+      "tier": "session",
+      "content": "Session 11 note: a query performance review showed all other partitions have query plans with index scans.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps019-n06",
+      "tier": "project",
+      "content": "Old partition guide: partition creation was a manual DBA step before it was automated in the pipeline.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps019-n07",
+      "tier": "long_term",
+      "content": "New table partitions require explicit statistics collection before the query planner can generate optimal plans.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps019-n08",
+      "tier": "session",
+      "content": "Session 8 note: the analytics team added a new dashboard for partition-level query latency.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps019-n09",
+      "tier": "project",
+      "content": "The transactions table has 900 million rows across 18 partitions.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps019-n10",
+      "tier": "session",
+      "content": "A query plan review in session 6 confirmed the October partition uses an efficient index scan.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps019-n11",
+      "tier": "project",
+      "content": "Partition creation is automated via a cron job that runs on the 28th of each month.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps019-n12",
+      "tier": "long_term",
+      "content": "Partitioned tables should have a post-creation automation hook that runs ANALYZE on each new partition.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps019-n13",
+      "tier": "session",
+      "content": "Session 3 note: the DBA team added partition pruning hints to the most frequent reporting queries.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps019-n14",
+      "tier": "project",
+      "content": "Old statistics guide: the statistics target for the transactions table was 100 before the DBA review.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps019-n15",
+      "tier": "project",
+      "content": "The reporting dashboard queries are run against a read replica that has a 5-minute replication lag.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps019-s1",
+    "tps019-p1",
+    "tps019-p2",
+    "tps019-l1",
+    "tps019-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps019-n01",
+    "tps019-n02",
+    "tps019-n03",
+    "tps019-n04",
+    "tps019-n05",
+    "tps019-n06",
+    "tps019-n07",
+    "tps019-n08",
+    "tps019-n09",
+    "tps019-n10",
+    "tps019-n11",
+    "tps019-n12",
+    "tps019-n13",
+    "tps019-n14",
+    "tps019-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps019-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps019-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps019-p2",
+        "tps019-l1",
+        "tps019-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ma008",
+  "family": "multi_agent",
+  "split": "public",
+  "task": "Coordinate reviewer and planner on cross-project leakage checks.",
+  "repo_state_fingerprint": "ma008-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "ma008-s1",
+      "tier": "session",
+      "content": "Reviewer must verify that similarly named project memories do not bleed across repos during handoff.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ma008-p1",
+      "tier": "project",
+      "content": "Project memory says cross-project transfer must be explicit, minimal, and auditable.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ma008-x1",
+      "tier": "session",
+      "content": "Old note says long-term lessons can be freely injected whenever naming overlaps look relevant.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ma008-s1",
+    "ma008-p1"
+  ],
+  "gold_invalid_ids": [
+    "ma008-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "ma008-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ma008-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

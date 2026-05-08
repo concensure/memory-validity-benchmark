@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rse005",
+  "family": "retrieval_scope_enforcement",
+  "split": "public",
+  "task": "[Project: Ember/auth-svc] Set the JWT expiry for tokens issued by Ember's auth-svc.",
+  "repo_state_fingerprint": "rse005-repo-v1",
+  "token_budget": 207,
+  "candidate_memories": [
+    {
+      "id": "rse005-p1",
+      "tier": "project",
+      "content": "[Project: Ember] auth-svc issues JWTs with a 15-minute expiry; refresh tokens are valid for 7 days and must be rotated on use.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rse005-p2",
+      "tier": "project",
+      "content": "[Project: Ember] JWT expiry is configured via AUTH_JWT_EXPIRY_SECONDS in auth-svc/config.yaml; the refresh token TTL is AUTH_REFRESH_TTL_DAYS.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rse005-x1",
+      "tier": "project",
+      "content": "[Project: Nova] auth-svc issues JWTs with a 1-hour expiry to reduce refresh overhead for Nova's low-traffic internal tools.",
+      "validity": "irrelevant",
+      "bucket": "critical",
+      "notes": "note: scope=Nova; different risk profile, longer expiry"
+    },
+    {
+      "id": "rse005-x2",
+      "tier": "long_term",
+      "content": "[General] JWT expiry should be short (15\u201360 min) for public-facing services and may be longer for internal tools; always pair with refresh tokens.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: general guidance, Ember-specific value is authoritative"
+    },
+    {
+      "id": "rse005-x3",
+      "tier": "project",
+      "content": "[Project: Ember / legacy] Old auth-svc issued 24-hour JWTs; this was identified as a security risk and reduced to 15 min in 2024.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: legacy value superseded by current 15-min policy"
+    },
+    {
+      "id": "rse005-x4",
+      "tier": "session",
+      "content": "[Project: Ember] Security team approved the 15-min/7-day token policy during Q3 review.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rse005-p1",
+    "rse005-p2"
+  ],
+  "gold_invalid_ids": [
+    "rse005-x1",
+    "rse005-x2",
+    "rse005-x3",
+    "rse005-x4"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rse005-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rse005-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

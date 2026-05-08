@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd023",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Apply the updated branching strategy: trunk-based development over feature branches.",
+  "repo_state_fingerprint": "pd023-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "pd023-s1",
+      "tier": "session",
+      "content": "User directed in session 45: stop creating long-lived feature branches; commit directly to trunk with feature flags.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd023-p1",
+      "tier": "project",
+      "content": "Branching policy (updated session 45): trunk-based development with feature flags is now mandatory.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd023-p2",
+      "tier": "project",
+      "content": "Long-lived feature branches in the active repository should be flagged for integration into trunk.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd023-l1",
+      "tier": "long_term",
+      "content": "When branching strategy changes, add feature flag scaffolding before merging any in-progress branches.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd023-x1",
+      "tier": "project",
+      "content": "Branching policy (session 15): all work must happen on named feature branches; direct trunk commits are prohibited.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old feature-branch mandate superseded by trunk-based development policy in session 45"
+    },
+    {
+      "id": "pd023-x2",
+      "tier": "project",
+      "content": "Old workflow note says feature branches were chosen to enable code review before any changes reached trunk.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd023-s1",
+    "pd023-p1",
+    "pd023-p2",
+    "pd023-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd023-x1",
+    "pd023-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd023-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd023-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd023-p2",
+        "pd023-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

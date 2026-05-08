@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr032",
+  "family": "checkpoint_resume",
+  "split": "holdout",
+  "task": "Continue the API key rotation at service 7 without re-rotating services 1\u20136.",
+  "repo_state_fingerprint": "cr032-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "cr032-s1",
+      "tier": "session",
+      "content": "Rotation log shows services 1\u20136 (api, worker, reporter, scheduler, exporter, monitor) rotated with new keys.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr032-p1",
+      "tier": "project",
+      "content": "Re-rotating services with already-rotated keys would revoke the new keys and cause authentication failures.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr032-p2",
+      "tier": "project",
+      "content": "Services 7\u201315 have not been rotated and must receive new keys after service 7.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr032-l1",
+      "tier": "long_term",
+      "content": "When API key rotation is interrupted, read the rotation log to identify the next service before resuming.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr032-x1",
+      "tier": "session",
+      "content": "Revoke all new keys and restart the rotation for all 15 services from service 1.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full revocation and restart; correct behavior is to continue from service 7"
+    },
+    {
+      "id": "cr032-x2",
+      "tier": "project",
+      "content": "Old security note says revoking all keys and restarting ensures the rotation is applied in a consistent order.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr032-s1",
+    "cr032-p1",
+    "cr032-p2",
+    "cr032-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr032-x1",
+    "cr032-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr032-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr032-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr032-p2",
+        "cr032-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

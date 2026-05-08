@@ -1,0 +1,92 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "lha012",
+  "family": "long_horizon_accumulation",
+  "split": "public",
+  "task": "Step 30 of 40 \u2014 continuous delivery pipeline overhaul: enable progressive delivery for the last 3 services. Steps 1\u201329 complete. Multiple configuration decisions have accumulated; 2 early configs are stale.",
+  "repo_state_fingerprint": "lha012-repo-v1",
+  "token_budget": 245,
+  "candidate_memories": [
+    {
+      "id": "lha012-s1",
+      "tier": "session",
+      "content": "Step 29 checkpoint: 12 of 15 services have progressive delivery enabled; billing-svc, auth-svc, and notification-svc are the 3 remaining services.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 29"
+    },
+    {
+      "id": "lha012-p1",
+      "tier": "project",
+      "content": "Progressive delivery for billing-svc requires finance team sign-off before enabling; auth-svc and notification-svc may proceed without additional approval.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 25; finance approval requirement added"
+    },
+    {
+      "id": "lha012-p2",
+      "tier": "project",
+      "content": "Enable progressive delivery via Argo Rollouts: argo rollouts set image <service> <image>:<tag>; canary step config is in rollouts/<service>-rollout.yaml.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha012-l1",
+      "tier": "long_term",
+      "content": "Progressive delivery must be validated end-to-end in staging on a weekly cadence; validation results are in docs/progressive-delivery-status.md.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha012-x1",
+      "tier": "project",
+      "content": "Step 8 config: progressive delivery used Flagger; replaced by Argo Rollouts at step 16 due to better Istio integration.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 16; Flagger replaced by Argo Rollouts"
+    },
+    {
+      "id": "lha012-x2",
+      "tier": "session",
+      "content": "Step 22 note: billing-svc did not require finance sign-off; this changed at step 25 after a compliance requirement was added.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 25; finance sign-off is now required as in p1"
+    }
+  ],
+  "gold_valid_ids": [
+    "lha012-s1",
+    "lha012-p1",
+    "lha012-p2",
+    "lha012-l1"
+  ],
+  "gold_invalid_ids": [
+    "lha012-x1",
+    "lha012-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "lha012-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "lha012-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "lha012-p2",
+        "lha012-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.06,
+    "ideal": 1.0
+  }
+}

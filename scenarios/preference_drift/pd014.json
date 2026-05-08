@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd014",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Implement caching using the updated preference for Redis over in-process memory cache.",
+  "repo_state_fingerprint": "pd014-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "pd014-s1",
+      "tier": "session",
+      "content": "User stated in session 37: stop using in-process memory caches; switch all caching to Redis for consistency.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd014-p1",
+      "tier": "project",
+      "content": "Caching policy (updated session 37): Redis is the required cache backend for all new caching needs.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd014-p2",
+      "tier": "project",
+      "content": "In-process cache implementations in files touched during this task should be migrated to Redis client calls.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd014-l1",
+      "tier": "long_term",
+      "content": "When cache backend preference changes, add Redis client configuration before migrating in-process caches.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd014-x1",
+      "tier": "project",
+      "content": "Caching policy (session 10): use in-process memory caches to avoid network overhead for frequently read data.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old in-process cache preference superseded by Redis mandate in session 37"
+    },
+    {
+      "id": "pd014-x2",
+      "tier": "project",
+      "content": "Old performance note says in-process caches were chosen to avoid Redis dependency for simpler deployments.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd014-s1",
+    "pd014-p1",
+    "pd014-p2",
+    "pd014-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd014-x1",
+    "pd014-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd014-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd014-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd014-p2",
+        "pd014-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

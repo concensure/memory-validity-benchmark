@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "bm014",
+  "family": "branch_merge",
+  "split": "holdout",
+  "task": "Re-evaluate deployment guidance after release branch hotfix diverged from main.",
+  "repo_state_fingerprint": "bm014-repo-v1",
+  "token_budget": 230,
+  "candidate_memories": [
+    {
+      "id": "bm014-s1",
+      "tier": "session",
+      "content": "Release branch hotfix changed the deployment steps and main branch instructions are no longer authoritative there.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "bm014-p1",
+      "tier": "project",
+      "content": "Project memory says branch-specific deployment procedures stay scoped until merged and replayed.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "bm014-x1",
+      "tier": "session",
+      "content": "Stale note says deployment memories from main always outrank release-branch notes because main is newer.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "bm014-s1",
+    "bm014-p1"
+  ],
+  "gold_invalid_ids": [
+    "bm014-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "bm014-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "bm014-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

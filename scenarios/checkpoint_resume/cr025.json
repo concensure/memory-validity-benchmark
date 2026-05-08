@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr025",
+  "family": "checkpoint_resume",
+  "split": "holdout",
+  "task": "Resume the API schema migration at version 6 without re-migrating versions 1\u20135.",
+  "repo_state_fingerprint": "cr025-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "cr025-s1",
+      "tier": "session",
+      "content": "Migration log confirms schema versions 1\u20135 successfully migrated and backward compatibility verified.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr025-p1",
+      "tier": "project",
+      "content": "Re-migrating completed schema versions risks reverting already-stable API contracts.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr025-p2",
+      "tier": "project",
+      "content": "Versions 6\u201310 have not been migrated and must complete after version 6.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr025-l1",
+      "tier": "long_term",
+      "content": "When a schema migration is interrupted, read the version log to identify the next migration before proceeding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr025-x1",
+      "tier": "session",
+      "content": "Roll back all schema migrations and restart from version 1 to ensure the full migration sequence is clean.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full rollback and restart; correct behavior is to resume from version 6"
+    },
+    {
+      "id": "cr025-x2",
+      "tier": "project",
+      "content": "Old schema note says rolling back and restarting ensures no intermediate version states cause issues.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr025-s1",
+    "cr025-p1",
+    "cr025-p2",
+    "cr025-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr025-x1",
+    "cr025-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr025-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr025-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr025-p2",
+        "cr025-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

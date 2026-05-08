@@ -1,0 +1,71 @@
+{
+  "scenario_id": "cb002",
+  "family": "coding_bugfix",
+  "task": "Resolve a flaky retry test where deadlines are computed in local time instead of UTC.",
+  "repo_state_fingerprint": "cb002-repo-v1",
+  "token_budget": 210,
+  "candidate_memories": [
+    {
+      "id": "cb002-s1",
+      "tier": "session",
+      "content": "Observed failure only on CI runners in non-UTC time zones.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cb002-p1",
+      "tier": "project",
+      "content": "retryDeadline helper should use time.Now().UTC() before formatting or comparison.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cb002-p2",
+      "tier": "project",
+      "content": "Scheduler metrics are unrelated to retry deadline logic.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cb002-l1",
+      "tier": "long_term",
+      "content": "Time-sensitive tests should avoid local timezone assumptions and normalize comparisons to UTC.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cb002-s1",
+    "cb002-p1",
+    "cb002-l1"
+  ],
+  "gold_invalid_ids": [
+    "cb002-p2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cb002-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cb002-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cb002-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.3,
+    "ideal": 1.0
+  },
+  "schema_version": "mvi-scenario-v1",
+  "split": "public"
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rvb004",
+  "family": "retrieval_vocabulary_bridge",
+  "split": "public",
+  "task": "The ingestion pipeline is overwhelming the processing workers. Slow down incoming work when workers are overloaded.",
+  "repo_state_fingerprint": "rvb004-repo-v1",
+  "token_budget": 196,
+  "candidate_memories": [
+    {
+      "id": "rvb004-p1",
+      "tier": "project",
+      "content": "The ingestion pipeline implements backpressure via a bounded channel (capacity=500); producers block when the channel is full, preventing worker overload.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb004-l1",
+      "tier": "long_term",
+      "content": "Bounded queues are the correct mechanism for backpressure; never use unbounded queues between a fast producer and a slow consumer in a long-running pipeline.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rvb004-p2",
+      "tier": "project",
+      "content": "Backpressure metrics are exposed as ingestion_channel_fill_ratio; alert threshold is 0.9 for 30 s sustained.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rvb004-x1",
+      "tier": "project",
+      "content": "Worker autoscaling is configured to add workers when CPU exceeds 80% for 2 min; this supplements but does not replace backpressure.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: autoscaling is complementary, not the backpressure fix"
+    },
+    {
+      "id": "rvb004-x2",
+      "tier": "long_term",
+      "content": "Rate limiting at the API gateway slows down external clients; this is a different layer from internal pipeline backpressure.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: external rate limiting \u2260 internal backpressure"
+    },
+    {
+      "id": "rvb004-x3",
+      "tier": "session",
+      "content": "Worker OOM events occurring every 20 min; root cause is unbounded queue; backpressure fix is the solution.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rvb004-p1",
+    "rvb004-l1",
+    "rvb004-p2"
+  ],
+  "gold_invalid_ids": [
+    "rvb004-x1",
+    "rvb004-x2",
+    "rvb004-x3"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rvb004-p1",
+        "rvb004-l1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rvb004-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

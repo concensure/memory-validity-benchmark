@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed020",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the Go module after the AWS SDK v2 removed the deprecated session.NewSession function.",
+  "repo_state_fingerprint": "ed020-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "ed020-s1",
+      "tier": "session",
+      "content": "AWS SDK calls fail to compile; AWS SDK for Go v2 removed the session.NewSession function from the SDK.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed020-p1",
+      "tier": "project",
+      "content": "AWS clients must now be created using aws.NewConfig and config.LoadDefaultConfig instead of session.NewSession.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed020-p2",
+      "tier": "project",
+      "content": "AWS SDK v2 also moved credential provider types to the credentials package with different initialization.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed020-l1",
+      "tier": "long_term",
+      "content": "When an AWS SDK major version removes session management, update all client creation patterns atomically.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed020-x1",
+      "tier": "project",
+      "content": "AWS SDK Go note (session 8): create AWS clients using session.NewSession and then passing the session to the service client.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: AWS SDK Go v2 removed session.NewSession; use config.LoadDefaultConfig instead"
+    },
+    {
+      "id": "ed020-x2",
+      "tier": "project",
+      "content": "Old AWS note says AWS SDK v1 session handling is still maintained and can coexist with SDK v2 clients.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed020-s1",
+    "ed020-p1",
+    "ed020-p2",
+    "ed020-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed020-x1",
+    "ed020-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed020-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed020-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed020-p2",
+        "ed020-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

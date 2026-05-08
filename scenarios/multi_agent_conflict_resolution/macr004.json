@@ -1,0 +1,68 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "macr004",
+  "family": "multi_agent_conflict_resolution",
+  "split": "public",
+  "task": "Set the downstream call timeout for the inventory-svc HTTP client. Resolution strategy: recency_wins.",
+  "repo_state_fingerprint": "macr004-repo-v1",
+  "token_budget": 206,
+  "candidate_memories": [
+    {
+      "id": "macr004-s1",
+      "tier": "session",
+      "content": "[sre-agent, written 11:45 UTC] inventory-svc timeout updated to 5 s (down from 15 s) after SLA renegotiation; inventory-svc P99 is now 3.2 s and a 5 s timeout provides 1.8 s headroom.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "resolution: recency_wins; written 11:45 UTC; wins"
+    },
+    {
+      "id": "macr004-p1",
+      "tier": "project",
+      "content": "Timeout is configured via INVENTORY_CLIENT_TIMEOUT_MS in config/production.yaml; update and redeploy.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr004-l1",
+      "tier": "long_term",
+      "content": "HTTP client timeouts should be (P99 * 1.5) rounded up to the nearest second; document the P99 basis for any timeout value.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr004-x1",
+      "tier": "project",
+      "content": "[architect-agent, written 09:00 UTC] inventory-svc HTTP client timeout is 15 s per the original capacity model.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "resolution: recency_loses; written 09:00 UTC; superseded by macr004-s1 at 11:45 UTC"
+    }
+  ],
+  "gold_valid_ids": [
+    "macr004-s1",
+    "macr004-p1",
+    "macr004-l1"
+  ],
+  "gold_invalid_ids": [
+    "macr004-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "macr004-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "macr004-p1",
+        "macr004-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

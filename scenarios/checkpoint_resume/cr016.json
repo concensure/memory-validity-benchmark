@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr016",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Continue the data sync at page 45 without re-syncing pages 1\u201344.",
+  "repo_state_fingerprint": "cr016-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cr016-s1",
+      "tier": "session",
+      "content": "Sync checkpoint shows 44 pages of user data synced to the remote system; page 45 is the next sync target.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr016-p1",
+      "tier": "project",
+      "content": "Re-syncing completed pages overwrites already-synced data and may trigger downstream deduplication errors.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr016-p2",
+      "tier": "project",
+      "content": "Pages 46\u2013120 have not been synced and must complete after page 45.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr016-l1",
+      "tier": "long_term",
+      "content": "When a data sync is interrupted, verify the last synced page in the checkpoint before resuming.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr016-x1",
+      "tier": "session",
+      "content": "Re-sync all 120 pages from the beginning to ensure the remote system reflects the complete dataset.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full re-sync; correct behavior is to resume syncing from page 45"
+    },
+    {
+      "id": "cr016-x2",
+      "tier": "project",
+      "content": "Old sync note says full re-syncs are preferred after interruptions to guarantee remote data consistency.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr016-s1",
+    "cr016-p1",
+    "cr016-p2",
+    "cr016-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr016-x1",
+    "cr016-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr016-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr016-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr016-p2",
+        "cr016-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

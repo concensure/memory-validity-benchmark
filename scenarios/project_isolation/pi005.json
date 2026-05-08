@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pi005",
+  "family": "project_isolation",
+  "split": "public",
+  "task": "Keep workspace automation memory from polluting mobile app fixes.",
+  "repo_state_fingerprint": "pi005-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "pi005-s1",
+      "tier": "session",
+      "content": "Workspace automation scripts are unrelated to the mobile app patch even though both mention retries.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pi005-p1",
+      "tier": "project",
+      "content": "Project memory says similarly worded retry memories still need project-scope checks.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pi005-x1",
+      "tier": "session",
+      "content": "Foreign note says retry-handling memory is always portable across repos with background jobs.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pi005-s1",
+    "pi005-p1"
+  ],
+  "gold_invalid_ids": [
+    "pi005-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "pi005-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pi005-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk031",
+  "family": "stakeholder_conflict",
+  "split": "holdout",
+  "task": "Use the testing standard from QA lead, not the PM's manual testing substitution.",
+  "repo_state_fingerprint": "stk031-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "stk031-s1",
+      "tier": "session",
+      "content": "QA lead issued a binding testing standard in session 58: all new features must have automated end-to-end tests.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk031-p1",
+      "tier": "project",
+      "content": "QA lead automated testing requirements are binding for release gating; manual testing does not satisfy them.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk031-p2",
+      "tier": "project",
+      "content": "End-to-end tests must cover the critical user journey for the feature with at least 5 distinct test cases.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk031-l1",
+      "tier": "long_term",
+      "content": "When a PM proposes manual testing as a substitute for automation, enforce the e2e requirement and schedule the tests.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk031-x1",
+      "tier": "project",
+      "content": "PM instruction (session 59): use manual QA testing for this feature instead of automated tests to ship sooner.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM manual testing proposal conflicts with QA lead's binding automated e2e test requirement"
+    },
+    {
+      "id": "stk031-x2",
+      "tier": "project",
+      "content": "Old QA note says manual testing was accepted for low-risk features before the automated testing policy was formalized.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk031-s1",
+    "stk031-p1",
+    "stk031-p2",
+    "stk031-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk031-x1",
+    "stk031-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk031-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk031-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk031-p2",
+        "stk031-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

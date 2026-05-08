@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cp002",
+  "family": "consensus_promotion",
+  "split": "public",
+  "task": "Require citation quality before promoting deployment guidance.",
+  "repo_state_fingerprint": "cp002-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "cp002-s1",
+      "tier": "session",
+      "content": "Deployment guidance has high confidence but only weak placeholder citations.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cp002-p1",
+      "tier": "project",
+      "content": "Project memory says strong citations and clean consensus are both required for trusted long-term promotion.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cp002-x1",
+      "tier": "session",
+      "content": "Old note says confidence alone should override thin citation evidence for operational tips.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cp002-s1",
+    "cp002-p1"
+  ],
+  "gold_invalid_ids": [
+    "cp002-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cp002-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cp002-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

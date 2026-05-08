@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nm013",
+  "family": "neutral_minimal",
+  "split": "public",
+  "task": "Rename a fixture file to match a clearly specified expected path.",
+  "repo_state_fingerprint": "nm013-repo-v1",
+  "token_budget": 115,
+  "candidate_memories": [
+    {
+      "id": "nm013-s1",
+      "tier": "session",
+      "content": "The expected path is already given by the test output and no durable memory is required.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nm013-p1",
+      "tier": "project",
+      "content": "Project memory says path-only fixture fixes should avoid context inflation.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nm013-x1",
+      "tier": "session",
+      "content": "Old note says any file rename should retrieve old refactor and watcher memories first.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nm013-s1",
+    "nm013-p1"
+  ],
+  "gold_invalid_ids": [
+    "nm013-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "nm013-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nm013-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

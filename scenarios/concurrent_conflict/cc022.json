@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc022",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Resume writing the incident report after confirming no other agent is authoring it.",
+  "repo_state_fingerprint": "cc022-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "cc022-s1",
+      "tier": "session",
+      "content": "Reporter-A claimed the incident report for INC-2204 at 13:00 and has written sections 1 through 3.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc022-p1",
+      "tier": "project",
+      "content": "Incident reports must be authored by a single agent to maintain narrative coherence.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc022-p2",
+      "tier": "project",
+      "content": "Reporter-A's draft is in progress; sections 4 and 5 remain unwritten.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc022-l1",
+      "tier": "long_term",
+      "content": "When two agents claim an incident report, check authorship lock before either continues writing.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc022-x1",
+      "tier": "session",
+      "content": "Reporter-B also claimed INC-2204 at 13:10 and has started authoring section 4 independently.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents both claim authorship of the same incident report document"
+    },
+    {
+      "id": "cc022-x2",
+      "tier": "project",
+      "content": "Old process note says concurrent incident report sections can be merged during final review.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc022-s1",
+    "cc022-p1",
+    "cc022-p2",
+    "cc022-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc022-x1",
+    "cc022-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc022-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc022-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc022-p2",
+        "cc022-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

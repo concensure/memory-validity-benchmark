@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps005",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Resolve the data consistency issue after the sharding migration changed the partition key.",
+  "repo_state_fingerprint": "tps005-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps005-s1",
+      "tier": "session",
+      "content": "Reads from shard 3 return stale data because the routing layer still uses the old customer_id-based partition key.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps005-p1",
+      "tier": "project",
+      "content": "After the migration, the routing layer must use tenant_id as the partition key for all shard lookups.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps005-p2",
+      "tier": "project",
+      "content": "The sharding migration completed on March 15; any data written before that date may still be on old shards.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps005-l1",
+      "tier": "long_term",
+      "content": "When a partition key changes, update routing before any new writes to prevent reads from returning stale shards.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps005-s2",
+      "tier": "session",
+      "content": "Shard 3 is the only affected shard; shards 1, 2, and 4 were migrated and verified before the routing issue appeared.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps005-n01",
+      "tier": "project",
+      "content": "The database sharding was originally designed for a 4-shard topology; the migration expanded it to 8.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps005-n02",
+      "tier": "session",
+      "content": "Session 5 note: the data team ran a quarterly reconciliation that found no discrepancies.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps005-n03",
+      "tier": "long_term",
+      "content": "Old lesson: consistent hashing with virtual nodes was considered but rejected for this sharding design.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps005-n04",
+      "tier": "project",
+      "content": "The analytics pipeline reads from a separate read replica and is not affected by the sharding key change.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps005-n05",
+      "tier": "session",
+      "content": "The infrastructure team deployed new EC2 instances for shard 4 in session 18.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps005-n06",
+      "tier": "project",
+      "content": "Old routing note: customer_id was chosen as the partition key for locality with the billing system.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps005-n07",
+      "tier": "long_term",
+      "content": "After any partition key change, run a full consistency check across all shards before opening traffic.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps005-n08",
+      "tier": "session",
+      "content": "Session 9 note: the search team indexed the customer table for name-based lookup.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps005-n09",
+      "tier": "project",
+      "content": "The sharding library used is vitess with custom routing rules configured in the shard map.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps005-n10",
+      "tier": "session",
+      "content": "A load test in session 14 confirmed all shards handle 1000 queries/second without saturation.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps005-n11",
+      "tier": "project",
+      "content": "The backup schedule was updated to include shard-level snapshots after the migration.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps005-n12",
+      "tier": "long_term",
+      "content": "Old practice: routing layers used a static shard map before dynamic discovery was added.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps005-n13",
+      "tier": "session",
+      "content": "Session 7 note: the data team created a new dashboard for shard health monitoring.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps005-n14",
+      "tier": "project",
+      "content": "Tenant IDs are UUIDs assigned at account creation; customer IDs are sequential integers.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps005-n15",
+      "tier": "project",
+      "content": "Old migration guide: the original sharding key change was planned for Q4 but was moved to Q1.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps005-s1",
+    "tps005-p1",
+    "tps005-p2",
+    "tps005-l1",
+    "tps005-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps005-n01",
+    "tps005-n02",
+    "tps005-n03",
+    "tps005-n04",
+    "tps005-n05",
+    "tps005-n06",
+    "tps005-n07",
+    "tps005-n08",
+    "tps005-n09",
+    "tps005-n10",
+    "tps005-n11",
+    "tps005-n12",
+    "tps005-n13",
+    "tps005-n14",
+    "tps005-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps005-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps005-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps005-p2",
+        "tps005-l1",
+        "tps005-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

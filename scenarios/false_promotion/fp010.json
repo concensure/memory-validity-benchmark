@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp010",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Fix the deployment rollout using session evidence, not the promoted rollout speed rule.",
+  "repo_state_fingerprint": "fp010-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "fp010-s1",
+      "tier": "session",
+      "content": "Current incident review shows the promoted '10% per hour rollout speed' is too fast for the payment service.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp010-p1",
+      "tier": "project",
+      "content": "Project SRE analysis shows the payment service requires 2-hour bake time between rollout increments.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp010-p2",
+      "tier": "project",
+      "content": "Correct rollout for the payment service is 5% initial, then 2-hour bake, then 25%, then 2-hour bake, then 100%.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp010-l1",
+      "tier": "long_term",
+      "content": "When session incidents trace to a promoted rollout rule, initiate a demotion review for the specific service.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp010-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 4): roll out all services at 10% per hour for uniform deployment safety.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted uniform rollout speed was based on stateless services; payment is stateful and needs longer bake time"
+    },
+    {
+      "id": "fp010-x2",
+      "tier": "project",
+      "content": "Old promotion note says the 10%/hour rollout was validated by the SRE team as the safe default for all services.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp010-s1",
+    "fp010-p1",
+    "fp010-p2",
+    "fp010-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp010-x1",
+    "fp010-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp010-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp010-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp010-p2",
+        "fp010-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

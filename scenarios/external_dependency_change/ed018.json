@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed018",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the Python client after the requests library changed its SSL default behavior in v2.28.",
+  "repo_state_fingerprint": "ed018-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "ed018-s1",
+      "tier": "session",
+      "content": "Outbound HTTPS calls fail certificate verification; requests v2.28 changed the default CA bundle source.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed018-p1",
+      "tier": "project",
+      "content": "The requests library v2.28 now uses the system trust store by default; custom CA bundles must be explicit.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed018-p2",
+      "tier": "project",
+      "content": "The verify parameter now accepts a directory path for custom CA stores, not just individual cert files.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed018-l1",
+      "tier": "long_term",
+      "content": "When an HTTP client library changes SSL defaults, audit all verify parameter usages before upgrading.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed018-x1",
+      "tier": "project",
+      "content": "requests library note (session 7): set verify=True in all HTTPS requests to enable certificate validation.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: requests v2.28 changed default CA bundle; system trust store is now used by default"
+    },
+    {
+      "id": "ed018-x2",
+      "tier": "project",
+      "content": "Old HTTP note says requests v2.28 is backward compatible and does not require changes for existing integrations.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed018-s1",
+    "ed018-p1",
+    "ed018-p2",
+    "ed018-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed018-x1",
+    "ed018-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed018-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed018-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed018-p2",
+        "ed018-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

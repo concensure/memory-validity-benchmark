@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt027",
+  "family": "negative_transfer",
+  "split": "holdout",
+  "task": "Implement create_index for the search service without importing the search engine index logic.",
+  "repo_state_fingerprint": "nt027-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "nt027-s1",
+      "tier": "session",
+      "content": "Search service create_index registers a new named index with its schema in the index registry.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt027-p1",
+      "tier": "project",
+      "content": "Index schema registration is lightweight; it does not trigger data ingestion or shard allocation.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt027-p2",
+      "tier": "project",
+      "content": "The search service create_index is a control-plane call; indexing data is a separate data-plane call.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt027-l1",
+      "tier": "long_term",
+      "content": "When create_index spans control and data plane contexts, confirm the registration vs build model.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt027-x1",
+      "tier": "project",
+      "content": "Search engine: create_index allocates shards, builds the inverted index, and writes to disk.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: shard allocation and index building belong to the data plane, not the registry call"
+    },
+    {
+      "id": "nt027-x2",
+      "tier": "project",
+      "content": "Old infra note says index creation and registration should be a single atomic operation.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt027-s1",
+    "nt027-p1",
+    "nt027-p2",
+    "nt027-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt027-x1",
+    "nt027-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt027-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt027-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt027-p2",
+        "nt027-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

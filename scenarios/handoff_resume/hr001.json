@@ -5,16 +5,62 @@
   "repo_state_fingerprint": "hr001-repo-v1",
   "token_budget": 260,
   "candidate_memories": [
-    { "id": "hr001-s1", "tier": "session", "content": "Previous agent already tried replacing the entire auth stack and user explicitly rejected that scope.", "validity": "valid", "bucket": "critical" },
-    { "id": "hr001-s2", "tier": "session", "content": "Current next step is to migrate token parsing first, not session storage.", "validity": "valid", "bucket": "critical" },
-    { "id": "hr001-p1", "tier": "project", "content": "Session storage depends on token claims format; changing order caused breakage in prior attempt.", "validity": "valid", "bucket": "supporting" },
-    { "id": "hr001-l1", "tier": "long_term", "content": "For agent handoffs, inject recent explicit user constraints before broad architectural context.", "validity": "valid", "bucket": "supporting" }
+    {
+      "id": "hr001-s1",
+      "tier": "session",
+      "content": "Previous agent already tried replacing the entire auth stack and user explicitly rejected that scope.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "hr001-s2",
+      "tier": "session",
+      "content": "Current next step is to migrate token parsing first, not session storage.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "hr001-p1",
+      "tier": "project",
+      "content": "Session storage depends on token claims format; changing order caused breakage in prior attempt.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "hr001-l1",
+      "tier": "long_term",
+      "content": "For agent handoffs, inject recent explicit user constraints before broad architectural context.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
   ],
-  "gold_valid_ids": ["hr001-s1", "hr001-s2", "hr001-p1", "hr001-l1"],
+  "gold_valid_ids": [
+    "hr001-s1",
+    "hr001-s2",
+    "hr001-p1",
+    "hr001-l1"
+  ],
   "gold_invalid_ids": [],
   "preferred_order_buckets": [
-    { "name": "session_critical", "memory_ids": ["hr001-s1", "hr001-s2"] },
-    { "name": "supporting", "memory_ids": ["hr001-p1", "hr001-l1"] }
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "hr001-s1",
+        "hr001-s2"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "hr001-p1",
+        "hr001-l1"
+      ]
+    }
   ],
-  "task_outcome_baselines": { "no_memory": 0.25, "ideal": 1.0 }
+  "task_outcome_baselines": {
+    "no_memory": 0.25,
+    "ideal": 1.0
+  },
+  "schema_version": "mvi-scenario-v1",
+  "split": "public"
 }

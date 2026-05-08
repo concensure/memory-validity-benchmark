@@ -1,0 +1,136 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rrs003",
+  "family": "retrieval_recall_scale",
+  "split": "public",
+  "task": "Deprecate the /api/v1/users endpoint across all consuming microservices and redirect traffic to /api/v2/users. Candidate pool from a 160-entry store across 9 services.",
+  "repo_state_fingerprint": "rrs003-repo-v1",
+  "token_budget": 230,
+  "candidate_memories": [
+    {
+      "id": "rrs003-s1",
+      "tier": "session",
+      "content": "Audit shows 4 services still calling /api/v1/users: order-svc, notification-svc, analytics-svc, and report-svc.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs003-p1",
+      "tier": "project",
+      "content": "v1 endpoint returns snake_case fields; v2 returns camelCase. All consumers must update field parsing before cutover.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rrs003-p2",
+      "tier": "project",
+      "content": "The v1\u2192v2 migration guide is in docs/api/v2_migration.md; includes a field mapping table and code examples.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs003-x1",
+      "tier": "project",
+      "content": "auth-svc uses /api/v1/tokens, a separate endpoint family not affected by the users deprecation.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs003-x2",
+      "tier": "long_term",
+      "content": "API versioning policy: v1 endpoints receive 90-day deprecation notice before removal.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs003-x3",
+      "tier": "session",
+      "content": "analytics-svc is owned by the data team; coordinate migration with them before their sprint ends Friday.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs003-x4",
+      "tier": "project",
+      "content": "Old v0 endpoint /api/users was removed in 2024; services that referenced it were updated then.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: v0 removal completed, not relevant to v1\u2192v2"
+    },
+    {
+      "id": "rrs003-x5",
+      "tier": "project",
+      "content": "notification-svc rate-limits outbound API calls to 50/s; not related to endpoint migration.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs003-x6",
+      "tier": "session",
+      "content": "Load balancer rules currently split traffic 80/20 between v1 and v2 for canary testing.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs003-x7",
+      "tier": "long_term",
+      "content": "Breaking changes must be flagged in the API changelog with migration notes and a deprecation date.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs003-x8",
+      "tier": "project",
+      "content": "report-svc is scheduled for retirement in Q3; minimal migration effort is acceptable for it.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rrs003-x9",
+      "tier": "session",
+      "content": "Integration tests for v2 are passing in CI; v2 endpoint is production-stable.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rrs003-s1",
+    "rrs003-p1",
+    "rrs003-p2"
+  ],
+  "gold_invalid_ids": [
+    "rrs003-x1",
+    "rrs003-x2",
+    "rrs003-x3",
+    "rrs003-x4",
+    "rrs003-x5",
+    "rrs003-x6",
+    "rrs003-x7",
+    "rrs003-x8",
+    "rrs003-x9"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "rrs003-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rrs003-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rrs003-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

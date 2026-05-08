@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed004",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the Google OAuth integration after Google deprecated the deprecated token info endpoint.",
+  "repo_state_fingerprint": "ed004-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "ed004-s1",
+      "tier": "session",
+      "content": "Token validation is failing with 404; Google removed the /oauth2/v2/tokeninfo endpoint in March 2024.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed004-p1",
+      "tier": "project",
+      "content": "Google OAuth token validation must now use the /oauth2/v3/userinfo endpoint or the token introspection endpoint.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed004-p2",
+      "tier": "project",
+      "content": "The v3 userinfo endpoint returns a sub field for user ID instead of the user_id field from v2.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed004-l1",
+      "tier": "long_term",
+      "content": "When an identity provider removes a token validation endpoint, update both the URL and the response field mapping.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed004-x1",
+      "tier": "project",
+      "content": "Google OAuth note (session 9): validate tokens using /oauth2/v2/tokeninfo and extract the user_id field.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: /oauth2/v2/tokeninfo removed; token validation must use v3 endpoints"
+    },
+    {
+      "id": "ed004-x2",
+      "tier": "project",
+      "content": "Old auth note says tokeninfo v2 was the recommended approach for server-side token verification.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed004-s1",
+    "ed004-p1",
+    "ed004-p2",
+    "ed004-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed004-x1",
+    "ed004-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed004-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed004-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed004-p2",
+        "ed004-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nm015",
+  "family": "neutral_minimal",
+  "split": "holdout",
+  "task": "Flip a single boolean in a benchmark config fixture exactly as specified by the issue.",
+  "repo_state_fingerprint": "nm015-repo-v1",
+  "token_budget": 120,
+  "candidate_memories": [
+    {
+      "id": "nm015-s1",
+      "tier": "session",
+      "content": "The issue already states the new boolean value and the change is isolated to one fixture.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nm015-p1",
+      "tier": "project",
+      "content": "Project memory says trivial config flips should penalize unnecessary retrieval.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nm015-x1",
+      "tier": "session",
+      "content": "Old note says fixture config changes should always include historical rollout context.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nm015-s1",
+    "nm015-p1"
+  ],
+  "gold_invalid_ids": [
+    "nm015-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "nm015-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nm015-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pi010",
+  "family": "project_isolation",
+  "split": "holdout",
+  "task": "Allow only explicit transfer of a generalized lesson across repos.",
+  "repo_state_fingerprint": "pi010-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "pi010-s1",
+      "tier": "session",
+      "content": "A generalized lesson about stale suppression is transferable but file-level fix instructions are not.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pi010-p1",
+      "tier": "project",
+      "content": "Project memory says only abstracted, cited long-term lessons may cross project boundaries intentionally.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pi010-x1",
+      "tier": "session",
+      "content": "Foreign note says once a lesson becomes long-term every related implementation detail can travel with it.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pi010-s1",
+    "pi010-p1"
+  ],
+  "gold_invalid_ids": [
+    "pi010-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "pi010-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pi010-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

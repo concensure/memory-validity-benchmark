@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk024",
+  "family": "stakeholder_conflict",
+  "split": "holdout",
+  "task": "Use the privacy policy from legal, not the PM's analytics expansion request.",
+  "repo_state_fingerprint": "stk024-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "stk024-s1",
+      "tier": "session",
+      "content": "Legal issued a binding privacy policy in session 44: behavioral analytics must require explicit user consent.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk024-p1",
+      "tier": "project",
+      "content": "Legal privacy policies are binding and override PM analytics expansion requests in all user-facing flows.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk024-p2",
+      "tier": "project",
+      "content": "The consent requirement must be implemented as an opt-in gate before any behavioral data is collected.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk024-l1",
+      "tier": "long_term",
+      "content": "When a PM requests analytics expansion without a consent gate, implement the consent mechanism first.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk024-x1",
+      "tier": "project",
+      "content": "PM instruction (session 45): enable full behavioral analytics for all users without a consent prompt to improve data.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM no-consent analytics request conflicts with legal's binding explicit consent requirement"
+    },
+    {
+      "id": "stk024-x2",
+      "tier": "project",
+      "content": "Old analytics note says behavioral data was collected without consent before the privacy policy was updated.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk024-s1",
+    "stk024-p1",
+    "stk024-p2",
+    "stk024-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk024-x1",
+    "stk024-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk024-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk024-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk024-p2",
+        "stk024-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

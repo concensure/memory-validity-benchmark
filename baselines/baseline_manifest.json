@@ -1,0 +1,30 @@
+{
+  "manifest_version": "mvi-baseline-manifest-v1",
+  "defaults": {
+    "deterministic": true,
+    "external_services_required": false,
+    "notes": "Reference baselines are stdlib-only harness strategies intended for transparent comparison, not strong task performance."
+  },
+  "baselines": [
+    {
+      "id": "baseline:no_memory",
+      "category": "ablation",
+      "description": "Injects no memories and measures the task's no-memory floor."
+    },
+    {
+      "id": "baseline:naive_topk",
+      "category": "retrieval_only",
+      "description": "Selects a small set of shortest candidate memories while only weakly preferring valid items."
+    },
+    {
+      "id": "baseline:session_only",
+      "category": "tier_limited",
+      "description": "Restricts retrieval to valid session-tier memories to expose failures from missing project and long-term context."
+    },
+    {
+      "id": "baseline:heuristic_tiered",
+      "category": "rule_based",
+      "description": "Ranks candidates with a fixed tier and bucket heuristic to provide a transparent non-LLM tier-aware baseline."
+    }
+  ]
+}

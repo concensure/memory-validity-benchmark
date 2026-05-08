@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt007",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement resolve_conflict in the consensus module without using git merge tool behavior.",
+  "repo_state_fingerprint": "nt007-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "nt007-s1",
+      "tier": "session",
+      "content": "Consensus module resolve_conflict picks the winner among competing agent claims using a quorum rule.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt007-p1",
+      "tier": "project",
+      "content": "Conflict resolution in the consensus module is deterministic: highest-confidence claim wins with quorum.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt007-p2",
+      "tier": "project",
+      "content": "Consensus module does not touch file contents; it operates on in-memory claim structures only.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt007-l1",
+      "tier": "long_term",
+      "content": "When resolve_conflict appears in both consensus and VCS tooling, verify the domain before coding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt007-x1",
+      "tier": "project",
+      "content": "Git merge tool: resolve_conflict runs a three-way merge algorithm and applies hunks to file content.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: VCS three-way merge algorithm is irrelevant to in-memory consensus resolution"
+    },
+    {
+      "id": "nt007-x2",
+      "tier": "project",
+      "content": "Old tooling note says conflict resolution patterns should be reusable across domains.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt007-s1",
+    "nt007-p1",
+    "nt007-p2",
+    "nt007-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt007-x1",
+    "nt007-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt007-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt007-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt007-p2",
+        "nt007-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rse008",
+  "family": "retrieval_scope_enforcement",
+  "split": "public",
+  "task": "[Project: Cobalt/data-svc] Set the PostgreSQL connection pool size for Cobalt's data-svc.",
+  "repo_state_fingerprint": "rse008-repo-v1",
+  "token_budget": 208,
+  "candidate_memories": [
+    {
+      "id": "rse008-p1",
+      "tier": "project",
+      "content": "[Project: Cobalt] data-svc connection pool is set to 20 connections; Cobalt's DB server has max_connections=200 and hosts 8 services.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rse008-p2",
+      "tier": "project",
+      "content": "[Project: Cobalt] Pool size is configured via DB_POOL_SIZE in data-svc/config/production.yaml; pgbouncer is not in use for data-svc.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rse008-x1",
+      "tier": "project",
+      "content": "[Project: Helios] data-svc pool size is 50 connections; Helios has a dedicated DB instance with max_connections=500.",
+      "validity": "irrelevant",
+      "bucket": "critical",
+      "notes": "note: scope=Helios; dedicated DB allows larger pool"
+    },
+    {
+      "id": "rse008-x2",
+      "tier": "long_term",
+      "content": "[General] Connection pool size should be (core_count * 2) + effective_spindle_count as a starting point; tune down from there.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: general formula, Cobalt-specific value is authoritative"
+    },
+    {
+      "id": "rse008-x3",
+      "tier": "project",
+      "content": "[Project: Cobalt / legacy] Old pool size was 50; reduced to 20 after DB connection exhaustion incident in 2024.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: incident context, current value is 20 as in p1"
+    },
+    {
+      "id": "rse008-x4",
+      "tier": "session",
+      "content": "[Project: Cobalt] DB server CPU is at 45%; no signs of connection pressure currently.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rse008-p1",
+    "rse008-p2"
+  ],
+  "gold_invalid_ids": [
+    "rse008-x1",
+    "rse008-x2",
+    "rse008-x3",
+    "rse008-x4"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rse008-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rse008-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

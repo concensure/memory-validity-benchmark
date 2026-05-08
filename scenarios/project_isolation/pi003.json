@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pi003",
+  "family": "project_isolation",
+  "split": "public",
+  "task": "Avoid applying CLI deployment memory to a web-only repo.",
+  "repo_state_fingerprint": "pi003-repo-v1",
+  "token_budget": 165,
+  "candidate_memories": [
+    {
+      "id": "pi003-s1",
+      "tier": "session",
+      "content": "This repo only ships a web build and does not use the CLI deployment path from another project.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pi003-p1",
+      "tier": "project",
+      "content": "Project memory says deployment memories must match repo type and build surface.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pi003-x1",
+      "tier": "session",
+      "content": "Cross-project note says every deployment memory mentioning env vars is likely reusable here.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pi003-s1",
+    "pi003-p1"
+  ],
+  "gold_invalid_ids": [
+    "pi003-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "pi003-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pi003-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

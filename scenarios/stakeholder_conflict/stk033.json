@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk033",
+  "family": "stakeholder_conflict",
+  "split": "holdout",
+  "task": "Implement the backup frequency from the DBA team, not the PM's cost reduction request.",
+  "repo_state_fingerprint": "stk033-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "stk033-s1",
+      "tier": "session",
+      "content": "DBA team issued a binding backup frequency in session 62: production databases must be backed up hourly.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk033-p1",
+      "tier": "project",
+      "content": "DBA backup frequency requirements are binding for RPO compliance; reducing frequency violates the data recovery SLA.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk033-p2",
+      "tier": "project",
+      "content": "The hourly backup requirement corresponds to a 1-hour RPO commitment documented in the DR plan.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk033-l1",
+      "tier": "long_term",
+      "content": "When a PM requests reduced backup frequency to cut cloud storage costs, enforce the DBA RPO requirement.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk033-x1",
+      "tier": "project",
+      "content": "PM instruction (session 63): reduce database backups to daily to cut cloud storage costs by 70%.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM daily backup request conflicts with DBA team's binding 1-hour RPO backup frequency"
+    },
+    {
+      "id": "stk033-x2",
+      "tier": "project",
+      "content": "Old cost note says daily backups were used before the DBA team formalized the RPO commitment.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk033-s1",
+    "stk033-p1",
+    "stk033-p2",
+    "stk033-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk033-x1",
+    "stk033-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk033-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk033-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk033-p2",
+        "stk033-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

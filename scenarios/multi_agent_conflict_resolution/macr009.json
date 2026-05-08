@@ -1,0 +1,68 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "macr009",
+  "family": "multi_agent_conflict_resolution",
+  "split": "holdout",
+  "task": "Name the new internal CLI command for the deployment tool. Resolution strategy: role_wins \u2014 tech-lead role takes precedence over contributor role.",
+  "repo_state_fingerprint": "macr009-repo-v1",
+  "token_budget": 205,
+  "candidate_memories": [
+    {
+      "id": "macr009-p1",
+      "tier": "project",
+      "content": "[tech-lead] CLI command naming: use verb-noun kebab-case, e.g. deploy-service, rollback-service, list-services. The deployment tool uses this convention for all commands.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "resolution: role_wins; role=tech-lead; wins over contributor"
+    },
+    {
+      "id": "macr009-l1",
+      "tier": "long_term",
+      "content": "CLI naming conventions are set by the tech lead; new commands must follow the convention to maintain discoverability.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr009-p2",
+      "tier": "project",
+      "content": "New command is registered in cmd/deploy/commands.go; add a new cobra Command struct following the existing pattern.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr009-x1",
+      "tier": "session",
+      "content": "[contributor-agent] CLI command naming: use noun_verb snake_case, e.g. service_deploy, service_rollback. This matches what I've seen in similar tools.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "resolution: role_loses; role=contributor; tech-lead convention is authoritative"
+    }
+  ],
+  "gold_valid_ids": [
+    "macr009-p1",
+    "macr009-l1",
+    "macr009-p2"
+  ],
+  "gold_invalid_ids": [
+    "macr009-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "macr009-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "macr009-l1",
+        "macr009-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rf014",
+  "family": "refactor",
+  "split": "holdout",
+  "task": "Separate holdout reporting from public benchmark reporting.",
+  "repo_state_fingerprint": "rf014-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "rf014-s1",
+      "tier": "session",
+      "content": "Holdout result formatting should be isolated so public runs do not accidentally expose holdout fields.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rf014-p1",
+      "tier": "project",
+      "content": "Project memory says holdout governance belongs in reporting policy, not in core public scoring.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rf014-x1",
+      "tier": "session",
+      "content": "Stale note says one shared report template is safe because users can ignore hidden fields.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rf014-s1",
+    "rf014-p1"
+  ],
+  "gold_invalid_ids": [
+    "rf014-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "rf014-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rf014-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

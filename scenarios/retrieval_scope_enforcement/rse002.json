@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rse002",
+  "family": "retrieval_scope_enforcement",
+  "split": "public",
+  "task": "[Project: Helios/orders-api] Configure the inbound rate limit for the Helios orders-api service.",
+  "repo_state_fingerprint": "rse002-repo-v1",
+  "token_budget": 215,
+  "candidate_memories": [
+    {
+      "id": "rse002-p1",
+      "tier": "project",
+      "content": "[Project: Helios] orders-api inbound rate limit is 200 req/s per IP per the 2025 Helios capacity plan.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rse002-l1",
+      "tier": "long_term",
+      "content": "[Project: Helios] Rate limit values are reviewed after each load test; the 200 req/s figure was validated in the 2025-03 peak test.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rse002-x1",
+      "tier": "project",
+      "content": "[Project: Apollo] orders-api rate limit is 500 req/s per IP; Apollo serves enterprise clients with higher quotas.",
+      "validity": "irrelevant",
+      "bucket": "critical",
+      "notes": "note: scope=Apollo; different service class"
+    },
+    {
+      "id": "rse002-x2",
+      "tier": "project",
+      "content": "[Project: Zeus] orders-api is limited to 50 req/s per IP due to Zeus's shared infrastructure constraints.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: scope=Zeus; different infrastructure tier"
+    },
+    {
+      "id": "rse002-x3",
+      "tier": "long_term",
+      "content": "[General] API rate limits must be documented in the capacity register; this general policy applies to all projects.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: general policy, not Helios-specific config value"
+    },
+    {
+      "id": "rse002-x4",
+      "tier": "session",
+      "content": "[Project: Helios] Load test result: 200 req/s produces p99 latency of 110 ms; within SLO.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rse002-p1",
+    "rse002-l1"
+  ],
+  "gold_invalid_ids": [
+    "rse002-x1",
+    "rse002-x2",
+    "rse002-x3",
+    "rse002-x4"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rse002-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rse002-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

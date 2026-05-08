@@ -1,0 +1,68 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "macr002",
+  "family": "multi_agent_conflict_resolution",
+  "split": "public",
+  "task": "Set the fulfillment webhook URL for the orders integration. Resolution strategy: tier_wins \u2014 higher memory tier takes precedence (long_term > project > session).",
+  "repo_state_fingerprint": "macr002-repo-v1",
+  "token_budget": 208,
+  "candidate_memories": [
+    {
+      "id": "macr002-l1",
+      "tier": "long_term",
+      "content": "[platform-architect] fulfillment webhook URL is https://fulfillment-api.internal/v2/webhooks/orders; this is the stable v2 endpoint registered in the service registry.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "resolution: tier_wins; tier=long_term; wins over session"
+    },
+    {
+      "id": "macr002-p1",
+      "tier": "project",
+      "content": "Webhook authentication uses HMAC-SHA256 signature; secret is in vault:/secret/integrations/fulfillment/webhook_secret.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr002-l2",
+      "tier": "long_term",
+      "content": "Webhook delivery must be idempotent; use the order_id as the deduplication key on the receiving end.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr002-x1",
+      "tier": "session",
+      "content": "[developer-agent, session note] fulfillment webhook URL is https://fulfillment-staging.internal/v1/webhooks/orders (copied from staging config).",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "resolution: tier_loses; tier=session; staging URL is incorrect for production"
+    }
+  ],
+  "gold_valid_ids": [
+    "macr002-l1",
+    "macr002-p1",
+    "macr002-l2"
+  ],
+  "gold_invalid_ids": [
+    "macr002-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "long_term_critical",
+      "memory_ids": [
+        "macr002-l1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "macr002-p1",
+        "macr002-l2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

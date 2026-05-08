@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps024",
+  "family": "token_pressure_scale",
+  "split": "holdout",
+  "task": "Fix the certificate validation failure after the root CA was rotated.",
+  "repo_state_fingerprint": "tps024-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps024-s1",
+      "tier": "session",
+      "content": "mTLS connections to partner services fail with unknown CA error after the root CA was rotated on May 15.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps024-p1",
+      "tier": "project",
+      "content": "The trust store in /etc/ssl/certs/custom_ca.pem must be updated with the new root CA certificate.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps024-p2",
+      "tier": "project",
+      "content": "The new root CA was issued by the PKI team and is available in the internal PKI portal.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps024-l1",
+      "tier": "long_term",
+      "content": "The old root CA expired on May 15 and is no longer valid; partner services enforce the new CA.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps024-s2",
+      "tier": "session",
+      "content": "Session 2 note: the infrastructure team flagged failing mTLS handshakes in the service mesh error logs.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps024-n01",
+      "tier": "project",
+      "content": "mTLS is used for all inter-service communication in the production environment.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps024-n02",
+      "tier": "session",
+      "content": "Session 6 note: the PKI team completed the annual certificate rotation for all leaf certificates.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps024-n03",
+      "tier": "long_term",
+      "content": "Old practice: root CA updates required manual trust store updates on each service host.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps024-n04",
+      "tier": "project",
+      "content": "The certificate trust store is managed by Puppet and is distributed to all nodes automatically.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps024-n05",
+      "tier": "session",
+      "content": "Session 11 note: the security team added certificate expiry alerting with 30-day advance notice.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps024-n06",
+      "tier": "project",
+      "content": "Old CA guide: the old root CA had a 5-year validity period; the new CA has a 3-year period.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps024-n07",
+      "tier": "long_term",
+      "content": "Root CA rotations must be tested with a shadow CA period before the old CA expires.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps024-n08",
+      "tier": "session",
+      "content": "Session 4 note: a TLS configuration audit found no cipher suite violations across all services.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps024-n09",
+      "tier": "project",
+      "content": "Partner services perform strict certificate pinning and reject certificates from unexpected CAs.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps024-n10",
+      "tier": "session",
+      "content": "Session 8 note: the Puppet module for trust store management was upgraded to support multiple CAs.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps024-n11",
+      "tier": "project",
+      "content": "The internal PKI portal provides CRL distribution points for certificate revocation.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps024-n12",
+      "tier": "long_term",
+      "content": "Trust store updates must be deployed before the old CA expires to prevent connection failures.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps024-n13",
+      "tier": "session",
+      "content": "Session 3 note: the networking team added a certificate health check to the monitoring suite.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps024-n14",
+      "tier": "project",
+      "content": "Old Puppet config: the trust store was updated as a one-time step when the first root CA was deployed.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps024-n15",
+      "tier": "project",
+      "content": "mTLS client certificates are rotated quarterly; the root CA rotation is on a 3-year cycle.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps024-s1",
+    "tps024-p1",
+    "tps024-p2",
+    "tps024-l1",
+    "tps024-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps024-n01",
+    "tps024-n02",
+    "tps024-n03",
+    "tps024-n04",
+    "tps024-n05",
+    "tps024-n06",
+    "tps024-n07",
+    "tps024-n08",
+    "tps024-n09",
+    "tps024-n10",
+    "tps024-n11",
+    "tps024-n12",
+    "tps024-n13",
+    "tps024-n14",
+    "tps024-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps024-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps024-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps024-p2",
+        "tps024-l1",
+        "tps024-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

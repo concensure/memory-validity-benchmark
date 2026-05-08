@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cb013",
+  "family": "coding_bugfix",
+  "split": "holdout",
+  "task": "Fix branch-scoped retrieval returning memories from the merged default branch.",
+  "repo_state_fingerprint": "cb013-repo-v1",
+  "token_budget": 220,
+  "candidate_memories": [
+    {
+      "id": "cb013-s1",
+      "tier": "session",
+      "content": "Feature branch retrieval is currently including default-branch memories that were already superseded on the branch.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cb013-p1",
+      "tier": "project",
+      "content": "Project memory says branch-aware retrieval must honor branch scope before recency.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cb013-x1",
+      "tier": "session",
+      "content": "Old note says newest project memory is always safe regardless of branch origin.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cb013-s1",
+    "cb013-p1"
+  ],
+  "gold_invalid_ids": [
+    "cb013-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cb013-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cb013-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

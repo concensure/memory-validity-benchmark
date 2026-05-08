@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "sm010",
+  "family": "stale_memory",
+  "split": "holdout",
+  "task": "Suppress obsolete replay assumptions after deterministic harness rules tighten.",
+  "repo_state_fingerprint": "sm010-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "sm010-s1",
+      "tier": "session",
+      "content": "Replay tracks now require explicit step logs, so inferred event reconstruction is no longer enough.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sm010-p1",
+      "tier": "project",
+      "content": "Project memory says audit completeness matters for benchmark credibility.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sm010-x1",
+      "tier": "session",
+      "content": "Stale benchmark note says replay quality can be approximated by comparing final selected memories only.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "sm010-s1",
+    "sm010-p1"
+  ],
+  "gold_invalid_ids": [
+    "sm010-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "sm010-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "sm010-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

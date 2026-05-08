@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr012",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Continue the schema validation sweep at table 9 without re-validating tables 1\u20138.",
+  "repo_state_fingerprint": "cr012-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cr012-s1",
+      "tier": "session",
+      "content": "Validation log shows tables 1\u20138 validated with zero errors; table 9 (transactions) is next.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr012-p1",
+      "tier": "project",
+      "content": "Re-validating completed tables consumes time and could surface false positives from ongoing writes.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr012-p2",
+      "tier": "project",
+      "content": "Tables 10\u201320 have not been validated and must be checked after table 9.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr012-l1",
+      "tier": "long_term",
+      "content": "When a validation sweep is interrupted, resume from the checkpoint table to avoid duplicate validation errors.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr012-x1",
+      "tier": "session",
+      "content": "Re-run the validation sweep from table 1 to produce a complete validation report with current data.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full re-sweep; correct behavior is to resume the sweep at table 9"
+    },
+    {
+      "id": "cr012-x2",
+      "tier": "project",
+      "content": "Old validation note says a full sweep from the beginning produces a cleaner and more consistent report.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr012-s1",
+    "cr012-p1",
+    "cr012-p2",
+    "cr012-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr012-x1",
+    "cr012-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr012-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr012-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr012-p2",
+        "cr012-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

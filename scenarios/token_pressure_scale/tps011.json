@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps011",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the authentication bypass introduced by the middleware refactor.",
+  "repo_state_fingerprint": "tps011-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps011-s1",
+      "tier": "session",
+      "content": "Integration tests show that requests with an expired token now bypass the authentication middleware.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps011-p1",
+      "tier": "project",
+      "content": "Authentication middleware must be registered before the route handlers in the middleware chain.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps011-p2",
+      "tier": "project",
+      "content": "The middleware refactor moved authentication to a sub-router but forgot to apply it to the root router.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps011-l1",
+      "tier": "long_term",
+      "content": "When refactoring middleware chains, audit the full route registration order before and after the change.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps011-s2",
+      "tier": "session",
+      "content": "The bypass only affects requests to the root router paths; sub-router paths still authenticate correctly.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps011-n01",
+      "tier": "project",
+      "content": "The API gateway is configured to forward the Authorization header to the upstream service.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps011-n02",
+      "tier": "session",
+      "content": "Session 5 note: a new API key authentication method was added alongside JWT.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps011-n03",
+      "tier": "long_term",
+      "content": "Old practice: authentication was enforced at the route level with decorators before middleware was adopted.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps011-n04",
+      "tier": "project",
+      "content": "The session management library was upgraded in the last sprint to support refresh tokens.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps011-n05",
+      "tier": "session",
+      "content": "Security scan in session 14 found no other authentication bypass issues in the sub-router paths.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps011-n06",
+      "tier": "project",
+      "content": "Old middleware guide: the authentication middleware ran after the logging middleware in the old chain.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps011-n07",
+      "tier": "long_term",
+      "content": "Middleware registration order determines execution order; authentication must precede all business logic.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps011-n08",
+      "tier": "session",
+      "content": "Session 9 note: the API documentation was updated to reflect the new authentication endpoints.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps011-n09",
+      "tier": "project",
+      "content": "The OAuth integration uses a third-party authorization server with a 24-hour token lifetime.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps011-n10",
+      "tier": "session",
+      "content": "Session 7 note: rate limiting was moved from the application to the API gateway.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps011-n11",
+      "tier": "project",
+      "content": "Two-factor authentication is implemented as a separate middleware that runs after basic auth.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps011-n12",
+      "tier": "long_term",
+      "content": "After any middleware refactor, run a full authentication matrix test covering all route prefixes.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps011-n13",
+      "tier": "session",
+      "content": "Session 11 note: the login failure audit log was extended to include IP addresses.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps011-n14",
+      "tier": "project",
+      "content": "Old auth guide: routes under /api/v1/public were intentionally excluded from authentication.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps011-n15",
+      "tier": "project",
+      "content": "JWT tokens are validated using RS256 with the public key fetched from the JWKS endpoint.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps011-s1",
+    "tps011-p1",
+    "tps011-p2",
+    "tps011-l1",
+    "tps011-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps011-n01",
+    "tps011-n02",
+    "tps011-n03",
+    "tps011-n04",
+    "tps011-n05",
+    "tps011-n06",
+    "tps011-n07",
+    "tps011-n08",
+    "tps011-n09",
+    "tps011-n10",
+    "tps011-n11",
+    "tps011-n12",
+    "tps011-n13",
+    "tps011-n14",
+    "tps011-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps011-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps011-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps011-p2",
+        "tps011-l1",
+        "tps011-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

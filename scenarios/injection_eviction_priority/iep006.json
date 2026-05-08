@@ -1,0 +1,66 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iep006",
+  "family": "injection_eviction_priority",
+  "split": "public",
+  "task": "Implement the bulk import endpoint that calls the partner API in a loop. Context window is nearly full.",
+  "repo_state_fingerprint": "iep006-repo-v1",
+  "token_budget": 103,
+  "candidate_memories": [
+    {
+      "id": "iep006-p1",
+      "tier": "project",
+      "content": "The partner API enforces a rate limit of 100 requests per minute per API key. Exceeding this limit suspends the API key for 1 hour and may trigger account review. The bulk import must batch calls with a 600 ms sleep between requests to stay within the quota.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iep006-p2",
+      "tier": "project",
+      "content": "Partner API key is in vault:/secret/integrations/partner/api_key; never hard-code in source.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iep006-l1",
+      "tier": "long_term",
+      "content": "All partner API calls must be logged with request_id for audit purposes.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iep006-s1",
+      "tier": "session",
+      "content": "Bulk import is expected to process 5 000 records; estimated run time with rate limiting is 50 min.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iep006-p1",
+    "iep006-p2",
+    "iep006-l1",
+    "iep006-s1"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "iep006-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iep006-p2",
+        "iep006-l1",
+        "iep006-s1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

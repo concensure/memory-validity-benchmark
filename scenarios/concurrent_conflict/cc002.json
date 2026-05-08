@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc002",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Resume the schema migration task after verifying no other agent is executing it.",
+  "repo_state_fingerprint": "cc002-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cc002-s1",
+      "tier": "session",
+      "content": "Planner-A delegated the schema migration task at 10:05 and assigned it to Migrator-A.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc002-p1",
+      "tier": "project",
+      "content": "A migration task must have exactly one executing agent; concurrent execution corrupts the version table.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc002-p2",
+      "tier": "project",
+      "content": "Migrator-A confirmed it holds the migration lock and has completed steps 1 through 3.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc002-l1",
+      "tier": "long_term",
+      "content": "When two agents both claim a migration task, check lock ownership before allowing any execution.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc002-x1",
+      "tier": "session",
+      "content": "Migrator-B also received a migration assignment at 10:07 and reports it is executing step 2.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two migration agents both claim they are executing the same migration task"
+    },
+    {
+      "id": "cc002-x2",
+      "tier": "project",
+      "content": "Old workflow note says duplicate migration assignments can be detected by checking the lock table.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc002-s1",
+    "cc002-p1",
+    "cc002-p2",
+    "cc002-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc002-x1",
+    "cc002-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc002-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc002-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc002-p2",
+        "cc002-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

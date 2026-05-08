@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cp009",
+  "family": "consensus_promotion",
+  "split": "holdout",
+  "task": "Hold promotion for long-term lesson until project-level replay confirms it.",
+  "repo_state_fingerprint": "cp009-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "cp009-s1",
+      "tier": "session",
+      "content": "A generalized lesson sounds right but has not been validated in replay after recent workflow changes.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cp009-p1",
+      "tier": "project",
+      "content": "Project memory says high-level lessons still need current evidence before trusted promotion.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cp009-x1",
+      "tier": "session",
+      "content": "Old note says generalized lessons never need replay confirmation once they sound plausible.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cp009-s1",
+    "cp009-p1"
+  ],
+  "gold_invalid_ids": [
+    "cp009-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cp009-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cp009-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

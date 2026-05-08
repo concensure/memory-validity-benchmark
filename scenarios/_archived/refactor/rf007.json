@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rf007",
+  "family": "refactor",
+  "split": "holdout",
+  "task": "Refactor pointer rendering filters into a policy package.",
+  "repo_state_fingerprint": "rf007-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "rf007-s1",
+      "tier": "session",
+      "content": "Pointer rendering still must exclude stale, superseded, and duplicate memories after extraction.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rf007-p1",
+      "tier": "project",
+      "content": "Project memory says policy evaluation must remain deterministic and side-effect free.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rf007-x1",
+      "tier": "session",
+      "content": "Stale experiment note suggests pointer filtering can consult remote judge output directly.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rf007-s1",
+    "rf007-p1"
+  ],
+  "gold_invalid_ids": [
+    "rf007-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "rf007-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rf007-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

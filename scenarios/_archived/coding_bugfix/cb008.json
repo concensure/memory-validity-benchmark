@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cb008",
+  "family": "coding_bugfix",
+  "split": "public",
+  "task": "Fix duplicate cache warming after optimistic write retry.",
+  "repo_state_fingerprint": "cb008-repo-v1",
+  "token_budget": 205,
+  "candidate_memories": [
+    {
+      "id": "cb008-s1",
+      "tier": "session",
+      "content": "Retry path now triggers duplicate cache warming when optimistic write collisions happen.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cb008-p1",
+      "tier": "project",
+      "content": "Project memory says retry handlers must reuse the same idempotency marker across attempts.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cb008-x1",
+      "tier": "session",
+      "content": "Old note says duplicate warming is harmless because cache writes are always free.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cb008-s1",
+    "cb008-p1"
+  ],
+  "gold_invalid_ids": [
+    "cb008-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cb008-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cb008-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

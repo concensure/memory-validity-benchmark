@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nm012",
+  "family": "neutral_minimal",
+  "split": "public",
+  "task": "Update one hard-coded test literal shown directly by the failing assertion.",
+  "repo_state_fingerprint": "nm012-repo-v1",
+  "token_budget": 110,
+  "candidate_memories": [
+    {
+      "id": "nm012-s1",
+      "tier": "session",
+      "content": "The assertion names the exact literal that changed and no other context is needed.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nm012-p1",
+      "tier": "project",
+      "content": "Project memory says deterministic assertion-driven fixes should stay lean.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nm012-x1",
+      "tier": "session",
+      "content": "Old note says every test failure should preload prior incident and migration memories.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nm012-s1",
+    "nm012-p1"
+  ],
+  "gold_invalid_ids": [
+    "nm012-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "nm012-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nm012-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc013",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Run the linting pass after confirming no other agent has already initiated it.",
+  "repo_state_fingerprint": "cc013-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "cc013-s1",
+      "tier": "session",
+      "content": "Lint-Agent-A started the full codebase lint pass at 10:00 after the pre-commit hook triggered.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc013-p1",
+      "tier": "project",
+      "content": "Lint passes are serialized per branch to prevent conflicting annotation sets in CI.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc013-p2",
+      "tier": "project",
+      "content": "Lint-Agent-A's pass is 40% complete and is writing annotations to the CI results store.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc013-l1",
+      "tier": "long_term",
+      "content": "When two lint agents claim the same branch, check CI annotation lock before allowing both to proceed.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc013-x1",
+      "tier": "session",
+      "content": "Lint-Agent-B also started a full lint pass at 10:01 after a parallel CI job trigger.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two lint agents are running simultaneously on the same branch"
+    },
+    {
+      "id": "cc013-x2",
+      "tier": "project",
+      "content": "Old CI note says parallel lint passes are fine because annotations are deduplicated by the CI system.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc013-s1",
+    "cc013-p1",
+    "cc013-p2",
+    "cc013-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc013-x1",
+    "cc013-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc013-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc013-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc013-p2",
+        "cc013-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

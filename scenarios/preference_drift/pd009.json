@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd009",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Use the updated import style: named exports preferred over default exports.",
+  "repo_state_fingerprint": "pd009-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "pd009-s1",
+      "tier": "session",
+      "content": "User directed in session 35: stop using default exports; all new modules must use named exports only.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd009-p1",
+      "tier": "project",
+      "content": "Module style guide (updated session 35): named exports are mandatory for all new and refactored modules.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd009-p2",
+      "tier": "project",
+      "content": "Default export patterns in files touched during this task should be migrated to named exports.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd009-l1",
+      "tier": "long_term",
+      "content": "When module export style preference changes, apply the new style consistently to all touched modules.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd009-x1",
+      "tier": "project",
+      "content": "Module style guide (session 9): use default exports to keep import statements simple for consumers.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old default-export preference superseded by named-export mandate in session 35"
+    },
+    {
+      "id": "pd009-x2",
+      "tier": "project",
+      "content": "Old module note says default exports were chosen to align with the existing team coding conventions.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd009-s1",
+    "pd009-p1",
+    "pd009-p2",
+    "pd009-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd009-x1",
+    "pd009-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd009-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd009-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd009-p2",
+        "pd009-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

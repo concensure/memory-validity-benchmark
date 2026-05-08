@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd002",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Write new test utilities using the updated preference for integration tests over unit tests.",
+  "repo_state_fingerprint": "pd002-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "pd002-s1",
+      "tier": "session",
+      "content": "User stated in session 31: stop writing isolated unit tests for service logic; use integration tests only.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd002-p1",
+      "tier": "project",
+      "content": "Current test policy (updated session 31) requires integration tests against real dependencies, not mocks.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd002-p2",
+      "tier": "project",
+      "content": "New test utilities must provision real database connections, not in-memory fakes.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd002-l1",
+      "tier": "long_term",
+      "content": "When testing preference changes, update all test scaffolding to match the new policy before writing tests.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd002-x1",
+      "tier": "project",
+      "content": "Test policy (session 5): all service logic must be covered by isolated unit tests with mocked dependencies.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old unit-test-first policy superseded by explicit integration-test preference in session 31"
+    },
+    {
+      "id": "pd002-x2",
+      "tier": "project",
+      "content": "Old coverage note says unit test coverage was required at 80% before integration tests were considered.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd002-s1",
+    "pd002-p1",
+    "pd002-p2",
+    "pd002-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd002-x1",
+    "pd002-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd002-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd002-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd002-p2",
+        "pd002-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

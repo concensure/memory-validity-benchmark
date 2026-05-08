@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ma010",
+  "family": "multi_agent",
+  "split": "holdout",
+  "task": "Coordinate planner and architect on requirement changes mid-run.",
+  "repo_state_fingerprint": "ma010-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "ma010-s1",
+      "tier": "session",
+      "content": "Planner handles new requirement intake while architect decides which earlier project decisions are superseded.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ma010-p1",
+      "tier": "project",
+      "content": "Project memory says requirement changes must trigger reevaluation of affected memories rather than silent reuse.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ma010-x1",
+      "tier": "session",
+      "content": "Old note says earlier approved decisions should remain in force until final review regardless of changed requirements.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ma010-s1",
+    "ma010-p1"
+  ],
+  "gold_invalid_ids": [
+    "ma010-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "ma010-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ma010-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

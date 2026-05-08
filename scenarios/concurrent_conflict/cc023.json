@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc023",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Apply the security patch after confirming no other agent is concurrently patching the same file.",
+  "repo_state_fingerprint": "cc023-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "cc023-s1",
+      "tier": "session",
+      "content": "Security-Agent-A claimed auth/middleware.go at 08:00 for the IDOR vulnerability patch.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc023-p1",
+      "tier": "project",
+      "content": "Security patches must be single-agent per file to prevent incomplete overlap that leaves the vuln open.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc023-p2",
+      "tier": "project",
+      "content": "Security-Agent-A has patched the authentication check; authorization validation is still in progress.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc023-l1",
+      "tier": "long_term",
+      "content": "When two agents claim the same file for a security patch, check patch completeness before proceeding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc023-x1",
+      "tier": "session",
+      "content": "Security-Agent-B claimed auth/middleware.go at 08:15 to patch an SSRF vulnerability in the same file.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two security agents simultaneously hold ownership of the same file for different patches"
+    },
+    {
+      "id": "cc023-x2",
+      "tier": "project",
+      "content": "Old security note says two patches to the same file can be merged if they touch different functions.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc023-s1",
+    "cc023-p1",
+    "cc023-p2",
+    "cc023-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc023-x1",
+    "cc023-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc023-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc023-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc023-p2",
+        "cc023-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

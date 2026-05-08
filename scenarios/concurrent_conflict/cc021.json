@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc021",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Apply the A/B test variant assignment after confirming no conflicting assignment exists.",
+  "repo_state_fingerprint": "cc021-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "cc021-s1",
+      "tier": "session",
+      "content": "Experiment-Agent-A assigned user #9031 to variant B of the checkout flow test at 11:00.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc021-p1",
+      "tier": "project",
+      "content": "Experiment assignments must be single-write; a user assigned to two variants corrupts analysis.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc021-p2",
+      "tier": "project",
+      "content": "Experiment-Agent-A's assignment is logged and the user is now in the variant B cohort.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc021-l1",
+      "tier": "long_term",
+      "content": "When two agents both assign the same user to an experiment, surface the conflict immediately.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc021-x1",
+      "tier": "session",
+      "content": "Experiment-Agent-B also assigned user #9031 to variant A of the same checkout flow test at 11:01.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents assigned the same user to different variants of the same experiment"
+    },
+    {
+      "id": "cc021-x2",
+      "tier": "project",
+      "content": "Old experiment note says assignment conflicts are resolved by the first write winning.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc021-s1",
+    "cc021-p1",
+    "cc021-p2",
+    "cc021-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc021-x1",
+    "cc021-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc021-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc021-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc021-p2",
+        "cc021-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

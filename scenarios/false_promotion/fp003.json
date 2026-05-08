@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp003",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Apply the error response format using session evidence, not the promoted error schema rule.",
+  "repo_state_fingerprint": "fp003-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "fp003-s1",
+      "tier": "session",
+      "content": "Current API client tests show the promoted RFC 7807 envelope wraps errors twice for some endpoints.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp003-p1",
+      "tier": "project",
+      "content": "Project audit shows the double-wrapping is caused by middleware applying RFC 7807 after the handler already wraps.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp003-p2",
+      "tier": "project",
+      "content": "Correct fix is to apply RFC 7807 only in middleware and remove handler-level error wrapping.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp003-l1",
+      "tier": "long_term",
+      "content": "When double-wrapping is detected in session tests, trust the evidence over the promoted middleware rule.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp003-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 6): all error responses must be wrapped in an RFC 7807 envelope by each handler.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted per-handler wrapping rule missed the middleware layer; double-wrapping is the symptom"
+    },
+    {
+      "id": "fp003-x2",
+      "tier": "project",
+      "content": "Old promotion note says the per-handler wrapping was confirmed after an RFC 7807 compliance review.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp003-s1",
+    "fp003-p1",
+    "fp003-p2",
+    "fp003-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp003-x1",
+    "fp003-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp003-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp003-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp003-p2",
+        "fp003-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

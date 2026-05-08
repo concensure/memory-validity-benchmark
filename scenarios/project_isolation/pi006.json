@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pi006",
+  "family": "project_isolation",
+  "split": "public",
+  "task": "Separate cloud gateway memory from local binary behavior.",
+  "repo_state_fingerprint": "pi006-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "pi006-s1",
+      "tier": "session",
+      "content": "Hosted gateway assumptions do not automatically apply to the local binary orchestration path.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pi006-p1",
+      "tier": "project",
+      "content": "Project memory says tenant-aware cloud memories must not leak into local-only flows.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pi006-x1",
+      "tier": "session",
+      "content": "Foreign note says local and cloud memory semantics can be merged whenever the command names overlap.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pi006-s1",
+    "pi006-p1"
+  ],
+  "gold_invalid_ids": [
+    "pi006-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "pi006-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pi006-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

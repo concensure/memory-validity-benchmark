@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "bm010",
+  "family": "branch_merge",
+  "split": "holdout",
+  "task": "Handle branch replay after merge introduced new command contract.",
+  "repo_state_fingerprint": "bm010-repo-v1",
+  "token_budget": 235,
+  "candidate_memories": [
+    {
+      "id": "bm010-s1",
+      "tier": "session",
+      "content": "Merged branch switched command output keys and stale automation assumptions now break replay.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "bm010-p1",
+      "tier": "project",
+      "content": "Project memory says merged transport contracts supersede branch-local protocol expectations.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "bm010-x1",
+      "tier": "session",
+      "content": "Old note says automation output keys can be unioned across merged branches without cleanup.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "bm010-s1",
+    "bm010-p1"
+  ],
+  "gold_invalid_ids": [
+    "bm010-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "bm010-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "bm010-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp030",
+  "family": "false_promotion",
+  "split": "holdout",
+  "task": "Fix the data partitioning using session evidence, not the promoted partition key rule.",
+  "repo_state_fingerprint": "fp030-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "fp030-s1",
+      "tier": "session",
+      "content": "Current query analysis shows the promoted 'partition by created_at month' rule causes hot partitions at month boundaries.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp030-p1",
+      "tier": "project",
+      "content": "Project DB analysis shows partitioning by hash of user_id distributes load more evenly than time-based partitioning.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp030-p2",
+      "tier": "project",
+      "content": "Correct partitioning for the events table is hash partitioning on user_id with 16 partitions.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp030-l1",
+      "tier": "long_term",
+      "content": "When session query analysis shows hot partitions from a promoted rule, demote and re-partition with a better key.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp030-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 6): partition the events table by created_at month for time-range query efficiency.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted time-based partitioning was based on time-range query patterns; user load is not time-correlated"
+    },
+    {
+      "id": "fp030-x2",
+      "tier": "project",
+      "content": "Old promotion note says monthly partitioning was confirmed by the DBA team as optimal for time-series data.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp030-s1",
+    "fp030-p1",
+    "fp030-p2",
+    "fp030-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp030-x1",
+    "fp030-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp030-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp030-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp030-p2",
+        "fp030-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

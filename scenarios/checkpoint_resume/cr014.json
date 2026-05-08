@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr014",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Continue the dependency upgrade at package 18 without re-upgrading packages 1\u201317.",
+  "repo_state_fingerprint": "cr014-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "cr014-s1",
+      "tier": "session",
+      "content": "Upgrade log shows packages 1\u201317 upgraded and integration-tested successfully; package 18 (axios) is next.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr014-p1",
+      "tier": "project",
+      "content": "Re-upgrading completed packages could introduce conflicts between already-upgraded and not-yet-upgraded packages.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr014-p2",
+      "tier": "project",
+      "content": "Packages 19\u201335 have not been upgraded and must be updated after package 18.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr014-l1",
+      "tier": "long_term",
+      "content": "When a dependency upgrade pass is interrupted, resume from the package log rather than starting over.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr014-x1",
+      "tier": "session",
+      "content": "Revert all upgraded packages to their original versions and restart the upgrade pass from package 1.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full revert and restart; correct behavior is to continue from package 18"
+    },
+    {
+      "id": "cr014-x2",
+      "tier": "project",
+      "content": "Old upgrade note says reverting and restarting is the safest approach to avoid partial upgrade states.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr014-s1",
+    "cr014-p1",
+    "cr014-p2",
+    "cr014-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr014-x1",
+    "cr014-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr014-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr014-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr014-p2",
+        "cr014-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

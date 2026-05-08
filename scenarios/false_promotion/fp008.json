@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp008",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Fix the pagination logic using session evidence, not the promoted page size rule.",
+  "repo_state_fingerprint": "fp008-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "fp008-s1",
+      "tier": "session",
+      "content": "Current API performance tests show the promoted '100-item default page size' causes OOM errors on large datasets.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp008-p1",
+      "tier": "project",
+      "content": "Project capacity planning shows 100 items per page can return up to 40MB of JSON for complex nested objects.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp008-p2",
+      "tier": "project",
+      "content": "Correct default is 20 items per page with a maximum of 50, enforced server-side.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp008-l1",
+      "tier": "long_term",
+      "content": "When session tests reveal OOM from a promoted rule, demote the rule and update the default before proceeding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp008-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 6): use a default page size of 100 items for all list API endpoints.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted 100-item default was based on shallow object benchmarks; nested objects cause OOM at that size"
+    },
+    {
+      "id": "fp008-x2",
+      "tier": "project",
+      "content": "Old promotion note says the 100-item default was validated by the API team during the pagination redesign.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp008-s1",
+    "fp008-p1",
+    "fp008-p2",
+    "fp008-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp008-x1",
+    "fp008-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp008-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp008-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp008-p2",
+        "fp008-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

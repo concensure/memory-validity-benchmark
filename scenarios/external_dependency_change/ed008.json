@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed008",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the npm package after the axios library changed its error response format in v1.0.",
+  "repo_state_fingerprint": "ed008-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "ed008-s1",
+      "tier": "session",
+      "content": "Error handling is broken after upgrading axios; the error.response.data structure changed in axios v1.0.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed008-p1",
+      "tier": "project",
+      "content": "Axios v1.0 moved error details from error.response.data to error.response.data.error for structured errors.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed008-p2",
+      "tier": "project",
+      "content": "Axios v1.0 also removed the error.request shorthand; use error.config.url for request metadata instead.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed008-l1",
+      "tier": "long_term",
+      "content": "When a major dependency changes its error format, update all error handling code before upgrading.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed008-x1",
+      "tier": "project",
+      "content": "Axios integration note (session 11): read HTTP error details from error.response.data for API error messages.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: axios v1.0 restructured error response format; error.response.data.error is now standard"
+    },
+    {
+      "id": "ed008-x2",
+      "tier": "project",
+      "content": "Old HTTP note says axios error.response.data reliably contains the API error payload in all versions.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed008-s1",
+    "ed008-p1",
+    "ed008-p2",
+    "ed008-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed008-x1",
+    "ed008-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed008-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed008-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed008-p2",
+        "ed008-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

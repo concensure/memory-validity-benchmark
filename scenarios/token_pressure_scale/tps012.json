@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps012",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the data pipeline backpressure failure after the consumer batch size was increased.",
+  "repo_state_fingerprint": "tps012-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps012-s1",
+      "tier": "session",
+      "content": "Pipeline consumers are dropping messages when the batch size exceeds the broker's max fetch bytes setting.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps012-p1",
+      "tier": "project",
+      "content": "Consumer batch size must not exceed the broker's max.fetch.bytes setting of 52428800 bytes (50MB).",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps012-p2",
+      "tier": "project",
+      "content": "The batch size was increased from 1000 to 5000 records without checking the broker's max fetch limit.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps012-l1",
+      "tier": "long_term",
+      "content": "When increasing consumer batch size, always verify the broker's max fetch bytes setting matches.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps012-s2",
+      "tier": "session",
+      "content": "Dropping occurs only at peak load when individual messages are large; small-message batches are unaffected.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps012-n01",
+      "tier": "project",
+      "content": "The message broker is Apache Kafka 3.5 running on a 6-node cluster.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps012-n02",
+      "tier": "session",
+      "content": "Session 3 note: the data team added a new consumer group for the analytics pipeline.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps012-n03",
+      "tier": "long_term",
+      "content": "Old lesson: consumer lag was the primary metric for backpressure detection before drop monitoring was added.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps012-n04",
+      "tier": "project",
+      "content": "The Kafka cluster is managed by Confluent Cloud with default broker settings.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps012-n05",
+      "tier": "session",
+      "content": "Session 8 note: consumer group rebalancing was optimized to reduce rebalance duration.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps012-n06",
+      "tier": "project",
+      "content": "Old pipeline guide: the batch size was 500 records in the original consumer design.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps012-n07",
+      "tier": "long_term",
+      "content": "Producer and consumer batch sizes must be tested against broker limits before increasing in production.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps012-n08",
+      "tier": "session",
+      "content": "Session 12 note: a new dead-letter topic was added for messages that fail processing.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps012-n09",
+      "tier": "project",
+      "content": "The pipeline processes 2 million messages per day with an average message size of 8KB.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps012-n10",
+      "tier": "session",
+      "content": "A throughput test in session 6 showed the pipeline handled 10,000 messages/second with the old batch size.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps012-n11",
+      "tier": "project",
+      "content": "The consumer uses the Confluent Kafka Go client with manual offset commits.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps012-n12",
+      "tier": "long_term",
+      "content": "When configuring consumer batch sizes, account for both record count and byte size limits.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps012-n13",
+      "tier": "session",
+      "content": "Session 10 note: the monitoring team added consumer lag alerts with a 5-minute threshold.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps012-n14",
+      "tier": "project",
+      "content": "Old Kafka guide: the default max.fetch.bytes was 1MB before the broker was reconfigured for large messages.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps012-n15",
+      "tier": "project",
+      "content": "Messages are serialized with Avro and the schema is registered in the Confluent Schema Registry.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps012-s1",
+    "tps012-p1",
+    "tps012-p2",
+    "tps012-l1",
+    "tps012-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps012-n01",
+    "tps012-n02",
+    "tps012-n03",
+    "tps012-n04",
+    "tps012-n05",
+    "tps012-n06",
+    "tps012-n07",
+    "tps012-n08",
+    "tps012-n09",
+    "tps012-n10",
+    "tps012-n11",
+    "tps012-n12",
+    "tps012-n13",
+    "tps012-n14",
+    "tps012-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps012-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps012-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps012-p2",
+        "tps012-l1",
+        "tps012-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

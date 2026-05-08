@@ -1,0 +1,69 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rde004",
+  "family": "retrieval_deduplication",
+  "split": "public",
+  "task": "Add structured logging to the user profile endpoint. Ensure no personally identifiable information appears in log output.",
+  "repo_state_fingerprint": "rde004-repo-v1",
+  "token_budget": 182,
+  "candidate_memories": [
+    {
+      "id": "rde004-p1",
+      "tier": "project",
+      "content": "PII must never appear in log output. Fields email, phone, full_name, and ssn must be redacted using the pii.Redact() helper before logging. Violation triggers an automatic compliance alert.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rde004-p2",
+      "tier": "project",
+      "content": "Never log PII fields: email, phone, full_name.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "deduplication: superseded by rde004-p1; incomplete field list, missing ssn and Redact() method"
+    },
+    {
+      "id": "rde004-l1",
+      "tier": "long_term",
+      "content": "PII must not be written to logs per data protection policy.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "deduplication: superseded by rde004-p1; no field list or implementation detail"
+    },
+    {
+      "id": "rde004-x1",
+      "tier": "long_term",
+      "content": "All logs should be structured JSON; unstructured log lines cannot be reliably scrubbed.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rde004-x2",
+      "tier": "session",
+      "content": "Compliance team flagged 2 endpoints that were logging email addresses; this task is the remediation.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rde004-p1"
+  ],
+  "gold_invalid_ids": [
+    "rde004-p2",
+    "rde004-l1",
+    "rde004-x1",
+    "rde004-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rde004-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

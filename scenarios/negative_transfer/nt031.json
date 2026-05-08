@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt031",
+  "family": "negative_transfer",
+  "split": "holdout",
+  "task": "Implement notify_failure for the alerting system without using the task queue notification.",
+  "repo_state_fingerprint": "nt031-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "nt031-s1",
+      "tier": "session",
+      "content": "Alerting system notify_failure pages the on-call rotation and opens an incident ticket immediately.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt031-p1",
+      "tier": "project",
+      "content": "Alert notifications must reach the on-call engineer within the SLO response window.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt031-p2",
+      "tier": "project",
+      "content": "Incident tickets are created atomically with the alert; a separate ticket creation step is not permitted.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt031-l1",
+      "tier": "long_term",
+      "content": "When notify_failure spans alerting and task queues, confirm the latency and ticket creation model.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt031-x1",
+      "tier": "project",
+      "content": "Task queue: notify_failure enqueues a best-effort notification job for async delivery.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: async best-effort queue delivery cannot satisfy the SLO latency requirement for alerts"
+    },
+    {
+      "id": "nt031-x2",
+      "tier": "project",
+      "content": "Old ops note says failure notifications should be decoupled from the alerting system via a task queue.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt031-s1",
+    "nt031-p1",
+    "nt031-p2",
+    "nt031-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt031-x1",
+    "nt031-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt031-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt031-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt031-p2",
+        "nt031-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

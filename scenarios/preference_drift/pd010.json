@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd010",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Apply the updated configuration approach: environment variables only, no config files.",
+  "repo_state_fingerprint": "pd010-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "pd010-s1",
+      "tier": "session",
+      "content": "User stated in session 38: remove all config file reading; all configuration must come from environment variables.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd010-p1",
+      "tier": "project",
+      "content": "Configuration policy (updated session 38): environment variables are the single source of truth for all config.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd010-p2",
+      "tier": "project",
+      "content": "Config file readers in files touched during this task should be replaced with env var reads.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd010-l1",
+      "tier": "long_term",
+      "content": "When configuration source preference changes, treat config file reads in touched files as policy violations.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd010-x1",
+      "tier": "project",
+      "content": "Configuration policy (session 11): use TOML config files for all configuration; environment variables are overrides only.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old config-file preference superseded by env-var-only mandate in session 38"
+    },
+    {
+      "id": "pd010-x2",
+      "tier": "project",
+      "content": "Old config note says TOML config files were chosen for explicitness and the ability to version control defaults.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd010-s1",
+    "pd010-p1",
+    "pd010-p2",
+    "pd010-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd010-x1",
+    "pd010-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd010-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd010-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd010-p2",
+        "pd010-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

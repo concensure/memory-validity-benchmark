@@ -1,0 +1,66 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iep003",
+  "family": "injection_eviction_priority",
+  "split": "public",
+  "task": "Implement the data export feature that writes user records to S3. Token budget is tight due to large prior context.",
+  "repo_state_fingerprint": "iep003-repo-v1",
+  "token_budget": 105,
+  "candidate_memories": [
+    {
+      "id": "iep003-p1",
+      "tier": "project",
+      "content": "User records written to S3 must be encrypted at rest using SSE-KMS with the key arn:aws:kms:us-east-1:123456789012:key/user-data-key. Unencrypted writes to S3 are rejected by the bucket policy and will raise a security incident.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iep003-p2",
+      "tier": "project",
+      "content": "S3 bucket for user exports is s3://user-exports-prod; use multipart upload for files over 100 MB.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iep003-l1",
+      "tier": "long_term",
+      "content": "Export jobs must write a manifest file alongside the data file listing record count and checksum.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iep003-s1",
+      "tier": "session",
+      "content": "Export job is expected to produce ~2 GB per run; scheduled to run nightly at 02:00 UTC.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iep003-p1",
+    "iep003-p2",
+    "iep003-l1",
+    "iep003-s1"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "iep003-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iep003-p2",
+        "iep003-l1",
+        "iep003-s1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

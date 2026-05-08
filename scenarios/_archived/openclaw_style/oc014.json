@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "oc014",
+  "family": "openclaw_style",
+  "split": "holdout",
+  "task": "Complete a multi-step patch while preserving deterministic replay logs.",
+  "repo_state_fingerprint": "oc014-repo-v1",
+  "token_budget": 250,
+  "candidate_memories": [
+    {
+      "id": "oc014-s1",
+      "tier": "session",
+      "content": "The patch itself is straightforward, but replay logging must stay complete through each intermediate verification.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "oc014-p1",
+      "tier": "project",
+      "content": "Project memory says audit completeness is a first-class requirement in long-horizon tool workflows.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "oc014-x1",
+      "tier": "session",
+      "content": "Old note says replay logs can be reconstructed later from git diff and final command output.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "oc014-s1",
+    "oc014-p1"
+  ],
+  "gold_invalid_ids": [
+    "oc014-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "oc014-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "oc014-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

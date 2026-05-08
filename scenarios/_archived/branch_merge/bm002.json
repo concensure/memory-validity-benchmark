@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "bm002",
+  "family": "branch_merge",
+  "split": "public",
+  "task": "Resolve branch divergence where one branch changed config shape and another changed defaults.",
+  "repo_state_fingerprint": "bm002-repo-v1",
+  "token_budget": 220,
+  "candidate_memories": [
+    {
+      "id": "bm002-s1",
+      "tier": "session",
+      "content": "Config shape diverged across branches and merged memory must respect the final merged schema.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "bm002-p1",
+      "tier": "project",
+      "content": "Project memory says branch-specific config memories should be revalidated after merge.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "bm002-x1",
+      "tier": "session",
+      "content": "Stale merge note says whichever config memory was most recent on either branch should win automatically.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "bm002-s1",
+    "bm002-p1"
+  ],
+  "gold_invalid_ids": [
+    "bm002-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "bm002-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "bm002-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

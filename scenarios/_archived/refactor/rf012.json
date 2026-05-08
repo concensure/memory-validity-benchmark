@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rf012",
+  "family": "refactor",
+  "split": "public",
+  "task": "Refactor split selection logic into a reusable scenario loader.",
+  "repo_state_fingerprint": "rf012-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "rf012-s1",
+      "tier": "session",
+      "content": "Public and holdout filtering should be shared instead of duplicated across scripts.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rf012-p1",
+      "tier": "project",
+      "content": "Project memory says split selection must remain explicit and deterministic after extraction.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rf012-x1",
+      "tier": "session",
+      "content": "Stale note says every runner can keep its own split filtering as long as names roughly match.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rf012-s1",
+    "rf012-p1"
+  ],
+  "gold_invalid_ids": [
+    "rf012-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "rf012-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rf012-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

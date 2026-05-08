@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp026",
+  "family": "false_promotion",
+  "split": "holdout",
+  "task": "Apply the API authentication fix using session evidence, not the promoted API key format rule.",
+  "repo_state_fingerprint": "fp026-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "fp026-s1",
+      "tier": "session",
+      "content": "Current security scan shows the promoted 'prefix API keys with pk_' format does not allow key type identification.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp026-p1",
+      "tier": "project",
+      "content": "Project security review shows API keys should be prefixed with sk_ for secret keys and pk_ for publishable keys.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp026-p2",
+      "tier": "project",
+      "content": "Correct format is sk_{env}_{random32} for secret keys and pk_{env}_{random32} for publishable keys.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp026-l1",
+      "tier": "long_term",
+      "content": "When session security scans reveal gaps in a promoted key format rule, demote and implement the full format spec.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp026-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 6): prefix all API keys with pk_ to make them identifiable in logs.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted pk_ prefix was based on publishable key patterns; secret keys need a distinct sk_ prefix"
+    },
+    {
+      "id": "fp026-x2",
+      "tier": "project",
+      "content": "Old promotion note says the pk_ prefix was confirmed by the security team as sufficient for key identification.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp026-s1",
+    "fp026-p1",
+    "fp026-p2",
+    "fp026-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp026-x1",
+    "fp026-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp026-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp026-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp026-p2",
+        "fp026-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

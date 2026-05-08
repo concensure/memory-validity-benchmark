@@ -1,0 +1,69 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rde007",
+  "family": "retrieval_deduplication",
+  "split": "public",
+  "task": "Configure the test coverage requirement for the new service in CI.",
+  "repo_state_fingerprint": "rde007-repo-v1",
+  "token_budget": 174,
+  "candidate_memories": [
+    {
+      "id": "rde007-p1",
+      "tier": "project",
+      "content": "Minimum test coverage is 80% line coverage and 70% branch coverage; CI enforces both thresholds via go test -cover; PRs below threshold are blocked.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rde007-p2",
+      "tier": "project",
+      "content": "Minimum 80% test coverage required.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "deduplication: superseded by rde007-p1; missing branch coverage and CI enforcement detail"
+    },
+    {
+      "id": "rde007-l1",
+      "tier": "long_term",
+      "content": "Test coverage below 80% blocks merge per engineering quality standards.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "deduplication: superseded by rde007-p1; no branch threshold"
+    },
+    {
+      "id": "rde007-x1",
+      "tier": "project",
+      "content": "Integration tests are excluded from the coverage calculation; only unit tests count toward the thresholds.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rde007-x2",
+      "tier": "session",
+      "content": "Current service draft is at 62% coverage; needs 18% more before CI will pass.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rde007-p1"
+  ],
+  "gold_invalid_ids": [
+    "rde007-p2",
+    "rde007-l1",
+    "rde007-x1",
+    "rde007-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rde007-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

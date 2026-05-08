@@ -1,0 +1,82 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "mabp005",
+  "family": "multi_agent_belief_propagation",
+  "split": "public",
+  "task": "Parallel worker agent: implement the payment retry logic for your assigned service. The planner updated the scope at step 9; apply the updated scope.",
+  "repo_state_fingerprint": "mabp005-repo-v1",
+  "token_budget": 223,
+  "candidate_memories": [
+    {
+      "id": "mabp005-s1",
+      "tier": "session",
+      "content": "[planner at step 9] SCOPE UPDATE: payment retry logic must only retry on network errors (timeout, connection refused); do not retry on 4xx responses. Earlier scope included 4xx retries which causes double charges.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "creating_agent: planner; scope_update_step: 9"
+    },
+    {
+      "id": "mabp005-p1",
+      "tier": "project",
+      "content": "Retry-eligible errors: net.Error (timeout=true), io.EOF, connection refused. Non-retriable: any HTTP 4xx or 5xx response from the payment gateway.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "mabp005-p2",
+      "tier": "project",
+      "content": "Retry policy: max 3 attempts, exponential backoff starting at 500 ms, with a unique idempotency key per attempt.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp005-l1",
+      "tier": "long_term",
+      "content": "Payment retries must never retry on 4xx; a 4xx from the payment gateway indicates a data error that a retry will not fix and may cause duplicate charges.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp005-x1",
+      "tier": "session",
+      "content": "[planner at step 5] Initial retry scope: retry on network errors and on 429 (rate limit) and 503 (service unavailable) responses.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "creating_agent: planner; contradicted_by: planner scope update at step 9"
+    }
+  ],
+  "gold_valid_ids": [
+    "mabp005-s1",
+    "mabp005-p1",
+    "mabp005-p2",
+    "mabp005-l1"
+  ],
+  "gold_invalid_ids": [
+    "mabp005-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "mabp005-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "mabp005-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "mabp005-p2",
+        "mabp005-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.07,
+    "ideal": 1.0
+  }
+}

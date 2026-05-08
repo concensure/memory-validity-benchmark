@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cc005",
+  "family": "concurrent_conflict",
+  "split": "public",
+  "task": "Apply the database index creation after verifying no concurrent index operation is running.",
+  "repo_state_fingerprint": "cc005-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cc005-s1",
+      "tier": "session",
+      "content": "DBA-A started the index creation on users.email at 14:10 after acquiring the table advisory lock.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc005-p1",
+      "tier": "project",
+      "content": "Table advisory locks prevent concurrent DDL operations from causing index corruption.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cc005-p2",
+      "tier": "project",
+      "content": "DBA-A's index creation is at 60% completion; estimated finish is 14:18.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc005-l1",
+      "tier": "long_term",
+      "content": "When two agents both attempt DDL on the same table, check advisory lock ownership first.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cc005-x1",
+      "tier": "session",
+      "content": "DBA-B also initiated an index on users.email at 14:12 after observing slow query logs.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "concurrent_conflict: two agents hold advisory lock claims for the same table DDL operation"
+    },
+    {
+      "id": "cc005-x2",
+      "tier": "project",
+      "content": "Old DBA note says concurrent index creation on the same column is usually safe in Postgres.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cc005-s1",
+    "cc005-p1",
+    "cc005-p2",
+    "cc005-l1"
+  ],
+  "gold_invalid_ids": [
+    "cc005-x1",
+    "cc005-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cc005-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cc005-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cc005-p2",
+        "cc005-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

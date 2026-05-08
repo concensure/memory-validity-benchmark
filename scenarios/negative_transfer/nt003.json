@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nt003",
+  "family": "negative_transfer",
+  "split": "public",
+  "task": "Implement validate_schema for the API gateway without using config-service validation rules.",
+  "repo_state_fingerprint": "nt003-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "nt003-s1",
+      "tier": "session",
+      "content": "API gateway validate_schema checks request payload shape against the published OpenAPI spec.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt003-p1",
+      "tier": "project",
+      "content": "API gateway schema validation must use the OpenAPI spec, not the config service schema registry.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nt003-p2",
+      "tier": "project",
+      "content": "Gateway validation is stateless; it does not call external services during the hot request path.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt003-l1",
+      "tier": "long_term",
+      "content": "When validate_schema appears in multiple services, confirm the target data source before coding.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nt003-x1",
+      "tier": "project",
+      "content": "Config service: validate_schema resolves tenant config keys against an internal schema registry.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "negative_transfer: config service validation logic would break the stateless gateway requirement"
+    },
+    {
+      "id": "nt003-x2",
+      "tier": "project",
+      "content": "Old integration note says schema validation could be centralized to reduce duplication.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nt003-s1",
+    "nt003-p1",
+    "nt003-p2",
+    "nt003-l1"
+  ],
+  "gold_invalid_ids": [
+    "nt003-x1",
+    "nt003-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "nt003-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "nt003-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nt003-p2",
+        "nt003-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

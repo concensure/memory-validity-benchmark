@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "fp019",
+  "family": "false_promotion",
+  "split": "public",
+  "task": "Apply the compression fix using session evidence, not the promoted compression algorithm rule.",
+  "repo_state_fingerprint": "fp019-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "fp019-s1",
+      "tier": "session",
+      "content": "Current bandwidth tests show the promoted 'gzip for all responses' rule produces poor ratios for binary payloads.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp019-p1",
+      "tier": "project",
+      "content": "Project payload analysis shows binary payloads (images, protobuf) benefit more from Brotli than gzip.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "fp019-p2",
+      "tier": "project",
+      "content": "Correct approach is Brotli for binary and text responses, gzip only for legacy client compatibility.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp019-l1",
+      "tier": "long_term",
+      "content": "When session bandwidth tests contradict a promoted compression rule, trust the test results and demote.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "fp019-x1",
+      "tier": "long_term",
+      "content": "Long-term memory (promoted session 6): use gzip compression for all API responses for broad client support.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "false_promotion: promoted gzip-only rule was based on text payload benchmarks; binary payloads favor Brotli"
+    },
+    {
+      "id": "fp019-x2",
+      "tier": "project",
+      "content": "Old promotion note says gzip was confirmed as the universal compression standard by the performance team.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "fp019-s1",
+    "fp019-p1",
+    "fp019-p2",
+    "fp019-l1"
+  ],
+  "gold_invalid_ids": [
+    "fp019-x1",
+    "fp019-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "fp019-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "fp019-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "fp019-p2",
+        "fp019-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

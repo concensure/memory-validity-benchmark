@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cp005",
+  "family": "consensus_promotion",
+  "split": "public",
+  "task": "Require architect approval for decision-memory promotion.",
+  "repo_state_fingerprint": "cp005-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "cp005-s1",
+      "tier": "session",
+      "content": "A decision memory lacks architect approval even though implementers agree it seems correct.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cp005-p1",
+      "tier": "project",
+      "content": "Project memory says decision promotion requires the authorized role as well as consensus.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cp005-x1",
+      "tier": "session",
+      "content": "Old note says broad team agreement is enough to promote any decision memory.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cp005-s1",
+    "cp005-p1"
+  ],
+  "gold_invalid_ids": [
+    "cp005-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "cp005-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cp005-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

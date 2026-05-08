@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ma014",
+  "family": "multi_agent",
+  "split": "holdout",
+  "task": "Coordinate planner and implementer on neutral minimal task handling.",
+  "repo_state_fingerprint": "ma014-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "ma014-s1",
+      "tier": "session",
+      "content": "Planner has already identified this as a minimal-context task, so implementer should avoid unnecessary retrieval plumbing.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ma014-p1",
+      "tier": "project",
+      "content": "Project memory says some workflows should optimize for disciplined non-injection.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ma014-x1",
+      "tier": "session",
+      "content": "Old coordination note says adding more retrieval usually helps and is rarely harmful.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ma014-s1",
+    "ma014-p1"
+  ],
+  "gold_invalid_ids": [
+    "ma014-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "ma014-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ma014-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr019",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Resume the email campaign send at subscriber 8,750 without re-sending to earlier subscribers.",
+  "repo_state_fingerprint": "cr019-repo-v1",
+  "token_budget": 170,
+  "candidate_memories": [
+    {
+      "id": "cr019-s1",
+      "tier": "session",
+      "content": "Send log confirms 8,749 subscribers received the campaign email; subscriber 8,750 is the next send target.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr019-p1",
+      "tier": "project",
+      "content": "Re-sending to already-emailed subscribers violates the campaign's one-email guarantee and risks spam complaints.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr019-p2",
+      "tier": "project",
+      "content": "Subscribers 8,751\u201320,000 have not received the campaign and must be sent to after subscriber 8,750.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr019-l1",
+      "tier": "long_term",
+      "content": "When a campaign send is interrupted, read the send log to identify the last confirmed send before resuming.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr019-x1",
+      "tier": "session",
+      "content": "Restart the campaign from subscriber 1 to guarantee all subscribers receive the email in the correct order.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full restart; correct behavior is to continue sending from subscriber 8,750"
+    },
+    {
+      "id": "cr019-x2",
+      "tier": "project",
+      "content": "Old email note says restarting from subscriber 1 is needed to ensure consistent campaign delivery tracking.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr019-s1",
+    "cr019-p1",
+    "cr019-p2",
+    "cr019-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr019-x1",
+    "cr019-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr019-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr019-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr019-p2",
+        "cr019-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

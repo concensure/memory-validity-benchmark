@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed023",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the Python ORM after SQLAlchemy 2.0 removed the execute() shorthand on session objects.",
+  "repo_state_fingerprint": "ed023-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "ed023-s1",
+      "tier": "session",
+      "content": "SQLAlchemy calls fail with AttributeError; SQLAlchemy 2.0 removed the execute() method from Session objects.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed023-p1",
+      "tier": "project",
+      "content": "Raw SQL execution must now use session.execute(text('SELECT ...')) with the text() construct explicitly.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed023-p2",
+      "tier": "project",
+      "content": "SQLAlchemy 2.0 also removed the Query.filter_by returning a list; queries must call .all() explicitly.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed023-l1",
+      "tier": "long_term",
+      "content": "When an ORM removes session execution shortcuts, audit all session.execute usages before upgrading.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed023-x1",
+      "tier": "project",
+      "content": "SQLAlchemy integration note (session 7): call session.execute('SELECT ...') to run raw SQL via the ORM session.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: SQLAlchemy 2.0 removed Session.execute shorthand; text() construct is required"
+    },
+    {
+      "id": "ed023-x2",
+      "tier": "project",
+      "content": "Old ORM note says SQLAlchemy execute() on session is a long-standing stable interface that rarely changes.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed023-s1",
+    "ed023-p1",
+    "ed023-p2",
+    "ed023-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed023-x1",
+    "ed023-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed023-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed023-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed023-p2",
+        "ed023-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

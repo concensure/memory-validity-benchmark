@@ -1,0 +1,66 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iibo004",
+  "family": "injection_intra_bucket_order",
+  "split": "public",
+  "task": "Deploy the updated config for the notification service that was modified 20 minutes ago.",
+  "repo_state_fingerprint": "iibo004-repo-v1",
+  "token_budget": 208,
+  "candidate_memories": [
+    {
+      "id": "iibo004-p1",
+      "tier": "project",
+      "content": "Config changes to notification-svc must be validated with make validate-config COMPONENT=notification-svc before deployment; invalid config causes silent message drops.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iibo004-s1",
+      "tier": "session",
+      "content": "Config updated 20 min ago by on-call engineer to increase SMTP connection pool from 10 to 50; change not yet validated or deployed.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iibo004-p2",
+      "tier": "project",
+      "content": "Validated config is deployed via kubectl apply -f config/notification-svc/production.yaml; rolling restart happens automatically.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iibo004-l1",
+      "tier": "long_term",
+      "content": "Config changes to notification-svc have historically caused silent failures when pool sizes exceed SMTP server limits; verify SMTP server max connections before increasing pool.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iibo004-p1",
+    "iibo004-s1",
+    "iibo004-p2",
+    "iibo004-l1"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "iibo004-p1",
+        "iibo004-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iibo004-p2",
+        "iibo004-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.1,
+    "ideal": 1.0
+  }
+}

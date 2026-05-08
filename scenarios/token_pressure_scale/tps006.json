@@ -1,0 +1,201 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "tps006",
+  "family": "token_pressure_scale",
+  "split": "public",
+  "task": "Fix the incorrect tax calculation introduced by the currency conversion refactor.",
+  "repo_state_fingerprint": "tps006-repo-v1",
+  "token_budget": 400,
+  "candidate_memories": [
+    {
+      "id": "tps006-s1",
+      "tier": "session",
+      "content": "Tax calculation now returns zero for non-USD orders after the currency conversion refactor.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps006-p1",
+      "tier": "project",
+      "content": "Tax amount must be computed on the pre-conversion price in the local currency, not on the USD equivalent.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "tps006-p2",
+      "tier": "project",
+      "content": "The refactor moved currency conversion before tax calculation; the order must be reversed back.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps006-l1",
+      "tier": "long_term",
+      "content": "When refactoring financial calculation pipelines, preserve the order of currency conversion and tax application.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps006-s2",
+      "tier": "session",
+      "content": "Non-USD orders account for 38% of revenue; the bug affects a significant portion of production transactions.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps006-n01",
+      "tier": "project",
+      "content": "Tax rates are updated quarterly from a third-party tax data provider.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps006-n02",
+      "tier": "session",
+      "content": "Session 3 note: the billing team requested a new invoice template with itemized tax display.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps006-n03",
+      "tier": "long_term",
+      "content": "Old practice: tax was calculated after currency conversion in all versions before the refactor.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps006-n04",
+      "tier": "project",
+      "content": "The currency conversion service uses real-time exchange rates updated every 5 minutes.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps006-n05",
+      "tier": "session",
+      "content": "Session 12 note: a new currency GBP was added to the supported currency list.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps006-n06",
+      "tier": "project",
+      "content": "Old tax guide: USD orders also used the conversion step with a 1.0 multiplier for consistency.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps006-n07",
+      "tier": "long_term",
+      "content": "Tax calculations must use the transaction currency, not the reporting currency, as the base.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps006-n08",
+      "tier": "session",
+      "content": "The accounts payable team reported no discrepancies in the monthly financial close last quarter.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps006-n09",
+      "tier": "project",
+      "content": "VAT rates for EU countries are handled by a separate VAT calculation module.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps006-n10",
+      "tier": "session",
+      "content": "Session 8 note: the finance team approved the new invoice layout for enterprise accounts.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps006-n11",
+      "tier": "project",
+      "content": "The tax service is deployed as a separate microservice with its own database.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps006-n12",
+      "tier": "long_term",
+      "content": "When currency conversion is in the pipeline, document the step order explicitly in the function name.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps006-n13",
+      "tier": "session",
+      "content": "Session 6 note: a bug in the VAT module was fixed for French accounts.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps006-n14",
+      "tier": "project",
+      "content": "Old billing guide: the tax calculation step had a 50ms timeout that was removed in the refactor.",
+      "validity": "stale",
+      "bucket": "supporting"
+    },
+    {
+      "id": "tps006-n15",
+      "tier": "project",
+      "content": "The payment service logs all currency conversions for audit purposes.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "tps006-s1",
+    "tps006-p1",
+    "tps006-p2",
+    "tps006-l1",
+    "tps006-s2"
+  ],
+  "gold_invalid_ids": [
+    "tps006-n01",
+    "tps006-n02",
+    "tps006-n03",
+    "tps006-n04",
+    "tps006-n05",
+    "tps006-n06",
+    "tps006-n07",
+    "tps006-n08",
+    "tps006-n09",
+    "tps006-n10",
+    "tps006-n11",
+    "tps006-n12",
+    "tps006-n13",
+    "tps006-n14",
+    "tps006-n15"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "tps006-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "tps006-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "tps006-p2",
+        "tps006-l1",
+        "tps006-s2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.05,
+    "ideal": 1.0
+  }
+}

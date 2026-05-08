@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nm007",
+  "family": "neutral_minimal",
+  "split": "public",
+  "task": "Update a comment to match already changed code behavior.",
+  "repo_state_fingerprint": "nm007-repo-v1",
+  "token_budget": 115,
+  "candidate_memories": [
+    {
+      "id": "nm007-s1",
+      "tier": "session",
+      "content": "The code already reflects the right behavior and only the stale comment remains.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nm007-p1",
+      "tier": "project",
+      "content": "Project memory says comment-only updates usually do not need broader memory injection.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nm007-x1",
+      "tier": "session",
+      "content": "Old note says comment edits should still carry historical design debates for completeness.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nm007-s1",
+    "nm007-p1"
+  ],
+  "gold_invalid_ids": [
+    "nm007-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "nm007-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nm007-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

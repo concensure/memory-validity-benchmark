@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd001",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Implement new API response formatting using the updated preference for camelCase keys.",
+  "repo_state_fingerprint": "pd001-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "pd001-s1",
+      "tier": "session",
+      "content": "User explicitly stated in session 24: switch all API response keys from snake_case to camelCase.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd001-p1",
+      "tier": "project",
+      "content": "Current project style guide (updated session 24) mandates camelCase for all HTTP response payloads.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd001-p2",
+      "tier": "project",
+      "content": "API response envelope fields (data, error, meta) must also use camelCase after the migration.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd001-l1",
+      "tier": "long_term",
+      "content": "When a style preference is explicitly changed mid-project, demote all prior style memories immediately.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd001-x1",
+      "tier": "project",
+      "content": "Project style guide (session 3): all API response keys must use snake_case for consistency with the DB schema.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old snake_case preference superseded by explicit camelCase instruction in session 24"
+    },
+    {
+      "id": "pd001-x2",
+      "tier": "project",
+      "content": "Old integration note says client scripts were written to expect snake_case response keys.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd001-s1",
+    "pd001-p1",
+    "pd001-p2",
+    "pd001-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd001-x1",
+    "pd001-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd001-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd001-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd001-p2",
+        "pd001-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

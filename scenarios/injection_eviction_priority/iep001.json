@@ -1,0 +1,66 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "iep001",
+  "family": "injection_eviction_priority",
+  "split": "public",
+  "task": "Add a new POST /payments/charges endpoint to the payment API. Prior context is large; token budget is critically constrained.",
+  "repo_state_fingerprint": "iep001-repo-v1",
+  "token_budget": 100,
+  "candidate_memories": [
+    {
+      "id": "iep001-p1",
+      "tier": "project",
+      "content": "All payment API endpoints must validate the X-Idempotency-Key header and reject requests without it to prevent duplicate charges. This check must occur in middleware before any route handler executes. Violations trigger an automatic compliance alert.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "iep001-p2",
+      "tier": "project",
+      "content": "REST endpoints should follow kebab-case naming convention; use plural nouns.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iep001-l1",
+      "tier": "long_term",
+      "content": "New endpoints must be added to the OpenAPI spec in docs/api/openapi.yaml before deployment.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "iep001-s1",
+      "tier": "session",
+      "content": "Developer asked about the naming convention for the new charge endpoint path.",
+      "validity": "valid",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "iep001-p1",
+    "iep001-p2",
+    "iep001-l1",
+    "iep001-s1"
+  ],
+  "gold_invalid_ids": [],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "iep001-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "iep001-p2",
+        "iep001-l1",
+        "iep001-s1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

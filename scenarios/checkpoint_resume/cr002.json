@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr002",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Continue the ETL pipeline run from the last committed batch without reprocessing earlier batches.",
+  "repo_state_fingerprint": "cr002-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "cr002-s1",
+      "tier": "session",
+      "content": "Checkpoint state shows batches 1\u201314 committed to the data warehouse; batch 15 (the interrupted batch) must be retried.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr002-p1",
+      "tier": "project",
+      "content": "ETL batch commits are idempotent per batch ID; rerunning committed batches creates duplicate rows.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr002-p2",
+      "tier": "project",
+      "content": "Batches 16\u201320 have not been processed and must run after batch 15 completes.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr002-l1",
+      "tier": "long_term",
+      "content": "When resuming an interrupted ETL run, read the checkpoint file to determine the last committed batch.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr002-x1",
+      "tier": "session",
+      "content": "Reprocess all 20 batches from the beginning to ensure consistency across the full pipeline run.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full rerun; correct behavior is to retry only batch 15 and continue through 20"
+    },
+    {
+      "id": "cr002-x2",
+      "tier": "project",
+      "content": "Old ETL note says a full rerun is the safest approach after any pipeline interruption.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr002-s1",
+    "cr002-p1",
+    "cr002-p2",
+    "cr002-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr002-x1",
+    "cr002-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr002-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr002-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr002-p2",
+        "cr002-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

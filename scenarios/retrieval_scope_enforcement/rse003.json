@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rse003",
+  "family": "retrieval_scope_enforcement",
+  "split": "public",
+  "task": "[Project: Nova/payment-svc] Set the downstream HTTP client timeout for payment-svc in Project Nova.",
+  "repo_state_fingerprint": "rse003-repo-v1",
+  "token_budget": 208,
+  "candidate_memories": [
+    {
+      "id": "rse003-p1",
+      "tier": "project",
+      "content": "[Project: Nova] payment-svc downstream HTTP timeout is 8 s; this is set to accommodate the payment processor's P99 of 6 s plus 2 s buffer.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rse003-p2",
+      "tier": "project",
+      "content": "[Project: Nova] Timeout is configured via PAYMENT_CLIENT_TIMEOUT_MS in payment-svc/config/production.yaml; default in code is 30 s and must be overridden.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rse003-x1",
+      "tier": "project",
+      "content": "[Project: Orion] All outbound HTTP timeouts in Orion are set to 3 s per the Orion latency SLA.",
+      "validity": "irrelevant",
+      "bucket": "critical",
+      "notes": "note: scope=Orion; Orion has stricter latency requirements"
+    },
+    {
+      "id": "rse003-x2",
+      "tier": "project",
+      "content": "[Project: Legacy] payment-svc timeout was 30 s before the Legacy modernisation; the new value is 8 s in Nova.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale: legacy value, current Nova value is 8 s in p1"
+    },
+    {
+      "id": "rse003-x3",
+      "tier": "long_term",
+      "content": "[General] HTTP client timeouts should always be set explicitly; relying on OS-level defaults causes unpredictable behaviour under load.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: general principle, not Nova-specific value"
+    },
+    {
+      "id": "rse003-x4",
+      "tier": "session",
+      "content": "[Project: Nova] Payment processor SLA updated: P99 is now 6 s, down from 8 s; timeout buffer remains at 2 s.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rse003-p1",
+    "rse003-p2"
+  ],
+  "gold_invalid_ids": [
+    "rse003-x1",
+    "rse003-x2",
+    "rse003-x3",
+    "rse003-x4"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rse003-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rse003-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

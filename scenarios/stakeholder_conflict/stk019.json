@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk019",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Apply the code review policy from the engineering manager, not the PM's self-merge request.",
+  "repo_state_fingerprint": "stk019-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "stk019-s1",
+      "tier": "session",
+      "content": "Engineering manager issued a binding code review policy in session 11: no self-merges; all PRs require 2 approvals.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk019-p1",
+      "tier": "project",
+      "content": "Engineering manager code review policies are binding; they protect code quality and incident prevention.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk019-p2",
+      "tier": "project",
+      "content": "Critical path code (payment, auth, data export) requires 3 approvals including at least one from a senior engineer.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk019-l1",
+      "tier": "long_term",
+      "content": "When a PM requests a self-merge to ship faster, enforce the approval policy and expedite the review process.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk019-x1",
+      "tier": "project",
+      "content": "PM instruction (session 12): allow the engineer to self-merge this PR to make the Friday release cutoff.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM self-merge request conflicts with engineering manager's binding 2-approval code review policy"
+    },
+    {
+      "id": "stk019-x2",
+      "tier": "project",
+      "content": "Old delivery note says self-merges were allowed for hotfixes with PM sign-off before the policy was formal.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk019-s1",
+    "stk019-p1",
+    "stk019-p2",
+    "stk019-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk019-x1",
+    "stk019-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk019-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk019-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk019-p2",
+        "stk019-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

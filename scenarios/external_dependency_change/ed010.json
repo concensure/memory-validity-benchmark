@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed010",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the PostgreSQL client after the database server deprecated MD5 password authentication.",
+  "repo_state_fingerprint": "ed010-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "ed010-s1",
+      "tier": "session",
+      "content": "Database connections fail with authentication error; the Postgres server disabled MD5 auth in favor of SCRAM-SHA-256.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed010-p1",
+      "tier": "project",
+      "content": "PostgreSQL connection strings must specify sslmode=require and the client library must support SCRAM-SHA-256.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed010-p2",
+      "tier": "project",
+      "content": "The pg_hba.conf on the server now enforces SCRAM-SHA-256 for all client connections.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed010-l1",
+      "tier": "long_term",
+      "content": "When a database server removes an authentication method, update the client library and connection config together.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed010-x1",
+      "tier": "project",
+      "content": "PostgreSQL connection note (session 6): use MD5 password authentication with pg_hba.conf set to md5.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: PostgreSQL server disabled MD5 auth; SCRAM-SHA-256 is now required"
+    },
+    {
+      "id": "ed010-x2",
+      "tier": "project",
+      "content": "Old database note says MD5 auth was used for backward compatibility with older PostgreSQL client libraries.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed010-s1",
+    "ed010-p1",
+    "ed010-p2",
+    "ed010-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed010-x1",
+    "ed010-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed010-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed010-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed010-p2",
+        "ed010-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

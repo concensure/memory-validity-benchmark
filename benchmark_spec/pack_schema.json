@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MVI Scenario Pack Manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "pack_id",
+    "pack_type",
+    "status",
+    "scenario_count",
+    "families",
+    "scenario_ids"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "mvi-pack-manifest-v1"
+    },
+    "pack_id": {
+      "type": "string"
+    },
+    "pack_type": {
+      "enum": ["public", "holdout"]
+    },
+    "status": {
+      "enum": ["draft-local", "frozen-local", "published-public", "restricted-holdout"]
+    },
+    "description": {
+      "type": "string"
+    },
+    "scenario_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "families": {
+      "type": "object"
+    },
+    "scenario_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr024",
+  "family": "checkpoint_resume",
+  "split": "holdout",
+  "task": "Continue the GDPR deletion sweep at user 3,400 without re-processing users 1\u20133,399.",
+  "repo_state_fingerprint": "cr024-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "cr024-s1",
+      "tier": "session",
+      "content": "Deletion log shows users 1\u20133,399 processed with personal data deleted and records anonymized.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr024-p1",
+      "tier": "project",
+      "content": "Re-processing deleted users risks re-deleting already-anonymized records and corrupting the audit trail.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr024-p2",
+      "tier": "project",
+      "content": "Users 3,401\u20138,000 have not been processed and must be deleted after user 3,400.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr024-l1",
+      "tier": "long_term",
+      "content": "When a deletion sweep is interrupted, verify the deletion log before resuming to protect the audit trail.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr024-x1",
+      "tier": "session",
+      "content": "Reset the deletion log and re-process all 8,000 users from user 1 for a complete deletion audit.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full reset and restart; correct behavior is to resume from user 3,400"
+    },
+    {
+      "id": "cr024-x2",
+      "tier": "project",
+      "content": "Old GDPR note says re-running deletion sweeps from the beginning produces a complete and auditable deletion record.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr024-s1",
+    "cr024-p1",
+    "cr024-p2",
+    "cr024-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr024-x1",
+    "cr024-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr024-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr024-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr024-p2",
+        "cr024-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

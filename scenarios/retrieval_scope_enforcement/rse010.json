@@ -1,0 +1,84 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rse010",
+  "family": "retrieval_scope_enforcement",
+  "split": "holdout",
+  "task": "[Project: Nova/deploy-agent] Configure the deployment region for Nova's deploy-agent service.",
+  "repo_state_fingerprint": "rse010-repo-v1",
+  "token_budget": 206,
+  "candidate_memories": [
+    {
+      "id": "rse010-p1",
+      "tier": "project",
+      "content": "[Project: Nova] deploy-agent is deployed exclusively to us-east-1; Nova's data residency agreement prohibits deployment outside the US.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rse010-p2",
+      "tier": "project",
+      "content": "[Project: Nova] DEPLOY_REGION is set in nova/deploy-agent/helm/values.yaml; the value must remain us-east-1; do not inherit from the cluster default.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rse010-x1",
+      "tier": "project",
+      "content": "[Project: Atlas] deploy-agent is deployed to eu-west-1 and eu-central-1 to serve European customers; Atlas has EU data residency requirements.",
+      "validity": "irrelevant",
+      "bucket": "critical",
+      "notes": "note: scope=Atlas; EU residency constraint conflicts with Nova US-only"
+    },
+    {
+      "id": "rse010-x2",
+      "tier": "project",
+      "content": "[Project: Cobalt] deploy-agent is deployed globally (us-east-1, eu-west-1, ap-southeast-1); Cobalt has no data residency restrictions.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: scope=Cobalt; global deployment conflicts with Nova US-only"
+    },
+    {
+      "id": "rse010-x3",
+      "tier": "long_term",
+      "content": "[General] Deployment region should match customer geography to reduce latency; data residency requirements take precedence over latency.",
+      "validity": "irrelevant",
+      "bucket": "supporting",
+      "notes": "note: general principle, Nova-specific constraint is authoritative"
+    },
+    {
+      "id": "rse010-x4",
+      "tier": "session",
+      "content": "[Project: Nova] Legal review confirmed us-east-1 is sufficient for Nova's current customer base and compliance obligations.",
+      "validity": "irrelevant",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rse010-p1",
+    "rse010-p2"
+  ],
+  "gold_invalid_ids": [
+    "rse010-x1",
+    "rse010-x2",
+    "rse010-x3",
+    "rse010-x4"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "rse010-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rse010-p2"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "sec012",
+  "family": "security_constraint",
+  "split": "public",
+  "task": "Write the password reset flow without generating predictable reset tokens.",
+  "repo_state_fingerprint": "sec012-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "sec012-s1",
+      "tier": "session",
+      "content": "Current task is to implement the password reset token generation and validation flow.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sec012-p1",
+      "tier": "project",
+      "content": "SECURITY CONSTRAINT: password reset tokens must be generated using cryptographically secure random bytes, minimum 32 bytes.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sec012-p2",
+      "tier": "project",
+      "content": "Reset tokens must use constant-time comparison during validation to prevent timing attacks.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sec012-l1",
+      "tier": "long_term",
+      "content": "Token security constraints must propagate to all agents working on authentication flows.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sec012-x1",
+      "tier": "project",
+      "content": "Generate password reset tokens using user_id + timestamp + random(8) for easy debuggability.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "security_constraint: x1 creates a false exception to the secure random token constraint for debugging"
+    },
+    {
+      "id": "sec012-x2",
+      "tier": "project",
+      "content": "Old auth note says shorter tokens with user context were used in development for easier testing.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "sec012-s1",
+    "sec012-p1",
+    "sec012-p2",
+    "sec012-l1"
+  ],
+  "gold_invalid_ids": [
+    "sec012-x1",
+    "sec012-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "sec012-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "sec012-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "sec012-p2",
+        "sec012-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

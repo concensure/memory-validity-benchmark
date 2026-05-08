@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "sm009",
+  "family": "stale_memory",
+  "split": "public",
+  "task": "Filter obsolete promotion heuristics after contradiction hardening.",
+  "repo_state_fingerprint": "sm009-repo-v1",
+  "token_budget": 165,
+  "candidate_memories": [
+    {
+      "id": "sm009-s1",
+      "tier": "session",
+      "content": "Long-term promotion now requires clean consensus and strong citations, so earlier loose heuristics are stale.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "sm009-p1",
+      "tier": "project",
+      "content": "Project memory says contradiction blockers should outrank legacy confidence-only shortcuts.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "sm009-x1",
+      "tier": "session",
+      "content": "Old heuristic says any sufficiently confident project fact can be promoted once it appears twice.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "sm009-s1",
+    "sm009-p1"
+  ],
+  "gold_invalid_ids": [
+    "sm009-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "sm009-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "sm009-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

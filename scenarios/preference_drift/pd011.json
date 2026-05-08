@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd011",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Implement new data validation using the updated preference for schema-first validation.",
+  "repo_state_fingerprint": "pd011-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "pd011-s1",
+      "tier": "session",
+      "content": "User directed in session 26: switch all input validation from imperative checks to schema-first validation.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd011-p1",
+      "tier": "project",
+      "content": "Validation policy (updated session 26): JSON Schema or equivalent is required for all API input validation.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd011-p2",
+      "tier": "project",
+      "content": "Imperative validation logic in files touched during this task should be migrated to schema definitions.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd011-l1",
+      "tier": "long_term",
+      "content": "When validation preference changes, generate schemas from existing imperative checks before removing them.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd011-x1",
+      "tier": "project",
+      "content": "Validation policy (session 5): write imperative validation functions for clear and debuggable validation logic.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old imperative validation preference superseded by schema-first mandate in session 26"
+    },
+    {
+      "id": "pd011-x2",
+      "tier": "project",
+      "content": "Old validation note says imperative checks were chosen because schema validation had poor error messages.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd011-s1",
+    "pd011-p1",
+    "pd011-p2",
+    "pd011-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd011-x1",
+    "pd011-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd011-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd011-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd011-p2",
+        "pd011-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

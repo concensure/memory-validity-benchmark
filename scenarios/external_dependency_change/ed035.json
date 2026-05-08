@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed035",
+  "family": "external_dependency_change",
+  "split": "holdout",
+  "task": "Fix the Go module after the gorilla/mux library was archived and removed from active maintenance.",
+  "repo_state_fingerprint": "ed035-repo-v1",
+  "token_budget": 195,
+  "candidate_memories": [
+    {
+      "id": "ed035-s1",
+      "tier": "session",
+      "content": "Security audit flagged gorilla/mux as archived; the library received no security updates since November 2023.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed035-p1",
+      "tier": "project",
+      "content": "HTTP routing must be migrated from gorilla/mux to an actively maintained router such as chi or stdlib ServeMux.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed035-p2",
+      "tier": "project",
+      "content": "gorilla/mux handler function signatures are compatible with stdlib net/http; migration is mostly URL pattern syntax.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed035-l1",
+      "tier": "long_term",
+      "content": "When a critical dependency is archived, plan the migration before the dependency has an unpatched vulnerability.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed035-x1",
+      "tier": "project",
+      "content": "HTTP routing note (session 7): use gorilla/mux for flexible URL pattern matching and middleware chaining.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: gorilla/mux archived and no longer receives security updates; migration required"
+    },
+    {
+      "id": "ed035-x2",
+      "tier": "project",
+      "content": "Old routing note says gorilla/mux is the most popular Go router and is safe to use in production.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed035-s1",
+    "ed035-p1",
+    "ed035-p2",
+    "ed035-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed035-x1",
+    "ed035-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed035-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed035-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed035-p2",
+        "ed035-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

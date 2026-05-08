@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "rf006",
+  "family": "refactor",
+  "split": "public",
+  "task": "Consolidate JSON response writers.",
+  "repo_state_fingerprint": "rf006-repo-v1",
+  "token_budget": 175,
+  "candidate_memories": [
+    {
+      "id": "rf006-s1",
+      "tier": "session",
+      "content": "Response helpers must preserve exact error key names consumed by automation clients.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "rf006-p1",
+      "tier": "project",
+      "content": "Project memory says shared response writers cannot own auth redirect behavior.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "rf006-x1",
+      "tier": "session",
+      "content": "Contradicted note says client scripts tolerate any error payload shape.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "rf006-s1",
+    "rf006-p1"
+  ],
+  "gold_invalid_ids": [
+    "rf006-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "rf006-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "rf006-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

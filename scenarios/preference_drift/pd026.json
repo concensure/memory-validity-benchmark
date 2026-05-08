@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd026",
+  "family": "preference_drift",
+  "split": "holdout",
+  "task": "Apply the updated database transaction policy: explicit transactions for all multi-step writes.",
+  "repo_state_fingerprint": "pd026-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "pd026-s1",
+      "tier": "session",
+      "content": "User stated in session 48: wrap all multi-step database writes in explicit transactions, no auto-commit.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd026-p1",
+      "tier": "project",
+      "content": "Transaction policy (updated session 48): explicit transactions are required for any write that spans two or more steps.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd026-p2",
+      "tier": "project",
+      "content": "Auto-committed multi-step writes in files touched during this task should be migrated to explicit transactions.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd026-l1",
+      "tier": "long_term",
+      "content": "When transaction policy changes, add transaction scaffolding before modifying write logic in touched files.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd026-x1",
+      "tier": "project",
+      "content": "Transaction policy (session 18): rely on auto-commit for individual writes; only use transactions for long workflows.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old auto-commit preference superseded by explicit transaction mandate in session 48"
+    },
+    {
+      "id": "pd026-x2",
+      "tier": "project",
+      "content": "Old data note says auto-commit was chosen to simplify code for writes that rarely span multiple steps.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd026-s1",
+    "pd026-p1",
+    "pd026-p2",
+    "pd026-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd026-x1",
+    "pd026-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd026-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd026-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd026-p2",
+        "pd026-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

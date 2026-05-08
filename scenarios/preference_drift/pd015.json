@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "pd015",
+  "family": "preference_drift",
+  "split": "public",
+  "task": "Apply the updated code organization preference: one class per file, no grouped modules.",
+  "repo_state_fingerprint": "pd015-repo-v1",
+  "token_budget": 185,
+  "candidate_memories": [
+    {
+      "id": "pd015-s1",
+      "tier": "session",
+      "content": "User directed in session 28: split all grouped module files so each type or class lives in its own file.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd015-p1",
+      "tier": "project",
+      "content": "Code organization policy (updated session 28): one exported class or type per file is now mandatory.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "pd015-p2",
+      "tier": "project",
+      "content": "Multi-class files in directories touched during this task should be split as part of routine work.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd015-l1",
+      "tier": "long_term",
+      "content": "When file organization preference changes, split files as you touch them rather than in a separate pass.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "pd015-x1",
+      "tier": "project",
+      "content": "Code organization policy (session 6): group related types in a single file for navigational convenience.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "preference_drift: old grouped-module preference superseded by one-class-per-file mandate in session 28"
+    },
+    {
+      "id": "pd015-x2",
+      "tier": "project",
+      "content": "Old structure note says grouped modules were chosen to reduce the number of files in the project.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "pd015-s1",
+    "pd015-p1",
+    "pd015-p2",
+    "pd015-l1"
+  ],
+  "gold_invalid_ids": [
+    "pd015-x1",
+    "pd015-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "pd015-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "pd015-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "pd015-p2",
+        "pd015-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

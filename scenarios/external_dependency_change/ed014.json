@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ed014",
+  "family": "external_dependency_change",
+  "split": "public",
+  "task": "Fix the Redis client after the cloud provider deprecated the CLUSTER INFO command format.",
+  "repo_state_fingerprint": "ed014-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "ed014-s1",
+      "tier": "session",
+      "content": "Cluster health checks fail; the managed Redis provider changed the CLUSTER INFO response format in version 7.0.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed014-p1",
+      "tier": "project",
+      "content": "CLUSTER INFO responses in Redis 7.0 use a different field separator and added new required status fields.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ed014-p2",
+      "tier": "project",
+      "content": "The cluster_state field now returns active instead of ok when the cluster is healthy.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed014-l1",
+      "tier": "long_term",
+      "content": "When a managed cache provider changes a command response format, update all response parsers before adding health checks.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ed014-x1",
+      "tier": "project",
+      "content": "Redis cluster note (session 8): parse the CLUSTER INFO response and check for cluster_state:ok to confirm health.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "external_dependency_change: Redis 7.0 changed CLUSTER INFO response; cluster_state now returns 'active' not 'ok'"
+    },
+    {
+      "id": "ed014-x2",
+      "tier": "project",
+      "content": "Old Redis note says CLUSTER INFO response format is stable and has not changed across Redis versions.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ed014-s1",
+    "ed014-p1",
+    "ed014-p2",
+    "ed014-l1"
+  ],
+  "gold_invalid_ids": [
+    "ed014-x1",
+    "ed014-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "ed014-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "ed014-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ed014-p2",
+        "ed014-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

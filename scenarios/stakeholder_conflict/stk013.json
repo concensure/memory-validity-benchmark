@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk013",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Implement the data model per the architect's normalized design, not the PM's denormalized shortcut.",
+  "repo_state_fingerprint": "stk013-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "stk013-s1",
+      "tier": "session",
+      "content": "Architect issued a binding data model decision in session 16: use normalized relational tables for user preferences.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk013-p1",
+      "tier": "project",
+      "content": "Architect data model decisions are binding and protect long-term query performance and schema maintainability.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk013-p2",
+      "tier": "project",
+      "content": "The normalized preferences model uses a user_preference_entries table with key/value rows per user.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk013-l1",
+      "tier": "long_term",
+      "content": "When a PM requests a denormalized shortcut to an architect's data model decision, apply the normalized design.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk013-x1",
+      "tier": "project",
+      "content": "PM instruction (session 17): store all user preferences in a single JSON blob column for simpler application code.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM JSON blob preference conflicts with architect's binding normalized data model decision"
+    },
+    {
+      "id": "stk013-x2",
+      "tier": "project",
+      "content": "Old data note says JSON columns were used for preferences in the prototype to move quickly.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk013-s1",
+    "stk013-p1",
+    "stk013-p2",
+    "stk013-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk013-x1",
+    "stk013-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk013-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk013-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk013-p2",
+        "stk013-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "lha005",
+  "family": "long_horizon_accumulation",
+  "split": "public",
+  "task": "Step 12 of 20 \u2014 deployment pipeline rebuild: enable automated canary analysis for the orders-svc pipeline. Steps 1\u201311 complete. Checkpoint at step 11 confirmed all prior stages healthy.",
+  "repo_state_fingerprint": "lha005-repo-v1",
+  "token_budget": 238,
+  "candidate_memories": [
+    {
+      "id": "lha005-s1",
+      "tier": "session",
+      "content": "Step 11 checkpoint: smoke tests pass, load tests pass, rollback procedure verified; canary stage is the final addition before pipeline is production-ready.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 11"
+    },
+    {
+      "id": "lha005-p1",
+      "tier": "project",
+      "content": "Canary analysis uses Kayenta; configured in pipeline/canary-config.yaml; success threshold is 90% for all metrics before full rollout proceeds.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "lha005-p2",
+      "tier": "project",
+      "content": "Canary analysis duration is 15 min with 5% traffic split; if analysis fails the pipeline must automatically roll back without human intervention.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha005-l1",
+      "tier": "long_term",
+      "content": "Canary analysis must include the orders_error_rate and orders_p99_latency metrics at minimum; adding more metrics is encouraged.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha005-x1",
+      "tier": "session",
+      "content": "Step 3 note: canary stage was deferred because Kayenta was not yet deployed; Kayenta deployment was completed at step 7.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 7; Kayenta now available; deferral reason no longer applies"
+    },
+    {
+      "id": "lha005-x2",
+      "tier": "project",
+      "content": "Step 6 draft: canary traffic split was 10%; revised to 5% at step 9 based on load test results.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 9; 5% is the current value as in p2"
+    }
+  ],
+  "gold_valid_ids": [
+    "lha005-s1",
+    "lha005-p1",
+    "lha005-p2",
+    "lha005-l1"
+  ],
+  "gold_invalid_ids": [
+    "lha005-x1",
+    "lha005-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "lha005-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "lha005-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "lha005-p2",
+        "lha005-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.06,
+    "ideal": 1.0
+  }
+}

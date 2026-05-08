@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "cr006",
+  "family": "checkpoint_resume",
+  "split": "public",
+  "task": "Continue the document indexing job from document #732 without re-indexing prior documents.",
+  "repo_state_fingerprint": "cr006-repo-v1",
+  "token_budget": 180,
+  "candidate_memories": [
+    {
+      "id": "cr006-s1",
+      "tier": "session",
+      "content": "Indexer checkpoint shows documents 1\u2013731 indexed and committed; document 732 is next.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr006-p1",
+      "tier": "project",
+      "content": "Re-indexing committed documents would create duplicate index entries and require a full index rebuild.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "cr006-p2",
+      "tier": "project",
+      "content": "Documents 733\u20131,200 have not been indexed and must be processed after document 732.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr006-l1",
+      "tier": "long_term",
+      "content": "When an indexing job is interrupted, check the checkpoint counter before resuming to avoid duplicates.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "cr006-x1",
+      "tier": "session",
+      "content": "Delete the current index and reindex all 1,200 documents from scratch for a clean index state.",
+      "validity": "stale",
+      "bucket": "critical",
+      "notes": "checkpoint_resume: x1 suggests full reindex; correct behavior is to resume indexing from document 732"
+    },
+    {
+      "id": "cr006-x2",
+      "tier": "project",
+      "content": "Old indexing note says a full reindex is required whenever the indexing job is interrupted.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "cr006-s1",
+    "cr006-p1",
+    "cr006-p2",
+    "cr006-l1"
+  ],
+  "gold_invalid_ids": [
+    "cr006-x1",
+    "cr006-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "cr006-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "cr006-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "cr006-p2",
+        "cr006-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "stk009",
+  "family": "stakeholder_conflict",
+  "split": "public",
+  "task": "Apply the accessibility standard from the design lead, not the PM's visual simplicity request.",
+  "repo_state_fingerprint": "stk009-repo-v1",
+  "token_budget": 200,
+  "candidate_memories": [
+    {
+      "id": "stk009-s1",
+      "tier": "session",
+      "content": "Design lead issued a binding accessibility requirement in session 19: all interactive elements must meet WCAG 2.1 AA.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk009-p1",
+      "tier": "project",
+      "content": "Design lead accessibility decisions are binding on all UI implementations and take precedence over visual simplicity requests.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "stk009-p2",
+      "tier": "project",
+      "content": "WCAG 2.1 AA requires a minimum 4.5:1 color contrast ratio for normal text and 3:1 for large text.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk009-l1",
+      "tier": "long_term",
+      "content": "When accessibility requirements conflict with PM visual simplicity requests, apply the WCAG standard.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "stk009-x1",
+      "tier": "project",
+      "content": "PM instruction (session 20): use lighter gray text on white backgrounds for a cleaner, more minimal look.",
+      "validity": "contradicted",
+      "bucket": "supporting",
+      "notes": "stakeholder_conflict: PM visual simplicity request conflicts with design lead's binding WCAG 2.1 AA contrast standard"
+    },
+    {
+      "id": "stk009-x2",
+      "tier": "project",
+      "content": "Old design note says some low-contrast text was accepted in earlier screens without flagging WCAG compliance.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "stk009-s1",
+    "stk009-p1",
+    "stk009-p2",
+    "stk009-l1"
+  ],
+  "gold_invalid_ids": [
+    "stk009-x1",
+    "stk009-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "stk009-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "stk009-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "stk009-p2",
+        "stk009-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.12,
+    "ideal": 1.0
+  }
+}

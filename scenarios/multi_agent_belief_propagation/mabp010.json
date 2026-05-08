@@ -1,0 +1,82 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "mabp010",
+  "family": "multi_agent_belief_propagation",
+  "split": "holdout",
+  "task": "All worker agents: a PII boundary correction was broadcast by the security agent. Apply the updated PII scope before processing user data.",
+  "repo_state_fingerprint": "mabp010-repo-v1",
+  "token_budget": 221,
+  "candidate_memories": [
+    {
+      "id": "mabp010-s1",
+      "tier": "session",
+      "content": "[security-agent broadcast at step 8] PII BOUNDARY UPDATE: ip_address is now classified as PII and must be redacted from all logs and external API responses. This supersedes the prior classification of ip_address as non-PII operational data.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "creating_agent: security-agent; broadcast_step: 8"
+    },
+    {
+      "id": "mabp010-p1",
+      "tier": "project",
+      "content": "Updated PII fields requiring redaction: email, phone, full_name, ssn, date_of_birth, ip_address. All agents must apply this updated list immediately.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "mabp010-p2",
+      "tier": "project",
+      "content": "Use pii.Redact() with the updated field list; the redactor was updated in v2.1 to include ip_address automatically.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp010-l1",
+      "tier": "long_term",
+      "content": "PII classification changes are broadcast to all agents; each agent must update its redaction logic before processing the next user data record.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "mabp010-x1",
+      "tier": "long_term",
+      "content": "[prior classification] ip_address is operational data, not PII; it may appear in logs and API responses for debugging.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "creating_agent: prior-classification; contradicted_by: security-agent broadcast at step 8"
+    }
+  ],
+  "gold_valid_ids": [
+    "mabp010-s1",
+    "mabp010-p1",
+    "mabp010-p2",
+    "mabp010-l1"
+  ],
+  "gold_invalid_ids": [
+    "mabp010-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "mabp010-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "mabp010-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "mabp010-p2",
+        "mabp010-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.07,
+    "ideal": 1.0
+  }
+}

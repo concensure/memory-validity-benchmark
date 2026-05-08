@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "bm003",
+  "family": "branch_merge",
+  "split": "public",
+  "task": "Recover after partial revert changed only one side of a previous refactor.",
+  "repo_state_fingerprint": "bm003-repo-v1",
+  "token_budget": 205,
+  "candidate_memories": [
+    {
+      "id": "bm003-s1",
+      "tier": "session",
+      "content": "A partial revert restored old call sites but left new helper names in some modules.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "bm003-p1",
+      "tier": "project",
+      "content": "Project memory says partial reverts produce mixed validity and should trigger targeted invalidation.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "bm003-x1",
+      "tier": "session",
+      "content": "Old note says any revert fully restores the earlier memory state for all affected files.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "bm003-s1",
+    "bm003-p1"
+  ],
+  "gold_invalid_ids": [
+    "bm003-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "bm003-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "bm003-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

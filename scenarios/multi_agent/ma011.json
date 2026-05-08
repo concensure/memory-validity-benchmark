@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "ma011",
+  "family": "multi_agent",
+  "split": "public",
+  "task": "Coordinate architect and reviewer on promotion evidence quality.",
+  "repo_state_fingerprint": "ma011-repo-v1",
+  "token_budget": 190,
+  "candidate_memories": [
+    {
+      "id": "ma011-s1",
+      "tier": "session",
+      "content": "Architect defines the promotion boundary while reviewer verifies the citation and consensus evidence.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "ma011-p1",
+      "tier": "project",
+      "content": "Project memory says role-specialized review should validate evidence before long-term promotion.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "ma011-x1",
+      "tier": "session",
+      "content": "Old coordination note says any senior agent can waive citation gaps if the memory feels useful.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "ma011-s1",
+    "ma011-p1"
+  ],
+  "gold_invalid_ids": [
+    "ma011-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "ma011-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "ma011-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

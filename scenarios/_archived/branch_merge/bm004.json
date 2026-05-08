@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "bm004",
+  "family": "branch_merge",
+  "split": "public",
+  "task": "Handle cherry-pick divergence for deployment scripts.",
+  "repo_state_fingerprint": "bm004-repo-v1",
+  "token_budget": 215,
+  "candidate_memories": [
+    {
+      "id": "bm004-s1",
+      "tier": "session",
+      "content": "Cherry-picked deployment changes landed without the related env var rename from the original branch.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "bm004-p1",
+      "tier": "project",
+      "content": "Project memory says deployment memories must track whether prerequisite changes also landed.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "bm004-x1",
+      "tier": "session",
+      "content": "Stale note says cherry-picked deployment fixes always carry their original assumptions intact.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "bm004-s1",
+    "bm004-p1"
+  ],
+  "gold_invalid_ids": [
+    "bm004-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "bm004-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "bm004-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}

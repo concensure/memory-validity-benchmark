@@ -1,0 +1,93 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "lha003",
+  "family": "long_horizon_accumulation",
+  "split": "public",
+  "task": "Step 22 of 40 \u2014 microservice decomposition: split the monolith order domain into order-create-svc and order-query-svc. Steps 1\u201321 complete. At step 18 the data-layer decision changed from shared DB to separate DBs per service.",
+  "repo_state_fingerprint": "lha003-repo-v1",
+  "token_budget": 248,
+  "candidate_memories": [
+    {
+      "id": "lha003-s1",
+      "tier": "session",
+      "content": "Step 21 checkpoint: order-create-svc is deployed and healthy; order-query-svc scaffold created, DB provisioning pending.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 21"
+    },
+    {
+      "id": "lha003-p1",
+      "tier": "project",
+      "content": "order-query-svc must connect to its own read-replica DB (orders-query-db); it must not connect to orders-write-db used by order-create-svc.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "created_at_step: 18; new data-layer decision from step 18"
+    },
+    {
+      "id": "lha003-p2",
+      "tier": "project",
+      "content": "Sync between orders-write-db and orders-query-db is via Debezium CDC; order-query-svc expects eventual consistency with up to 2 s lag.",
+      "validity": "valid",
+      "bucket": "supporting",
+      "notes": "created_at_step: 18"
+    },
+    {
+      "id": "lha003-l1",
+      "tier": "long_term",
+      "content": "Separate read and write databases per service are the decomposition target; never reintroduce cross-service DB sharing.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "lha003-x1",
+      "tier": "project",
+      "content": "Step 5 decision: both services share the monolith orders-db during the transition period.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 18; shared DB decision reversed at step 18 to separate DBs"
+    },
+    {
+      "id": "lha003-x2",
+      "tier": "session",
+      "content": "Step 17 note: shared DB approach was causing locking contention; separate DB approach approved at step 18 design review.",
+      "validity": "stale",
+      "bucket": "supporting",
+      "notes": "stale_since_step: 18; this note describes the problem; the fix is now in p1/p2"
+    }
+  ],
+  "gold_valid_ids": [
+    "lha003-s1",
+    "lha003-p1",
+    "lha003-p2",
+    "lha003-l1"
+  ],
+  "gold_invalid_ids": [
+    "lha003-x1",
+    "lha003-x2"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "session_critical",
+      "memory_ids": [
+        "lha003-s1"
+      ]
+    },
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "lha003-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "lha003-p2",
+        "lha003-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.06,
+    "ideal": 1.0
+  }
+}

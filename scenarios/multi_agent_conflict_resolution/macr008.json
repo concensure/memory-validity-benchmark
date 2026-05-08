@@ -1,0 +1,68 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "macr008",
+  "family": "multi_agent_conflict_resolution",
+  "split": "public",
+  "task": "Set the state of the express_checkout_beta feature flag for the current sprint. Resolution strategy: tier_wins (project > session).",
+  "repo_state_fingerprint": "macr008-repo-v1",
+  "token_budget": 207,
+  "candidate_memories": [
+    {
+      "id": "macr008-p1",
+      "tier": "project",
+      "content": "[product-manager, project memory] express_checkout_beta must remain at 5% rollout for the entire Q2 sprint; the product team has not approved increasing the rollout until the A/B test completes.",
+      "validity": "valid",
+      "bucket": "critical",
+      "notes": "resolution: tier_wins; tier=project; wins over session note"
+    },
+    {
+      "id": "macr008-p2",
+      "tier": "project",
+      "content": "Flag is managed via flagctl; set command is flagctl set --flag express_checkout_beta --pct 5.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr008-l1",
+      "tier": "long_term",
+      "content": "Rollout percentage changes during an active A/B test invalidate the test results; do not change during the test window.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "macr008-x1",
+      "tier": "session",
+      "content": "[developer-agent, session note] Flag should be increased to 20% \u2014 conversion rate metrics look good after 3 days.",
+      "validity": "contradicted",
+      "bucket": "critical",
+      "notes": "resolution: tier_loses; tier=session; product-manager project constraint overrides developer session suggestion"
+    }
+  ],
+  "gold_valid_ids": [
+    "macr008-p1",
+    "macr008-p2",
+    "macr008-l1"
+  ],
+  "gold_invalid_ids": [
+    "macr008-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "project_critical",
+      "memory_ids": [
+        "macr008-p1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "macr008-p2",
+        "macr008-l1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.08,
+    "ideal": 1.0
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "mvi-scenario-v1",
+  "scenario_id": "nm003",
+  "family": "neutral_minimal",
+  "split": "public",
+  "task": "Update a single config flag that is fully specified in the current diff.",
+  "repo_state_fingerprint": "nm003-repo-v1",
+  "token_budget": 115,
+  "candidate_memories": [
+    {
+      "id": "nm003-s1",
+      "tier": "session",
+      "content": "The current change request includes the exact config flag and desired value.",
+      "validity": "valid",
+      "bucket": "critical"
+    },
+    {
+      "id": "nm003-p1",
+      "tier": "project",
+      "content": "Project memory says unnecessary historical config memories should be suppressed in local tasks.",
+      "validity": "valid",
+      "bucket": "supporting"
+    },
+    {
+      "id": "nm003-x1",
+      "tier": "session",
+      "content": "Old note says every config edit should include past migration memories for safety.",
+      "validity": "stale",
+      "bucket": "supporting"
+    }
+  ],
+  "gold_valid_ids": [
+    "nm003-s1",
+    "nm003-p1"
+  ],
+  "gold_invalid_ids": [
+    "nm003-x1"
+  ],
+  "preferred_order_buckets": [
+    {
+      "name": "critical",
+      "memory_ids": [
+        "nm003-s1"
+      ]
+    },
+    {
+      "name": "supporting",
+      "memory_ids": [
+        "nm003-p1"
+      ]
+    }
+  ],
+  "task_outcome_baselines": {
+    "no_memory": 0.15,
+    "ideal": 1.0
+  }
+}
